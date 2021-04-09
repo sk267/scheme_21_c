@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-#define READER_DEBUG
+// #define READER_DEBUG
 
 #ifdef READER_DEBUG
 #define READER_DEBUG_CODE(code) code
