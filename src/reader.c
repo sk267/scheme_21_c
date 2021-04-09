@@ -112,21 +112,53 @@ bool isValidSymbolChar(char input)
     }
 }
 
+typedef struct charBufferStruct charBuffer;
+
+struct charBufferStruct
+{
+    char *characters;
+    int bufferSize;
+    int nCharsInBuffer;
+};
+
+void init_char_buffer(charBuffer *b)
+{
+    b->characters = malloc(4);
+    b->bufferSize = 4;
+    b->nCharsInBuffer = 0;
+}
+
+void add_to_char_buffer(charBuffer *b, char charToAdd)
+{
+    // Ist Buffer schon am Anschlag?
+    if (b->nCharsInBuffer == b->bufferSize)
+    {
+        // Buffer vergroessern:
+        READER_DEBUG_CODE({
+            printf("Buffer wird jetzt vergroessert!\n");
+        })
+        b->bufferSize *= 1.8;
+        b->characters = realloc(b->characters, b->bufferSize);
+    }
+
+    b->characters[b->nCharsInBuffer] = charToAdd;
+    b->nCharsInBuffer++;
+}
+
 scmObject read_Symbol(scmObject newObj)
 {
 
-    int buffer_capacity = 4;
-    char *charBuffer = (char *)malloc(buffer_capacity);
-    int i = 0;
+    charBuffer buffer;
+    init_char_buffer(&buffer);
 
     while (true)
     {
         actChar = nextChar();
         if (isValidSymbolChar(actChar) == true)
         {
-            charBuffer[i] = actChar;
+            add_to_char_buffer(&buffer, actChar);
             READER_DEBUG_CODE({
-                printf("read_Symbol: charBuffer: %s\n", charBuffer);
+                printf("read_Symbol: charBuffer: %s\n", buffer.characters);
                 printf("read_Symbol: actChar: %c\n", actChar);
             })
         }
@@ -134,23 +166,10 @@ scmObject read_Symbol(scmObject newObj)
         {
             break;
         }
-
-        i++;
-        // Ensure that the charBuffer is big enough
-        if (i > buffer_capacity)
-        {
-            // Enlarge charBuffer
-            printf("reader: buffer got too small...\n");
-            printf("reader: buffer_capacity before: %d\n", buffer_capacity);
-            buffer_capacity *= 1.8;
-            printf("reader: buffer_capacity after: %d\n", buffer_capacity);
-            char *newBuffer = (char *)realloc(charBuffer, buffer_capacity);
-            charBuffer = newBuffer;
-        }
     }
 
-    newObj = newSymbol(charBuffer);
-    free(charBuffer);
+    newObj = newSymbol(buffer.characters, buffer.nCharsInBuffer);
+    // free(charBuffer);
 
     return newObj;
 }

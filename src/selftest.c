@@ -34,7 +34,7 @@ void selftest()
     }
 
     char tmpString[] = "12345";
-    scmObject obj2 = newSymbol(tmpString);
+    scmObject obj2 = newSymbol(tmpString, 5);
     if (obj2->tag != TAG_SYMBOL)
     {
         char tmpString[] = "newSymbol wrong Tag";

@@ -1,9 +1,9 @@
 #include "scheme.h"
 
-scmObject newSymbol(char *input)
+scmObject newSymbol(char *input, int length)
 {
     // wieso geht hier malloc(1)??? Da dürfte das doch garnicht reingehen!?
-    char *copiedString = (char *)malloc(16);
+    char *copiedString = (char *)malloc(length);
     strcpy(copiedString, input);
 
     // printf("newSymbol: input: %s\n", input);

@@ -37,7 +37,7 @@ extern void unreadChar(char input);
 
 extern scmObject newInteger(int inInt);
 extern scmObject newString(char *input);
-extern scmObject newSymbol(char *input);
+extern scmObject newSymbol(char *input, int length);
 
 extern scmObject scm_read();
 extern scmObject scm_eval(scmObject input);
