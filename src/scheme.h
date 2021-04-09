@@ -18,6 +18,14 @@ enum
 
 typedef struct scmObjectStruct *scmObject;
 
+typedef struct consStruct cons;
+
+struct consStruct
+{
+    scmObject car;
+    scmObject cdr;
+};
+
 struct scmObjectStruct
 {
     int tag;
@@ -27,6 +35,7 @@ struct scmObjectStruct
         int scmInt;
         char *scmChar;
         char *scmSymbol;
+        cons scmCons;
         double scmDouble;
     } value;
 };
@@ -36,8 +45,9 @@ extern char nextChar();
 extern void unreadChar(char input);
 
 extern scmObject newInteger(int inInt);
-extern scmObject newString(char *input);
+extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
+extern scmObject newCons(scmObject car, scmObject cdr);
 
 extern scmObject scm_read();
 extern scmObject scm_eval(scmObject input);

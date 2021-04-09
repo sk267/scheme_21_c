@@ -10,43 +10,43 @@
 
 void scm_print(scmObject input)
 {
-    if (input->tag == TAG_INT)
+    switch (input->tag)
     {
-        // INTEGER ############################################
+    case TAG_INT:
         PRINTER_DEBUG_CODE({
             printf("scm_print: integer erkannt\n");
         })
-        printf("%d\n", input->value.scmInt);
-    }
-    else if (input->tag == TAG_STRING)
-    {
-        // STRING ############################################
+        printf("%d", input->value.scmInt);
+        break;
+    case TAG_STRING:
         PRINTER_DEBUG_CODE({
             printf("scm_print: String erkannt\n");
         })
         printf("\"");
         printf("%s", input->value.scmChar);
-        printf("\"\n");
-    }
-    else if (input->tag == TAG_SYMBOL)
-    {
-        // SYMBOL #############################################
-        printf("%s\n", input->value.scmSymbol);
-    }
-    else if (input->tag == TAG_NULL)
-    {
-        printf("()\n");
-    }
-    else if (input->tag == TAG_FALSE)
-    {
-        printf("#f\n");
-    }
-    else if (input->tag == TAG_TRUE)
-    {
-        printf("#t\n");
-    }
-    else
-    {
+        printf("\"");
+        break;
+    case TAG_SYMBOL:
+        printf("%s", input->value.scmSymbol);
+        break;
+    case TAG_NULL:
+        printf("()");
+        break;
+    case TAG_FALSE:
+        printf("#f");
+        break;
+    case TAG_TRUE:
+        printf("#t");
+        break;
+    case TAG_CONS:
+        printf("(");
+        scm_print(input->value.scmCons.car);
+        printf(" ");
+        scm_print(input->value.scmCons.cdr);
+        printf(")");
+        break;
+    default:
         printf("kann ich noch nicht printen!! \n");
+        break;
     }
 }

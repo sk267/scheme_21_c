@@ -60,46 +60,6 @@ scmObject read_Integer(scmObject newObj)
     return newObj;
 }
 
-scmObject read_String(scmObject newObj)
-{
-
-    int buffer_capacity = 4;
-    char *charBuffer = (char *)malloc(buffer_capacity);
-    int i = 0;
-
-    while (true)
-    {
-        actChar = nextChar();
-        if (actChar != '"')
-        {
-            charBuffer[i] = actChar;
-            READER_DEBUG_CODE({
-                printf("read_String: charBuffer: %s\n", charBuffer);
-                printf("read_string: actChar: %c\n", actChar);
-            })
-        }
-        else
-        {
-            break;
-        }
-
-        i++;
-        // Ensure that the charBuffer is big enough
-        if ((i + 2) > buffer_capacity)
-        {
-            // Enlarge charBuffer
-            buffer_capacity *= 1.8;
-            char *newBuffer = (char *)realloc(charBuffer, buffer_capacity);
-            charBuffer = newBuffer;
-        }
-    }
-
-    newObj = newString(charBuffer);
-    free(charBuffer);
-
-    return newObj;
-}
-
 bool isValidSymbolChar(char input)
 {
     if (((input >= 'A') && (input >= 'A')) || ((input >= '0') && (input <= '9')))
@@ -169,8 +129,33 @@ scmObject read_Symbol(scmObject newObj)
     }
 
     newObj = newSymbol(buffer.characters, buffer.nCharsInBuffer);
-    // free(charBuffer);
+    return newObj;
+}
 
+scmObject read_String(scmObject newObj)
+{
+
+    charBuffer buffer;
+    init_char_buffer(&buffer);
+
+    while (true)
+    {
+        actChar = nextChar();
+        if (isValidSymbolChar(actChar) == true)
+        {
+            add_to_char_buffer(&buffer, actChar);
+            READER_DEBUG_CODE({
+                printf("read_Symbol: charBuffer: %s\n", buffer.characters);
+                printf("read_Symbol: actChar: %c\n", actChar);
+            })
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    newObj = newString(buffer.characters, buffer.nCharsInBuffer);
     return newObj;
 }
 
@@ -178,7 +163,7 @@ scmObject scm_read()
 {
     scmObject newObj = (scmObject)malloc(sizeof(scmObject));
 
-    printf(">");
+    printf("\n>");
     READER_DEBUG_CODE({
         printf("Betrete scm_read! \n");
     })

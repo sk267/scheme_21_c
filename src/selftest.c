@@ -16,15 +16,11 @@ void selftest()
 {
     printf("#################### selftest begins ###########################\n");
 
-    char *charBuffer = (char *)malloc(sizeof(char));
-    charBuffer = "1234567891011121314151617181920";
-    printTmp(charBuffer);
-
     scmObject obj1 = newInteger(33);
 
-    if (obj1->tag != TAG_CONS)
+    if (obj1->tag != TAG_INT)
     {
-        char tmpString[] = "newInteger wrong Tag";
+        char *tmpString = "newInteger wrong Tag";
         scmError(tmpString);
     }
     if (obj1->value.scmInt != 33)
@@ -33,18 +29,8 @@ void selftest()
         scmError(tmpString);
     }
 
-    char tmpString[] = "12345";
-    scmObject obj2 = newSymbol(tmpString, 5);
-    if (obj2->tag != TAG_SYMBOL)
-    {
-        char tmpString[] = "newSymbol wrong Tag";
-        scmError(tmpString);
-    }
-    if (obj2->value.scmSymbol != tmpString)
-    {
-        char tmpString[] = "newSymbol wrong value";
-        scmError(tmpString);
-    }
+    obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
+    scm_print(obj1);
 
     printf("#################### selftest ends ###########################\n");
 }
