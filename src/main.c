@@ -3,6 +3,7 @@
 scmObject SCM_TRUE;
 scmObject SCM_FALSE;
 scmObject SCM_NULL;
+scmObject SCM_INV;
 
 static void
 scm_initialize()
@@ -12,9 +13,9 @@ scm_initialize()
     SCM_TRUE = (scmObject)malloc(sizeof(scmObject));
     SCM_FALSE = (scmObject)malloc(sizeof(scmObject));
     SCM_NULL = (scmObject)malloc(sizeof(scmObject));
+    SCM_INV = (scmObject)malloc(sizeof(scmObject));
 
     SCM_TRUE->tag = TAG_TRUE;
-
     SCM_TRUE->value.scmInt = 1;
 
     SCM_FALSE->tag = TAG_FALSE;
@@ -22,6 +23,9 @@ scm_initialize()
 
     SCM_NULL->tag = TAG_NULL;
     SCM_NULL->value.scmInt = 0;
+
+    SCM_INV->tag = TAG_INV;
+    SCM_INV->value.scmInt = 0;
 }
 
 int main(int argCount, char *argValues[])
@@ -35,9 +39,9 @@ int main(int argCount, char *argValues[])
 
     // Read Eval Print Loop
     scmObject expr;
-
     for (;;)
     {
+        printf("\n>");
         expr = scm_read();
         expr = scm_eval(expr);
         scm_print(expr);

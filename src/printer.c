@@ -12,6 +12,9 @@ void scm_print(scmObject input)
 {
     switch (input->tag)
     {
+
+    case TAG_INV:
+        break;
     case TAG_INT:
         PRINTER_DEBUG_CODE({
             printf("scm_print: integer erkannt\n");
@@ -30,7 +33,7 @@ void scm_print(scmObject input)
         printf("%s", input->value.scmSymbol);
         break;
     case TAG_NULL:
-        printf("()");
+        printf("SCM_NULL");
         break;
     case TAG_FALSE:
         printf("#f");

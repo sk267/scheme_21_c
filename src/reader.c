@@ -61,7 +61,22 @@ scmObject read_Integer(scmObject newObj)
 
 bool isValidSymbolChar(char input)
 {
-    if (((input >= 'A') && (input >= 'A')) || ((input >= '0') && (input <= '9')))
+    if (
+        ((input >= 'A') && (input <= 'Z')) ||
+        ((input >= 'a') && (input <= 'z')) ||
+        ((input >= '0') && (input <= '9')))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool isValidStringChar(char input)
+{
+    if (input != '\0')
     {
         return true;
     }
@@ -89,6 +104,9 @@ void init_char_buffer(charBuffer *b)
 
 void free_char_buffer(charBuffer *b)
 {
+    READER_DEBUG_CODE({
+        printf("-------------------------------free_char_buffer betreten\n");
+    })
     free(b->characters);
     b->characters = NULL;
 }
@@ -115,6 +133,10 @@ scmObject read_Symbol(scmObject newObj)
 
     charBuffer buffer;
     init_char_buffer(&buffer);
+    READER_DEBUG_CODE({
+        printf("--------------------------------------read_Symbol: eben gerade init_char_buffer aufgerufen...\n");
+        printf("--------------------------------------read_Symbol: buffer.characters: %s\n", buffer.characters);
+    })
 
     while (true)
     {
@@ -123,12 +145,13 @@ scmObject read_Symbol(scmObject newObj)
         {
             add_to_char_buffer(&buffer, actChar);
             READER_DEBUG_CODE({
-                printf("read_Symbol: charBuffer: %s\n", buffer.characters);
                 printf("read_Symbol: actChar: %c\n", actChar);
+                printf("read_Symbol: charBuffer: %s\n", buffer.characters);
             })
         }
         else
         {
+            add_to_char_buffer(&buffer, '\0');
             break;
         }
     }
@@ -161,6 +184,7 @@ scmObject read_String(scmObject newObj)
         }
         else
         {
+            add_to_char_buffer(&buffer, '\0');
             break;
         }
     }
@@ -176,20 +200,40 @@ scmObject read_Cons(scmObject newObject)
     READER_DEBUG_CODE({
         printf("Betrete read_Cons\n");
     })
+
+    char actChar = nextChar();
+    printf("read_Cons: actChar: %c\n", actChar);
+
+    if (actChar == ')')
+    {
+        return SCM_NULL;
+    }
+    unreadChar(actChar);
+
     scmObject car, cdr;
 
+    printf("read_Cons2: actChar: %c\n", actChar);
     car = scm_read();
 
-    READER_DEBUG_CODE({
-        printf("read_Cons: car: \n");
-        scm_print(car);
-    })
+    // printf("read_Cons: car: ");
+    // scm_print(car);
+    // printf("\n");
+
+    // skipWhitespace();
+    actChar = nextChar();
+
+    if (actChar == ')')
+    {
+        return newCons(car, SCM_NULL);
+    }
+
+    unreadChar(actChar);
 
     cdr = scm_read();
-    READER_DEBUG_CODE({
-        printf("read_Cons: cdr: \n");
-        scm_print(cdr);
-    })
+
+    printf("read_Cons: cdr: ");
+    scm_print(cdr);
+    printf("\n");
 
     return newCons(car, cdr);
 }
@@ -198,7 +242,7 @@ scmObject scm_read()
 {
     scmObject newObj = (scmObject)malloc(sizeof(scmObject));
 
-    printf("\n>");
+    // printf("\n>");
     READER_DEBUG_CODE({
         printf("Betrete scm_read! \n");
     })
@@ -206,9 +250,13 @@ scmObject scm_read()
     skipWhitespace();
     actChar = nextChar();
     READER_DEBUG_CODE({
-        printf("----------------------------scm_read> actChar: %d \n", actChar);
+        printf("scm_read> actChar: %d \n", actChar);
     })
 
+    if (actChar == ')')
+    {
+        return SCM_INV;
+    }
     if ((actChar >= 48) && (actChar <= 75))
     {
         // INTEGER #################################################
@@ -241,17 +289,8 @@ scmObject scm_read()
     }
     else if (actChar == '(')
     {
-        actChar = nextChar();
-        if (actChar == ')')
-        {
-            // NULL ################################################
-            return SCM_NULL;
-        }
-        else
-        {
-            unreadChar(actChar);
-            newObj = read_Cons(newObj);
-        }
+        // CONS ######################################################
+        newObj = read_Cons(newObj);
     }
     else
     {

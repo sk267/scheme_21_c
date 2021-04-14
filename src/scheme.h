@@ -13,7 +13,8 @@ enum
     TAG_CONS,
     TAG_TRUE,
     TAG_FALSE,
-    TAG_NULL
+    TAG_NULL,
+    TAG_INV
 };
 
 typedef struct scmObjectStruct *scmObject;
@@ -56,3 +57,4 @@ extern void scm_print(scmObject input);
 extern scmObject SCM_NULL;
 extern scmObject SCM_TRUE;
 extern scmObject SCM_FALSE;
+extern scmObject SCM_INV;
