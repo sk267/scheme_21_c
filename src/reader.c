@@ -54,7 +54,6 @@ scmObject read_Integer(scmObject newObj)
     newObj = newInteger(number);
 
     READER_DEBUG_CODE({
-        printf("Hallo \n");
         printf("read_Integer: \ntag: %d\nvalue: %d\n", newObj->tag, newObj->value.scmInt);
     })
     return newObj;
@@ -86,6 +85,12 @@ void init_char_buffer(charBuffer *b)
     b->characters = malloc(4);
     b->bufferSize = 4;
     b->nCharsInBuffer = 0;
+}
+
+void free_char_buffer(charBuffer *b)
+{
+    free(b->characters);
+    b->characters = NULL;
 }
 
 void add_to_char_buffer(charBuffer *b, char charToAdd)
@@ -128,7 +133,12 @@ scmObject read_Symbol(scmObject newObj)
         }
     }
 
+    READER_DEBUG_CODE({
+        printf("read_Symbol: buffer.nCharsInBuffer: %d\n", buffer.nCharsInBuffer);
+    })
+
     newObj = newSymbol(buffer.characters, buffer.nCharsInBuffer);
+    free_char_buffer(&buffer);
     return newObj;
 }
 
@@ -156,7 +166,32 @@ scmObject read_String(scmObject newObj)
     }
 
     newObj = newString(buffer.characters, buffer.nCharsInBuffer);
+    free_char_buffer(&buffer);
+
     return newObj;
+}
+
+scmObject read_Cons(scmObject newObject)
+{
+    READER_DEBUG_CODE({
+        printf("Betrete read_Cons\n");
+    })
+    scmObject car, cdr;
+
+    car = scm_read();
+
+    READER_DEBUG_CODE({
+        printf("read_Cons: car: \n");
+        scm_print(car);
+    })
+
+    cdr = scm_read();
+    READER_DEBUG_CODE({
+        printf("read_Cons: cdr: \n");
+        scm_print(cdr);
+    })
+
+    return newCons(car, cdr);
 }
 
 scmObject scm_read()
@@ -211,6 +246,11 @@ scmObject scm_read()
         {
             // NULL ################################################
             return SCM_NULL;
+        }
+        else
+        {
+            unreadChar(actChar);
+            newObj = read_Cons(newObj);
         }
     }
     else

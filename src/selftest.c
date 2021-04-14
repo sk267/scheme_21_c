@@ -29,7 +29,13 @@ void selftest()
         scmError(tmpString);
     }
 
+    obj1 = newSymbol("123456789", 9);
+    scm_print(obj1);
+
     obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
+    scm_print(obj1);
+
+    obj1 = newCons(newInteger(33), newCons(newInteger(11), newSymbol("2hallo", 6)));
     scm_print(obj1);
 
     printf("#################### selftest ends ###########################\n");
