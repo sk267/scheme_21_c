@@ -202,7 +202,9 @@ scmObject read_Cons(scmObject newObject)
     })
 
     char actChar = nextChar();
-    printf("read_Cons: actChar: %c\n", actChar);
+    READER_DEBUG_CODE({
+        printf("read_Cons: actChar: %c\n", actChar);
+    })
 
     if (actChar == ')')
     {
@@ -212,15 +214,19 @@ scmObject read_Cons(scmObject newObject)
 
     scmObject car, cdr;
 
-    printf("read_Cons2: actChar: %c\n", actChar);
+    READER_DEBUG_CODE({
+        printf("read_Cons2: actChar: %c\n", actChar);
+    })
     car = scm_read();
 
-    // printf("read_Cons: car: ");
-    // scm_print(car);
-    // printf("\n");
-
-    // skipWhitespace();
     actChar = nextChar();
+
+    if (actChar == 10)
+    {
+        printf("!!! Error: If you which to make a List with only one Argument a blank is needed after the last argument!\n");
+        printf("Going back to REPL\n");
+        longjmp(savebuf, 1);
+    }
 
     if (actChar == ')')
     {
@@ -231,9 +237,11 @@ scmObject read_Cons(scmObject newObject)
 
     cdr = scm_read();
 
-    printf("read_Cons: cdr: ");
-    scm_print(cdr);
-    printf("\n");
+    READER_DEBUG_CODE({
+        printf("read_Cons: cdr: ");
+        scm_print(cdr);
+        printf("\n");
+    })
 
     return newCons(car, cdr);
 }

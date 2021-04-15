@@ -1,8 +1,8 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <setjmp.h>
 
 enum
 {
@@ -58,3 +58,5 @@ extern scmObject SCM_NULL;
 extern scmObject SCM_TRUE;
 extern scmObject SCM_FALSE;
 extern scmObject SCM_INV;
+
+extern jmp_buf savebuf;

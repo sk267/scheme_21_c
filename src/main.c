@@ -5,6 +5,9 @@ scmObject SCM_FALSE;
 scmObject SCM_NULL;
 scmObject SCM_INV;
 
+// Globale Variable; muss von überall erreichbar sein:
+jmp_buf savebuf;
+
 static void
 scm_initialize()
 {
@@ -41,10 +44,18 @@ int main(int argCount, char *argValues[])
     scmObject expr;
     for (;;)
     {
-        printf("\n>");
-        expr = scm_read();
-        expr = scm_eval(expr);
-        scm_print(expr);
+        if (setjmp(savebuf) == 0)
+        {
+            // Vergleichbar mit try-Block
+            printf("\n>");
+            expr = scm_read();
+            expr = scm_eval(expr);
+            scm_print(expr);
+        }
+        else
+        {
+            printf("SET JUMP WURDE AUFGEFURFEN\n");
+        }
     }
 
     return 0;
