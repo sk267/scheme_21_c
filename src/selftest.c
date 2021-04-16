@@ -14,7 +14,20 @@ void printTmp(char *input)
 
 void selftest()
 {
-    printf("#################### selftest begins ###########################\n");
+    printf("#################### selftest begins ###########################\n\n");
+    // printf("IHK.value: %s\n", newSymbol("IHK", 3)->value.scmSymbol);
+    // printf("\nlllllllllllllllllllllllllllllll\n\n");
+
+    char *a = "Hallo";
+    char *b = "Hallo";
+    printf("selftest: strcmp: %d\n", strcmp(a, b));
+
+    printf("newSymbol(111, 3); wird aufgerufen\n");
+    newSymbol("111", 3);
+    printf("newSymbol(222, 3); wird aufgerufen\n");
+    newSymbol("222", 3);
+    printf("newSymbol(111, 3); wird aufgerufen\n");
+    newSymbol("111", 3);
 
     scmObject obj1 = newInteger(33);
 
@@ -29,10 +42,6 @@ void selftest()
         scmError(tmpString);
     }
 
-    obj1 = newSymbol("123456789", 9);
-    scm_print(obj1);
-    printf("\n");
-
     obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
     scm_print(obj1);
     printf("\n");
@@ -40,6 +49,9 @@ void selftest()
     obj1 = newCons(newInteger(33), newCons(newInteger(11), newSymbol("hallo2", 6)));
     scm_print(obj1);
     printf("\n");
+
+    printf("Strcmp check: %d\n", strcmp("Hallo", "Hallo"));
+    printf("Strcmp check: %d\n", strcmp("Hallo", "Hello"));
 
     printf("#################### selftest ends ###########################\n");
 }

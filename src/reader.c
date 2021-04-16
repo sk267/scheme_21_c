@@ -23,7 +23,7 @@ void skipWhitespace()
     {
         actChar = nextChar();
     } while (
-        (actChar == ' ') || (actChar == '\n') || (actChar == '\t'));
+        (actChar == ' ') || (actChar == '\n') || (actChar == '\t') || (actChar == '\r'));
 
     unreadChar(actChar);
 }
@@ -108,7 +108,6 @@ void free_char_buffer(charBuffer *b)
         printf("-------------------------------free_char_buffer betreten\n");
     })
     free(b->characters);
-    b->characters = NULL;
 }
 
 void add_to_char_buffer(charBuffer *b, char charToAdd)
