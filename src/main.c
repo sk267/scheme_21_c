@@ -18,6 +18,8 @@ scm_initialize()
     SCM_NULL = (scmObject)malloc(sizeof(scmObject));
     SCM_INV = (scmObject)malloc(sizeof(scmObject));
 
+    initializeSymbolTableBuffer();
+
     SCM_TRUE->tag = TAG_TRUE;
     SCM_TRUE->value.scmInt = 1;
 

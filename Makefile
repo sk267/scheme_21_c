@@ -3,7 +3,7 @@
 ########################################################################
 
 # Compiler settings - Can be customized.
-CC = gcc
+CC = gcc -g
 CXXFLAGS = -std=c11 -Wall
 LDFLAGS = 
 

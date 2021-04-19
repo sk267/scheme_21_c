@@ -18,16 +18,24 @@ void selftest()
     // printf("IHK.value: %s\n", newSymbol("IHK", 3)->value.scmSymbol);
     // printf("\nlllllllllllllllllllllllllllllll\n\n");
 
-    char *a = "Hallo";
-    char *b = "Hallo";
-    printf("selftest: strcmp: %d\n", strcmp(a, b));
+    // char *a = "Hallo";
+    // char *b = "Hallo";
+    // printf("selftest: strcmp: %d\n", strcmp(a, b));
 
     printf("newSymbol(111, 3); wird aufgerufen\n");
     newSymbol("111", 3);
+
     printf("newSymbol(222, 3); wird aufgerufen\n");
     newSymbol("222", 3);
     printf("newSymbol(111, 3); wird aufgerufen\n");
     newSymbol("111", 3);
+
+    printf("newSymbol(333, 3); wird aufgerufen\n");
+    newSymbol("333", 3);
+    printf("newSymbol(444, 3); wird aufgerufen\n");
+    newSymbol("444", 3);
+    printf("newSymbol(555, 3); wird aufgerufen\n");
+    newSymbol("555", 3);
 
     scmObject obj1 = newInteger(33);
 

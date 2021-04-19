@@ -41,6 +41,8 @@ struct scmObjectStruct
     } value;
 };
 
+extern scmObject *existingSymbols;
+
 extern void selftest();
 extern char nextChar();
 extern void unreadChar(char input);
@@ -50,6 +52,8 @@ extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
 extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
+
+extern void initializeSymbolTableBuffer();
 
 extern scmObject scm_read();
 extern scmObject scm_eval(scmObject input);
