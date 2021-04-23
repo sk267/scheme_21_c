@@ -4,6 +4,8 @@
 #include <string.h>
 #include <setjmp.h>
 
+#define scmAssert(ok, msg) scmAssertVerbose(ok, msg, __FILE__, __LINE__)
+
 enum
 {
     TAG_INT = 1,
@@ -52,6 +54,8 @@ extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
 extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
+
+extern void scmAssertVerbose(int ok, char *msg, char *file, int line);
 
 extern void initializeSymbolTableBuffer();
 

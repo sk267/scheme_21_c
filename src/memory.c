@@ -16,7 +16,9 @@ int currentNumberOfMaxSymbols;
 scmObject newSymbolAllocation(char *input, int length)
 {
 
-    printf("----------------------------------------newSymbolAllocation betreten\n");
+    MEMORY_DEBUG_CODE({
+        printf("----------------------------------------newSymbolAllocation betreten\n");
+    })
 
     char *copiedString = (char *)malloc((length + 1) * sizeof(char));
     strcpy(copiedString, input);
@@ -80,7 +82,9 @@ scmObject newSymbol(char *input, int length)
         if (strcmp(existingSymbols[i]->value.scmSymbol, input) == 0)
         {
             // Found an existing Symbol!
-            printf("--------------------------------------Found an existing Symbol!\n");
+            MEMORY_DEBUG_CODE({
+                printf("--------------------------------------Found an existing Symbol!\n");
+            })
             return existingSymbols[i];
         }
     }

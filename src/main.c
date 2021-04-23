@@ -1,5 +1,11 @@
 #include "scheme.h"
 
+#ifdef MAIN_DEBUG
+#define MAIN_DEBUG_CODE(code) code
+#else
+#define MAIN_DEBUG_CODE(code) // as nothing
+#endif
+
 scmObject SCM_TRUE;
 scmObject SCM_FALSE;
 scmObject SCM_NULL;
@@ -11,7 +17,10 @@ jmp_buf savebuf;
 static void
 scm_initialize()
 {
-    printf("initialize...\n");
+
+    MAIN_DEBUG_CODE({
+        printf("initialize...\n");
+    })
 
     SCM_TRUE = (scmObject)malloc(sizeof(scmObject));
     SCM_FALSE = (scmObject)malloc(sizeof(scmObject));
@@ -36,8 +45,11 @@ scm_initialize()
 int main(int argCount, char *argValues[])
 {
     printf("Welcome to my scheme 2021!!\n");
-    printf("%d\n", argCount);
-    printf("%s\n", argValues[1]);
+
+    MAIN_DEBUG_CODE({
+        printf("%d\n", argCount);
+        printf("%s\n", argValues[1]);
+    })
 
     scm_initialize();
     selftest();

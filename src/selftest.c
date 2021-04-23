@@ -22,44 +22,43 @@ void selftest()
     // char *b = "Hallo";
     // printf("selftest: strcmp: %d\n", strcmp(a, b));
 
-    printf("newSymbol(111, 3); wird aufgerufen\n");
-    newSymbol("111", 3);
+    scmObject symbol1, symbol2, symbol3, symbol4, symbol5;
 
-    printf("newSymbol(222, 3); wird aufgerufen\n");
-    newSymbol("222", 3);
-    printf("newSymbol(111, 3); wird aufgerufen\n");
-    newSymbol("111", 3);
+    // printf("newSymbol(111, 3); wird aufgerufen\n");
+    symbol1 = newSymbol("111", 3);
 
-    printf("newSymbol(333, 3); wird aufgerufen\n");
-    newSymbol("333", 3);
-    printf("newSymbol(444, 3); wird aufgerufen\n");
-    newSymbol("444", 3);
-    printf("newSymbol(555, 3); wird aufgerufen\n");
-    newSymbol("555", 3);
+    // printf("newSymbol(222, 3); wird aufgerufen\n");
+    symbol2 = newSymbol("222", 3);
+
+    // printf("newSymbol(111, 3); wird aufgerufen\n");
+    symbol3 = newSymbol("111", 3);
+
+    // printf("%p\n", symbol1);
+    // printf("%p\n", symbol3);
+    scmAssert(symbol1 == symbol3, "Pointer sollten die gleiche Adresse haben!!\n");
+    scmAssert(symbol1 != symbol2, "Pointer sollten NICHT die gleiche Adresse haben!!\n");
+
+    // printf("newSymbol(333, 3); wird aufgerufen\n");
+    symbol4 = newSymbol("333", 3);
+    scmAssert(symbol1 != symbol4, "Pointer sollten NICHT die gleiche Adresse haben!!\n");
+
+    // printf("newSymbol(444, 3); wird aufgerufen\n");
+    symbol5 = newSymbol("444", 3);
+    scmAssert(symbol1 != symbol5, "Pointer sollten NICHT die gleiche Adresse haben!!\n");
 
     scmObject obj1 = newInteger(33);
 
-    if (obj1->tag != TAG_INT)
-    {
-        char *tmpString = "newInteger wrong Tag";
-        scmError(tmpString);
-    }
-    if (obj1->value.scmInt != 33)
-    {
-        char tmpString[] = "newInteger wrong Value";
-        scmError(tmpString);
-    }
+    scmAssert(obj1->tag == TAG_INT, "newInteger should be TAG_INT");
+
+    scmAssert(obj1->value.scmInt == 33, "newInteger value should be 33");
 
     obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
-    scm_print(obj1);
-    printf("\n");
+    // scm_print(obj1);
+    // printf("\n");
 
     obj1 = newCons(newInteger(33), newCons(newInteger(11), newSymbol("hallo2", 6)));
-    scm_print(obj1);
-    printf("\n");
-
-    printf("Strcmp check: %d\n", strcmp("Hallo", "Hallo"));
-    printf("Strcmp check: %d\n", strcmp("Hallo", "Hello"));
+    // scm_print(obj1);
+    // printf("\n");
 
     printf("#################### selftest ends ###########################\n");
 }
