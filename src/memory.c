@@ -8,7 +8,7 @@
 #define MEMORY_DEBUG_CODE(code)
 #endif
 
-int INITIAL_NUMBER_OF_MAX_SYMBOLS = 50;
+int INITIAL_NUMBER_OF_MAX_SYMBOLS = 20;
 scmObject *existingSymbols;
 int numberOfExisitingSymbols = 0;
 int currentNumberOfMaxSymbols;
@@ -46,20 +46,22 @@ scmObject newSymbolAllocation(char *input, int length)
 }
 void initializeSymbolTableBuffer()
 {
-    existingSymbols = (scmObject *)malloc(sizeof(scmObject *) * INITIAL_NUMBER_OF_MAX_SYMBOLS);
+    // printf("size: %d\n", sizeof(scmObject) * INITIAL_NUMBER_OF_MAX_SYMBOLS);
+    existingSymbols = (scmObject *)malloc(sizeof(scmObject) * INITIAL_NUMBER_OF_MAX_SYMBOLS);
+    // printf("size: %p\n", existingSymbols);
     currentNumberOfMaxSymbols = INITIAL_NUMBER_OF_MAX_SYMBOLS;
 }
 
 void growSymbolTableBuffer()
 {
-    printf("growSymbolTableBuffer betreten\n");
-    printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
-    currentNumberOfMaxSymbols += 1;
-    printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
+    // printf("growSymbolTableBuffer betreten\n");
+    // printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
+    currentNumberOfMaxSymbols += 10;
+    // printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
     // printf("sizeof exisitingSymbols: %ld\n", sizeof(existingSymbols));
 
-    existingSymbols = (scmObject *)realloc(existingSymbols, currentNumberOfMaxSymbols);
-    printf("Noch da\n");
+    existingSymbols = (scmObject *)realloc(existingSymbols, sizeof(scmObject) * currentNumberOfMaxSymbols);
+    // printf("Noch da\n");
 }
 
 scmObject newSymbol(char *input, int length)
