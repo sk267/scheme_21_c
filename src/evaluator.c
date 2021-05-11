@@ -1,5 +1,13 @@
 #include "scheme.h"
 
+// #define READER_DEBUG
+
+#ifdef READER_DEBUG
+#define READER_DEBUG_CODE(code) code
+#else
+#define READER_DEBUG_CODE(code)
+#endif
+
 scmObject scm_eval(scmObject inputUnevaluated)
 {
     scmObject car;
@@ -12,13 +20,19 @@ scmObject scm_eval(scmObject inputUnevaluated)
         car = inputUnevaluated->value.scmCons.car;
         restList = inputUnevaluated->value.scmCons.cdr;
 
-        printf("scm_eval:------------------------- \n");
-        scm_print(restList);
-        printf("\n-----------------\n");
+        READER_DEBUG_CODE(
+            {
+                printf("scm_eval:------------------------- \n");
+                scm_print(restList);
+                printf("\n-----------------\n");
+            })
         // Wenn es eine Cons ist muss man was machen
         if (car == newSymbol("+", 1))
         {
-            printf("Betrete if\n");
+            READER_DEBUG_CODE({
+                printf("Betrete if\n");
+            })
+
             int sum;
             while (restList->tag != TAG_NULL)
             {

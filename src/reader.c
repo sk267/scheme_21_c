@@ -132,10 +132,11 @@ scmObject read_Symbol(scmObject newObj)
 
     charBuffer buffer;
     init_char_buffer(&buffer);
-    READER_DEBUG_CODE({
-        printf("--------------------------------------read_Symbol: eben gerade init_char_buffer aufgerufen...\n");
-        printf("--------------------------------------read_Symbol: buffer.characters: %s\n", buffer.characters);
-    })
+    READER_DEBUG_CODE(
+        {
+            printf("--------------------------------------read_Symbol: eben gerade init_char_buffer aufgerufen...\n");
+            printf("--------------------------------------read_Symbol: buffer.characters: %s\n", buffer.characters);
+        })
 
     while (true)
     {
@@ -143,10 +144,11 @@ scmObject read_Symbol(scmObject newObj)
         if (isValidSymbolChar(actChar) == true)
         {
             add_to_char_buffer(&buffer, actChar);
-            READER_DEBUG_CODE({
-                printf("read_Symbol: actChar: %c\n", actChar);
-                printf("read_Symbol: charBuffer: %s\n", buffer.characters);
-            })
+            READER_DEBUG_CODE(
+                {
+                    printf("read_Symbol: actChar: %c\n", actChar);
+                    printf("read_Symbol: charBuffer: %s\n", buffer.characters);
+                })
         }
         else
         {
@@ -176,10 +178,11 @@ scmObject read_String(scmObject newObj)
         if (isValidSymbolChar(actChar) == true)
         {
             add_to_char_buffer(&buffer, actChar);
-            READER_DEBUG_CODE({
-                printf("read_Symbol: charBuffer: %s\n", buffer.characters);
-                printf("read_Symbol: actChar: %c\n", actChar);
-            })
+            READER_DEBUG_CODE(
+                {
+                    printf("read_Symbol: charBuffer: %s\n", buffer.characters);
+                    printf("read_Symbol: actChar: %c\n", actChar);
+                })
         }
         else
         {
@@ -199,6 +202,7 @@ scmObject read_Cons(scmObject newObject)
     READER_DEBUG_CODE({
         printf("Betrete read_Cons\n");
     })
+    skipWhitespace();
 
     char actChar = nextChar();
     READER_DEBUG_CODE({
@@ -222,7 +226,7 @@ scmObject read_Cons(scmObject newObject)
 
     if (actChar == 10)
     {
-        printf("!!! Error: If you which to make a List with only one Argument a blank is needed after the last argument!\n");
+        printf("!!! Error: If you wish to make a List with only one Argument a blank is needed after the last argument!\n");
         printf("Going back to REPL\n");
         longjmp(savebuf, 1);
     }
@@ -236,11 +240,14 @@ scmObject read_Cons(scmObject newObject)
 
     cdr = scm_read();
 
-    READER_DEBUG_CODE({
-        printf("read_Cons: cdr: ");
-        scm_print(cdr);
-        printf("\n");
-    })
+    READER_DEBUG_CODE(
+        {
+            printf("read_Cons: cdr: ");
+            scm_print(cdr);
+            printf("\n");
+        })
+
+    scmAssert(actChar != -1, "'(' is missing!");
 
     return newCons(car, cdr);
 }

@@ -24,10 +24,11 @@ scmObject newSymbolAllocation(char *input, int length)
     strcpy(copiedString, input);
     copiedString[length] = '\0';
 
-    MEMORY_DEBUG_CODE({
-        printf("newSymbol: length: %d\n", length);
-        printf("newSymbol: copied string: %s\n", copiedString);
-    })
+    MEMORY_DEBUG_CODE(
+        {
+            printf("newSymbol: length: %d\n", length);
+            printf("newSymbol: copied string: %s\n", copiedString);
+        })
 
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_SYMBOL;
@@ -35,12 +36,13 @@ scmObject newSymbolAllocation(char *input, int length)
 
     existingSymbols[numberOfExisitingSymbols] = o;
 
-    MEMORY_DEBUG_CODE({
-        printf("newSymbolAllocation: gerade eben neues Symbol hinzugefuegt:\n");
-        printf("%d\n", numberOfExisitingSymbols);
-        scm_print(existingSymbols[numberOfExisitingSymbols]);
-        printf("\n");
-    })
+    MEMORY_DEBUG_CODE(
+        {
+            printf("newSymbolAllocation: gerade eben neues Symbol hinzugefuegt:\n");
+            printf("%d\n", numberOfExisitingSymbols);
+            scm_print(existingSymbols[numberOfExisitingSymbols]);
+            printf("\n");
+        })
 
     numberOfExisitingSymbols++;
 
