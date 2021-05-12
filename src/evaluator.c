@@ -14,6 +14,7 @@ scmObject scm_eval(scmObject inputUnevaluated)
     scmObject restList;
     scmObject nextArg;
 
+    // Wenn es eine Cons ist muss man was machen
     if (inputUnevaluated->tag == TAG_CONS)
     {
 
@@ -26,7 +27,6 @@ scmObject scm_eval(scmObject inputUnevaluated)
                 scm_print(restList);
                 printf("\n-----------------\n");
             })
-        // Wenn es eine Cons ist muss man was machen
         if (car == newSymbol("+", 1))
         {
             READER_DEBUG_CODE({
