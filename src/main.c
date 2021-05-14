@@ -10,6 +10,7 @@ scmObject SCM_TRUE;
 scmObject SCM_FALSE;
 scmObject SCM_NULL;
 scmObject SCM_INV;
+scmObject TOP_ENV;
 
 // Globale Variable; muss von überall erreichbar sein:
 jmp_buf savebuf;
@@ -26,6 +27,9 @@ scm_initialize()
     SCM_FALSE = (scmObject)malloc(sizeof(scmObject));
     SCM_NULL = (scmObject)malloc(sizeof(scmObject));
     SCM_INV = (scmObject)malloc(sizeof(scmObject));
+    TOP_ENV = (scmObject)malloc(sizeof(scmObject));
+
+    initializeTopEnv();
 
     initializeSymbolTableBuffer();
 
@@ -46,10 +50,11 @@ int main(int argCount, char *argValues[])
 {
     printf("Welcome to my scheme 2021!!\n");
 
-    MAIN_DEBUG_CODE({
-        printf("%d\n", argCount);
-        printf("%s\n", argValues[1]);
-    })
+    MAIN_DEBUG_CODE(
+        {
+            printf("%d\n", argCount);
+            printf("%s\n", argValues[1]);
+        })
 
     scm_initialize();
     selftest();

@@ -22,6 +22,10 @@ void selftest()
     // char *b = "Hallo";
     // printf("selftest: strcmp: %d\n", strcmp(a, b));
 
+    // printf("selftest: BITSHIFT: %d\n", 2 >> 1);
+    // printf("selftest: BITSHIFT: %d\n", 2 << 1);
+    // printf("selftest: BITSHIFT: %d\n", 2 << 2);
+
     scmObject symbol1, symbol2, symbol3, symbol4, symbol5;
 
     // printf("newSymbol(111, 3); wird aufgerufen\n");
@@ -59,6 +63,37 @@ void selftest()
     obj1 = newCons(newInteger(33), newCons(newInteger(11), newSymbol("hallo2", 6)));
     // scm_print(obj1);
     // printf("\n");
+
+    scmObject tmpKey1 = newSymbol("var1", 4);
+    scmObject tmpVal1 = newInteger(11);
+    setEnvironmentValue(tmpKey1, tmpVal1, TOP_ENV);
+
+    scmObject tmpKey2 = newSymbol("var2", 4);
+    scmObject tmpVal2 = newInteger(22);
+    setEnvironmentValue(tmpKey2, tmpVal2, TOP_ENV);
+
+    tmpVal1 = getEnvironmentValue(tmpKey1, TOP_ENV);
+    scm_print(tmpVal1);
+
+    tmpVal2 = getEnvironmentValue(tmpKey2, TOP_ENV);
+    scm_print(tmpVal2);
+
+    scmObject symbolToHash1;
+    scmObject symbolToHash2;
+    scmObject symbolToHash3;
+
+    symbolToHash1 = newSymbol("abc", 3);
+    symbolToHash2 = newSymbol("abc", 3);
+    symbolToHash3 = newSymbol("acb", 3);
+
+    // myHash = (long)symbolToHash1->value.scmSymbol;
+    printf("\nMyHash1: %p\n", symbolToHash1);
+    // myHash = (long)symbolToHash2->value.scmSymbol;
+    printf("\nMyHash2: %p\n", symbolToHash2);
+
+    hashForEnv(symbolToHash1, TOP_ENV);
+    hashForEnv(symbolToHash2, TOP_ENV);
+    hashForEnv(symbolToHash3, TOP_ENV);
 
     printf("#################### selftest ends ###########################\n");
 }
