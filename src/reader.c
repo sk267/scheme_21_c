@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-#define READER_DEBUG
+// #define READER_DEBUG
 
 #ifdef READER_DEBUG
 #define READER_DEBUG_CODE(code) code
@@ -64,7 +64,8 @@ bool isValidSymbolChar(char input)
     if (
         ((input >= 'A') && (input <= 'Z')) ||
         ((input >= 'a') && (input <= 'z')) ||
-        ((input >= '0') && (input <= '9')))
+        ((input >= '0') && (input <= '9')) ||
+        ((input >= '*') && (input <= '/')))
     {
         return true;
     }
@@ -209,6 +210,8 @@ scmObject read_Cons(scmObject newObject)
         printf("read_Cons: actChar: %c\n", actChar);
     })
 
+    // TODO: Andere Listen Input hier implementieren (dass man auch (1 2 3 4) eingeben kann!)
+
     if (actChar == ')')
     {
         return SCM_NULL;
@@ -281,7 +284,7 @@ scmObject scm_read()
         // STRING ##################################################
         newObj = read_String(newObj);
     }
-    else if ((actChar >= 'A') && (actChar <= 'z'))
+    else if (isValidSymbolChar(actChar))
     {
         // SYMBOL ##################################################
         unreadChar(actChar);

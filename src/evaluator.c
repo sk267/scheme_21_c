@@ -1,11 +1,11 @@
 #include "scheme.h"
 
-// #define READER_DEBUG
+#define EVAL_DEBUG
 
-#ifdef READER_DEBUG
-#define READER_DEBUG_CODE(code) code
+#ifdef EVAL_DEBUG
+#define EVAL_DEBUG_CODE(code) code
 #else
-#define READER_DEBUG_CODE(code)
+#define EVAL_DEBUG_CODE(code)
 #endif
 
 scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
@@ -17,25 +17,32 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
     car = exprUnevaluated->value.scmCons.car;
     restList = exprUnevaluated->value.scmCons.cdr;
 
-    READER_DEBUG_CODE(
+    EVAL_DEBUG_CODE(
         {
             printf("scm_eval:------------------------- \n");
+            printf("restlist: ");
             scm_print(restList);
             printf("\n-----------------\n");
         })
+
     if (car == newSymbol("+", 1))
     {
-        READER_DEBUG_CODE({
+        EVAL_DEBUG_CODE({
             printf("Betrete if + \n");
         })
 
-        int sum;
-        while (restList->tag != TAG_NULL)
+        int sum = 0;
+
+        do
         {
-            nextArg = restList->value.scmCons.car;
+            nextArg = restList;
+            printf("noch da\n");
+            printf("%d\n", nextArg->value.scmInt);
             sum += nextArg->value.scmInt;
+            printf("evalFuncOrSyntax: sum: %d\n", sum);
             restList = restList->value.scmCons.cdr;
-        }
+        } while (restList->tag != TAG_NULL);
+
         return (newInteger(sum));
     }
 

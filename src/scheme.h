@@ -25,13 +25,6 @@ typedef struct scmObjectStruct *scmObject;
 typedef struct consStruct cons;
 typedef struct envStruct envStr;
 
-// struct envStruct
-// {
-//     scmObject *cons;
-//     int capacity;
-//     int nSymbols;
-// };
-
 struct consStruct
 {
     scmObject car;
