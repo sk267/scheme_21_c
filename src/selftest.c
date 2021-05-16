@@ -26,6 +26,24 @@ void selftest()
     // printf("selftest: BITSHIFT: %d\n", 2 << 1);
     // printf("selftest: BITSHIFT: %d\n", 2 << 2);
 
+    // int *testInts = (int *)calloc(5, sizeof(int));
+
+    // testInts[2] = 27;
+
+    // for (int i = 0; i < 5; i++)
+    // {
+
+    //     printf("i: %d\n", i);
+    //     if (testInts[i] == NULL)
+    //     {
+    //         printf("hier steht NULL drin\n");
+    //     }
+    //     else
+    //     {
+    //         printf("hier steht %d\n", testInts[i]);
+    //     }
+    // }
+
     scmObject symbol1, symbol2, symbol3, symbol4, symbol5;
 
     // printf("newSymbol(111, 3); wird aufgerufen\n");
@@ -65,18 +83,58 @@ void selftest()
     // printf("\n");
 
     scmObject tmpKey1 = newSymbol("var1", 4);
-    scmObject tmpVal1 = newInteger(11);
+    scmObject tmpVal1 = newInteger(1);
     setEnvironmentValue(tmpKey1, tmpVal1, TOP_ENV);
 
     scmObject tmpKey2 = newSymbol("var2", 4);
-    scmObject tmpVal2 = newInteger(22);
+    scmObject tmpVal2 = newInteger(2);
     setEnvironmentValue(tmpKey2, tmpVal2, TOP_ENV);
 
+    scmObject tmpKey3 = newSymbol("var3", 4);
+    scmObject tmpVal3 = newInteger(3);
+    setEnvironmentValue(tmpKey3, tmpVal3, TOP_ENV);
+
+    scmObject tmpKey4 = newSymbol("var4", 4);
+    scmObject tmpVal4 = newInteger(4);
+    setEnvironmentValue(tmpKey4, tmpVal4, TOP_ENV);
+
+    scmObject tmpKey5 = newSymbol("var5", 4);
+    scmObject tmpVal5 = newInteger(5);
+    setEnvironmentValue(tmpKey5, tmpVal5, TOP_ENV);
+
+    scmObject tmpKey6 = newSymbol("var6", 4);
+    scmObject tmpVal6 = newInteger(6);
+    setEnvironmentValue(tmpKey6, tmpVal6, TOP_ENV);
+
     tmpVal1 = getEnvironmentValue(tmpKey1, TOP_ENV);
+    printf("\n");
     scm_print(tmpVal1);
+    printf("\n");
 
     tmpVal2 = getEnvironmentValue(tmpKey2, TOP_ENV);
+    printf("\n");
     scm_print(tmpVal2);
+    printf("\n");
+
+    tmpVal3 = getEnvironmentValue(tmpKey3, TOP_ENV);
+    printf("\n");
+    scm_print(tmpVal3);
+    printf("\n");
+
+    tmpVal4 = getEnvironmentValue(tmpKey4, TOP_ENV);
+    printf("\n");
+    scm_print(tmpVal4);
+    printf("\n");
+
+    tmpVal5 = getEnvironmentValue(tmpKey5, TOP_ENV);
+    printf("\n");
+    scm_print(tmpVal5);
+    printf("\n");
+
+    tmpVal6 = getEnvironmentValue(tmpKey6, TOP_ENV);
+    printf("\n");
+    scm_print(tmpVal6);
+    printf("\n");
 
     scmObject symbolToHash1;
     scmObject symbolToHash2;
