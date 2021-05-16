@@ -1,12 +1,5 @@
 #include "scheme.h"
 
-void scmError(char *message)
-{
-    printf("\n\n!!!!!!!!!!!!!!!!!!!!!!\n");
-    printf("%s\n", message);
-    printf("!!!!!!!!!!!!!!!!!!!!!!\n\n");
-}
-
 void printTmp(char *input)
 {
     printf("printTmp: %s\n", input);

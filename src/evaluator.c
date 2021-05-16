@@ -13,8 +13,20 @@ scmObject scm_eval(scmObject inputUnevaluated)
     scmObject car;
     scmObject restList;
     scmObject nextArg;
+    scmObject evaluated;
 
-    // Wenn es eine Cons ist muss man was machen
+    if (inputUnevaluated->tag == TAG_SYMBOL)
+    {
+        // Nach dem Symbol-Value suchen und dieses Binding zurückgeben
+        evaluated = getEnvironmentValue(inputUnevaluated, TOP_ENV);
+        printf("Betrete errorosodjvfnerjnvg\n");
+        if (evaluated == SCM_NULL)
+        {
+            scmError("variable does not exist yet!");
+        }
+        return evaluated;
+    }
+
     if (inputUnevaluated->tag == TAG_CONS)
     {
 

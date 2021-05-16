@@ -5,6 +5,7 @@
 #include <setjmp.h>
 
 #define scmAssert(ok, msg) scmAssertVerbose(ok, msg, __FILE__, __LINE__)
+#define scmError(msg) scmErrorVerbose(msg, __FILE__, __LINE__)
 
 enum
 {
@@ -77,6 +78,7 @@ extern scmObject getEnvironmentValue(scmObject key, scmObject env);
 extern int hashForEnv(scmObject symbol, scmObject env);
 
 extern void scmAssertVerbose(int ok, char *msg, char *file, int line);
+extern void scmErrorVerbose(char *msg, char *file, int line);
 
 extern void initializeSymbolTableBuffer();
 

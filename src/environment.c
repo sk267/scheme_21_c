@@ -65,22 +65,22 @@ void growEnvironment(scmObject env)
     for (int i = 0; i < oldCapacity; i++)
     {
 
-        printf("------------------ i begin:%d\n", i);
+        // printf("------------------ i begin:%d\n", i);
         if (oldBindings[i] != NULL)
         {
             key = oldBindings[i]->value.scmCons.car;
             value = oldBindings[i]->value.scmCons.cdr;
 
-            printf("Environment: for: key: \n");
-            scm_print(key);
-            printf("\n");
-            printf("Environment: for: value: \n");
-            scm_print(value);
-            printf("\n");
+            // printf("Environment: for: key: \n");
+            // scm_print(key);
+            // printf("\n");
+            // printf("Environment: for: value: \n");
+            // scm_print(value);
+            // printf("\n");
 
             setEnvironmentValue(key, value, env);
         }
-        printf("------------------ i finished:%d\n\n\n", i);
+        // printf("------------------ i finished:%d\n\n\n", i);
     }
 
     free(oldBindings);
@@ -88,39 +88,94 @@ void growEnvironment(scmObject env)
 
 void setEnvironmentValue(scmObject key, scmObject value, scmObject env)
 {
-    // Returns 1 if element was added
-    // Return 0 if the table size stays the same
-    // Idee: einfach über das Env checken, ob wir schon ein Grow machen müssen!?
+
+    int initialIndex;
+    int capacity;
 
     if (env->value.scmEnv.capacity == env->value.scmEnv.nVariables)
     {
         growEnvironment(env);
     }
 
-    // An der entsprechenden Stelle kann man newCons(key, value) aufrufen!
     int index = hashForEnv(key, env);
+    initialIndex = index;
+    capacity = env->value.scmEnv.capacity;
 
     // Prüfen, ob an dieser Stelle überhaupt platz ist.
-    while (env->value.scmEnv.keyValuePairs[index] != NULL)
+    while (true)
     {
-        printf("setEnvironmentValue: idx: %d already full!! Add one\n", index);
-        index++;
-    }
+        if (env->value.scmEnv.keyValuePairs[index] != NULL)
+        {
+            // Slot ist nicht frei!
+            if (env->value.scmEnv.keyValuePairs[index]->value.scmCons.car == key)
+            {
+                // Diese Symbol existiert bereits, wir müssen nur den cdr hier ändern
+                // und die Methode verlassen
+                env->value.scmEnv.keyValuePairs[index]->value.scmCons.cdr = value;
+                return;
+            }
+            else
+            {
+                // Symbol noch nicht gefunden, wir müssen weitersuchen
+                index++;
+            }
+        }
+        else if (env->value.scmEnv.keyValuePairs[index] == NULL)
+        {
+            // Slot ist frei, hier eintragen
 
-    index = index % env->value.scmEnv.capacity;
-    env->value.scmEnv.keyValuePairs[index] = newCons(key, value);
-    env->value.scmEnv.nVariables += 1;
+            printf("free slot found\n");
+            index = index % capacity;
+            env->value.scmEnv.keyValuePairs[index] = newCons(key, value);
+            env->value.scmEnv.nVariables += 1;
+            return;
+        }
+
+        if (initialIndex == (index % capacity))
+        {
+            // Es gab überhaupt keine freien Slot mehr
+            scmError("setEnvironmentValue: There was no free slot, FATAL");
+        }
+    }
 }
 
 scmObject getEnvironmentValue(scmObject key, scmObject env)
 {
+
+    // printf("Betrete getEnvironmentValue\n");
     int index = hashForEnv(key, env);
+    int initialIndex = index;
+    int capacity = env->value.scmEnv.capacity;
+
+    // printf("getEnvironmentValue: initialIndex: %d\n", initialIndex);
+    // printf("getEnvironmentValue: initialIndex mod capaxity: %d\n", (initialIndex % capacity));
 
     // Prüfen, habe ich wirklich den richtigen Key?
-    while (env->value.scmEnv.keyValuePairs[index]->value.scmCons.car != key)
+    while (true)
     {
-        index++;
+
+        if (env->value.scmEnv.keyValuePairs[(index % capacity)] == NULL)
+        {
+            // Leerer Platz -> weitersuchen
+            index++;
+        }
+        else if (env->value.scmEnv.keyValuePairs[(index % capacity)]->value.scmCons.car != key)
+        {
+            // Nicht der richtige Key -> weitersuchen
+            index++;
+        }
+        else if (env->value.scmEnv.keyValuePairs[(index % capacity)]->value.scmCons.car == key)
+        {
+            // Key gefunden -> wert zurückgeben
+            index = index % capacity;
+            return env->value.scmEnv.keyValuePairs[index]->value.scmCons.cdr;
+        }
+        if (initialIndex == (index % capacity))
+        {
+            // Wir sind wieder beim ersten Index -> Den Key scheint es noch nicht zu geben!
+            printf("\n\n!!!!FATAL:getEnvironmentValue:  wieder beim ersten Index herausgekommen!! \n\n");
+            return SCM_NULL;
+        }
     }
-    index = index % env->value.scmEnv.capacity;
-    return env->value.scmEnv.keyValuePairs[index]->value.scmCons.cdr;
+    return SCM_NULL;
 }
