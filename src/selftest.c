@@ -96,7 +96,7 @@ void selftest()
     setEnvironmentValue(tmpKey5, tmpVal5, TOP_ENV);
 
     scmObject tmpKey6 = newSymbol("var6", 4);
-    scmObject tmpVal6 = newInteger(6);
+    scmObject tmpVal6 = newString("StringV", 7);
     setEnvironmentValue(tmpKey6, tmpVal6, TOP_ENV);
 
     tmpVal1 = getEnvironmentValue(tmpKey1, TOP_ENV);

@@ -124,7 +124,7 @@ void setEnvironmentValue(scmObject key, scmObject value, scmObject env)
         {
             // Slot ist frei, hier eintragen
 
-            printf("free slot found\n");
+            // printf("free slot found\n");
             index = index % capacity;
             env->value.scmEnv.keyValuePairs[index] = newCons(key, value);
             env->value.scmEnv.nVariables += 1;

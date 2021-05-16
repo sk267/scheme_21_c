@@ -76,6 +76,7 @@ extern void initializeTopEnv();
 extern void setEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern scmObject getEnvironmentValue(scmObject key, scmObject env);
 extern int hashForEnv(scmObject symbol, scmObject env);
+extern scmObject evalFuncOrSyntax(scmObject exprUnevaluated);
 
 extern void scmAssertVerbose(int ok, char *msg, char *file, int line);
 extern void scmErrorVerbose(char *msg, char *file, int line);
