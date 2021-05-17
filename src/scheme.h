@@ -80,6 +80,9 @@ extern scmObject scm_read();
 extern scmObject scm_eval(scmObject input);
 extern void scm_print(scmObject input);
 
+extern scmObject getCar(scmObject hopefullyCons);
+extern scmObject getCdr(scmObject hopefullyCons);
+
 extern scmObject SCM_NULL;
 extern scmObject SCM_TRUE;
 extern scmObject SCM_FALSE;
