@@ -56,7 +56,7 @@ struct scmObjectStruct
 extern scmObject *existingSymbols;
 
 extern void selftest();
-extern char nextChar();
+extern int nextChar();
 extern void unreadChar(char input);
 
 extern scmObject newInteger(int inInt);

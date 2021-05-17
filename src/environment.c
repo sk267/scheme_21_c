@@ -19,7 +19,10 @@ scmObject allocateEnvironment(int inCapacitiy)
     env->value.scmEnv.capacity = inCapacitiy;
     // Hier auf (scmObject*) casten???
     env->value.scmEnv.keyValuePairs = (scmObject *)calloc(inCapacitiy, sizeof(scmObject));
-    printf("allocateEnvironment: capacity: %d\n", env->value.scmEnv.capacity);
+
+    ENV_DEBUG_CODE({
+        printf("allocateEnvironment: capacity: %d\n", env->value.scmEnv.capacity);
+    })
 
     return env;
 }
@@ -37,7 +40,7 @@ int hashForEnv(scmObject symbol, scmObject env)
 
 void initializeTopEnv()
 {
-    TOP_ENV = allocateEnvironment(1);
+    TOP_ENV = allocateEnvironment(50);
 }
 
 void growEnvironment(scmObject env)
@@ -48,7 +51,9 @@ void growEnvironment(scmObject env)
     // Über alle Werte drüber gehen, wenn es != NULL ist, dann setEnvironmentValue aufrufen
     // Die alten Bindings löschen
 
-    printf("Environment: growEnvirtonment betreten!\n");
+    ENV_DEBUG_CODE({
+        printf("Environment: growEnvirtonment betreten!\n");
+    })
 
     scmObject key;
     scmObject value;
@@ -59,7 +64,9 @@ void growEnvironment(scmObject env)
     scmObject *newBindings = (scmObject *)calloc(newCapacity, sizeof(scmObject));
 
     env->value.scmEnv.keyValuePairs = newBindings;
-    printf("Environment: newCapacity: %d\n", newCapacity);
+    ENV_DEBUG_CODE({
+        printf("Environment: newCapacity: %d\n", newCapacity);
+    })
     env->value.scmEnv.capacity = newCapacity;
 
     for (int i = 0; i < oldCapacity; i++)
@@ -173,7 +180,9 @@ scmObject getEnvironmentValue(scmObject key, scmObject env)
         if (initialIndex == (index % capacity))
         {
             // Wir sind wieder beim ersten Index -> Den Key scheint es noch nicht zu geben!
-            printf("\n\n!!!!FATAL:getEnvironmentValue:  wieder beim ersten Index herausgekommen!! \n\n");
+            ENV_DEBUG_CODE({
+                printf("\n\n!!!!FATAL:getEnvironmentValue:  wieder beim ersten Index herausgekommen!! \n\n");
+            })
             return SCM_NULL;
         }
     }

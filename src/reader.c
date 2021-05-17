@@ -22,13 +22,16 @@ void skipWhitespace()
     do
     {
         actChar = nextChar();
+
+        // printf("-----------------skipWhitespace: actChar: %d\n", (int)actChar);
     } while (
         (actChar == ' ') || (actChar == '\n') || (actChar == '\t') || (actChar == '\r'));
 
     unreadChar(actChar);
+    // printf("-----------------skipWhitespace: noch da \n");
 }
 
-char actChar;
+int actChar;
 
 scmObject read_Integer(scmObject newObj)
 {
@@ -75,17 +78,17 @@ bool isValidSymbolChar(char input)
     }
 }
 
-bool isValidStringChar(char input)
-{
-    if (input != '\0')
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
+// bool isValidStringChar(char input)
+// {
+//     if (input != '\0')
+//     {
+//         return true;
+//     }
+//     else
+//     {
+//         return false;
+//     }
+// }
 
 typedef struct charBufferStruct charBuffer;
 
@@ -169,13 +172,21 @@ scmObject read_Symbol(scmObject newObj)
 
 scmObject read_String(scmObject newObj)
 {
-
+    READER_DEBUG_CODE({
+        printf("read String betreten \n");
+    })
     charBuffer buffer;
     init_char_buffer(&buffer);
 
     while (true)
     {
         actChar = nextChar();
+
+        if (actChar == 42)
+        {
+            // " entdeckt, rausgehen!
+            break;
+        }
         if (isValidSymbolChar(actChar) == true)
         {
             add_to_char_buffer(&buffer, actChar);
@@ -198,61 +209,89 @@ scmObject read_String(scmObject newObj)
     return newObj;
 }
 
-scmObject read_Cons(scmObject newObject)
+// scmObject read_Cons(scmObject newObject)
+// {
+//     READER_DEBUG_CODE({
+//         printf("Betrete read_Cons\n");
+//     })
+//     skipWhitespace();
+
+//     char actChar = nextChar();
+//     READER_DEBUG_CODE({
+//         printf("read_Cons: actChar: %c\n", actChar);
+//     })
+
+//     // TODO: Andere Listen Input hier implementieren (dass man auch (1 2 3 4) eingeben kann!)
+
+//     if (actChar == ')')
+//     {
+//         return SCM_NULL;
+//     }
+//     unreadChar(actChar);
+
+//     scmObject car, cdr;
+
+//     READER_DEBUG_CODE({
+//         printf("read_Cons2: actChar: %c\n", actChar);
+//     })
+//     car = scm_read();
+
+//     actChar = nextChar();
+
+//     if (actChar == 10)
+//     {
+//         printf("!!! Error: If you wish to make a List with only one Argument a blank is needed after the last argument!\n");
+//         printf("Going back to REPL\n");
+//         longjmp(savebuf, 1);
+//     }
+
+//     if (actChar == ')')
+//     {
+//         return newCons(car, SCM_NULL);
+//     }
+
+//     unreadChar(actChar);
+
+//     cdr = scm_read();
+
+//     READER_DEBUG_CODE(
+//         {
+//             printf("read_Cons: cdr: ");
+//             scm_print(cdr);
+//             printf("\n");
+//         })
+
+//     scmAssert(actChar != -1, "'(' is missing!");
+
+//     return newCons(car, cdr);
+// }
+
+scmObject read_Cons(scmObject nextCar)
 {
+
     READER_DEBUG_CODE({
         printf("Betrete read_Cons\n");
     })
-    skipWhitespace();
+    scmObject car = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    scmObject cdr;
 
-    char actChar = nextChar();
-    READER_DEBUG_CODE({
-        printf("read_Cons: actChar: %c\n", actChar);
-    })
-
-    // TODO: Andere Listen Input hier implementieren (dass man auch (1 2 3 4) eingeben kann!)
-
-    if (actChar == ')')
-    {
-        return SCM_NULL;
-    }
-    unreadChar(actChar);
-
-    scmObject car, cdr;
-
-    READER_DEBUG_CODE({
-        printf("read_Cons2: actChar: %c\n", actChar);
-    })
-    car = scm_read();
-
-    actChar = nextChar();
-
-    if (actChar == 10)
-    {
-        printf("!!! Error: If you wish to make a List with only one Argument a blank is needed after the last argument!\n");
-        printf("Going back to REPL\n");
-        longjmp(savebuf, 1);
-    }
-
-    if (actChar == ')')
-    {
-        return newCons(car, SCM_NULL);
-    }
-
-    unreadChar(actChar);
-
+    car = nextCar;
     cdr = scm_read();
 
-    READER_DEBUG_CODE(
-        {
-            printf("read_Cons: cdr: ");
-            scm_print(cdr);
-            printf("\n");
-        })
+    if (cdr->tag == SCM_FALSE->tag)
+    {
+        scmError("found uncompleted List");
+    }
 
-    scmAssert(actChar != -1, "'(' is missing!");
-
-    return newCons(car, cdr);
+    if (cdr->tag == TAG_INV)
+    {
+        // cdr = SCM_NULL;
+        return newCons(car, SCM_NULL);
+    }
+    else
+    {
+        return newCons(car, read_Cons(cdr));
+    }
 }
 
 scmObject scm_read()
@@ -267,8 +306,14 @@ scmObject scm_read()
     skipWhitespace();
     actChar = nextChar();
     READER_DEBUG_CODE({
-        printf("scm_read> actChar: %d \n", actChar);
+        printf("scm_read> actChar: %d \n", (int)actChar);
     })
+
+    if (actChar == -1)
+    {
+        // printf("------------------------------ EOF gefunden!! \n");
+        return SCM_FALSE;
+    }
 
     if (actChar == ')')
     {
@@ -306,8 +351,18 @@ scmObject scm_read()
     }
     else if (actChar == '(')
     {
-        // CONS ######################################################
-        newObj = read_Cons(newObj);
+        skipWhitespace();
+        actChar = nextChar();
+        unreadChar(actChar);
+        if (actChar == ')')
+        {
+            return SCM_NULL;
+        }
+        else
+        {
+            // CONS ######################################################
+            newObj = read_Cons(scm_read());
+        }
     }
     else
     {

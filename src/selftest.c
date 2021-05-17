@@ -8,6 +8,7 @@ void printTmp(char *input)
 void selftest()
 {
     printf("#################### selftest begins ###########################\n\n");
+
     // printf("IHK.value: %s\n", newSymbol("IHK", 3)->value.scmSymbol);
     // printf("\nlllllllllllllllllllllllllllllll\n\n");
 

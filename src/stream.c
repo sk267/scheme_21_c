@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include "scheme.h"
 
 char parkedChar = '\0';
-char nextChar()
+int nextChar()
 {
     int nextChar;
     if (parkedChar != '\0')
@@ -12,8 +13,15 @@ char nextChar()
     }
     else
     {
-        nextChar = getchar();
-        return (char)nextChar;
+        nextChar = fgetc(stdin);
+        if (nextChar < 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return nextChar;
+        }
     }
 }
 

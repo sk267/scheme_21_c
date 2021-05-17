@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-#define EVAL_DEBUG
+// #define EVAL_DEBUG
 
 #ifdef EVAL_DEBUG
 #define EVAL_DEBUG_CODE(code) code
@@ -52,6 +52,7 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
 scmObject scm_eval(scmObject inputUnevaluated)
 {
 
+#ifdef true
     scmObject evaluated;
 
     if (inputUnevaluated->tag == TAG_SYMBOL)
@@ -71,4 +72,8 @@ scmObject scm_eval(scmObject inputUnevaluated)
     }
     // Der ganze Rest evaluiert einfach zu sich selbst (Int, True, ...)
     return inputUnevaluated;
+#
+#elif
+    return inputUnevaluated;
+#endif
 }
