@@ -66,6 +66,7 @@ extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
 extern scmObject allocateEnvironment(int inCapacitiy);
 extern void initializeTopEnv();
+extern void defineEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern void setEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern scmObject getEnvironmentValue(scmObject key, scmObject env);
 extern int hashForEnv(scmObject symbol, scmObject env);

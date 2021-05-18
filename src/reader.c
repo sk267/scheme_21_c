@@ -68,7 +68,8 @@ bool isValidSymbolChar(char input)
         ((input >= 'A') && (input <= 'Z')) ||
         ((input >= 'a') && (input <= 'z')) ||
         ((input >= '0') && (input <= '9')) ||
-        ((input >= '*') && (input <= '/')))
+        ((input >= '*') && (input <= '/')) ||
+        ((input == '!') || (input == '?')))
     {
         return true;
     }

@@ -78,27 +78,27 @@ void selftest()
 
     scmObject tmpKey1 = newSymbol("var1", 4);
     scmObject tmpVal1 = newInteger(1);
-    setEnvironmentValue(tmpKey1, tmpVal1, TOP_ENV);
+    defineEnvironmentValue(tmpKey1, tmpVal1, TOP_ENV);
 
     scmObject tmpKey2 = newSymbol("var2", 4);
     scmObject tmpVal2 = newInteger(2);
-    setEnvironmentValue(tmpKey2, tmpVal2, TOP_ENV);
+    defineEnvironmentValue(tmpKey2, tmpVal2, TOP_ENV);
 
     scmObject tmpKey3 = newSymbol("var3", 4);
     scmObject tmpVal3 = newInteger(3);
-    setEnvironmentValue(tmpKey3, tmpVal3, TOP_ENV);
+    defineEnvironmentValue(tmpKey3, tmpVal3, TOP_ENV);
 
     scmObject tmpKey4 = newSymbol("var4", 4);
     scmObject tmpVal4 = newInteger(4);
-    setEnvironmentValue(tmpKey4, tmpVal4, TOP_ENV);
+    defineEnvironmentValue(tmpKey4, tmpVal4, TOP_ENV);
 
     scmObject tmpKey5 = newSymbol("var5", 4);
     scmObject tmpVal5 = newInteger(5);
-    setEnvironmentValue(tmpKey5, tmpVal5, TOP_ENV);
+    defineEnvironmentValue(tmpKey5, tmpVal5, TOP_ENV);
 
     scmObject tmpKey6 = newSymbol("var6", 4);
     scmObject tmpVal6 = newString("StringV", 7);
-    setEnvironmentValue(tmpKey6, tmpVal6, TOP_ENV);
+    defineEnvironmentValue(tmpKey6, tmpVal6, TOP_ENV);
 
     tmpVal1 = getEnvironmentValue(tmpKey1, TOP_ENV);
     printf("\n");

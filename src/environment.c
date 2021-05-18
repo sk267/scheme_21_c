@@ -47,8 +47,8 @@ void growEnvironment(scmObject env)
 {
     // Alte Bindings aus der Tabelle herausholen,
     // die Werte in die neue Tabelle rein hashen
-    // Müsste mit setEnvironmentValue gehen
-    // Über alle Werte drüber gehen, wenn es != NULL ist, dann setEnvironmentValue aufrufen
+    // Müsste mit defineEnvironmentValue gehen
+    // Über alle Werte drüber gehen, wenn es != NULL ist, dann defineEnvironmentValue aufrufen
     // Die alten Bindings löschen
 
     ENV_DEBUG_CODE({
@@ -85,7 +85,7 @@ void growEnvironment(scmObject env)
             // scm_print(value);
             // printf("\n");
 
-            setEnvironmentValue(key, value, env);
+            defineEnvironmentValue(key, value, env);
         }
         // printf("------------------ i finished:%d\n\n\n", i);
     }
@@ -93,9 +93,8 @@ void growEnvironment(scmObject env)
     free(oldBindings);
 }
 
-void setEnvironmentValue(scmObject key, scmObject value, scmObject env)
+void setOrDefineEnvironmentValue(scmObject key, scmObject value, scmObject env, bool scmDefine)
 {
-
     int initialIndex;
     int capacity;
 
@@ -129,7 +128,14 @@ void setEnvironmentValue(scmObject key, scmObject value, scmObject env)
         }
         else if (env->value.scmEnv.keyValuePairs[index] == NULL)
         {
-            // Slot ist frei, hier eintragen
+            // Slot ist frei, evt. hier eintragen
+
+            if (!scmDefine)
+            {
+                // Eintragen ist nur erlaubt, wenn define aufgerufen wurde!
+                // Bei set! können nur vorhandene variablen überschrieben werden
+                scmError("set! is only allowed to override existing variables! Use define instead!");
+            }
 
             // printf("free slot found\n");
             index = index % capacity;
@@ -141,9 +147,19 @@ void setEnvironmentValue(scmObject key, scmObject value, scmObject env)
         if (initialIndex == (index % capacity))
         {
             // Es gab überhaupt keine freien Slot mehr
-            scmError("setEnvironmentValue: There was no free slot, FATAL");
+            scmError("defineEnvironmentValue: There was no free slot, FATAL");
         }
     }
+}
+
+void defineEnvironmentValue(scmObject key, scmObject value, scmObject env)
+{
+    setOrDefineEnvironmentValue(key, value, env, true);
+}
+
+void setEnvironmentValue(scmObject key, scmObject value, scmObject env)
+{
+    setOrDefineEnvironmentValue(key, value, env, false);
 }
 
 scmObject getEnvironmentValue(scmObject key, scmObject env)

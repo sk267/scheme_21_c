@@ -113,7 +113,23 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
         // in case we get an expression here, we want to evaluate it!
         value = scm_eval(getCar(getCdr(restList)));
 
-        setEnvironmentValue(key, value, TOP_ENV);
+        defineEnvironmentValue(key, value, TOP_ENV);
+    }
+
+    if (car == newSymbol("set!", 4))
+    {
+        // DEFINE #########################################
+
+        scmObject keyUneval, valueUneval;
+        scmObject valueEvaluated;
+
+        keyUneval = getCar(restList);
+        restList = getCdr(restList);
+
+        valueUneval = getCar(restList);
+        valueEvaluated = scm_eval(valueUneval);
+
+        setEnvironmentValue(keyUneval, valueEvaluated, TOP_ENV);
     }
 
     if (car == newSymbol("display", 7))
