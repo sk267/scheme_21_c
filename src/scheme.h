@@ -30,7 +30,6 @@ enum
     F_TAG_MULT,
     F_TAG_CONS,
     F_TAG_CAR,
-    F_TAG_CAR,
     F_TAG_CDR,
 };
 
@@ -114,6 +113,8 @@ extern void setEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern scmObject getEnvironmentValue(scmObject key, scmObject env);
 extern int hashForEnv(scmObject symbol, scmObject env);
 extern scmObject evalFuncOrSyntax(scmObject exprUnevaluated);
+extern scmObject evalFunction(scmObject functionEvaluated, scmObject restList);
+extern scmObject evalSyntax(scmObject functionEvaluated, scmObject restList);
 
 extern void scmAssertVerbose(int ok, char *msg, char *file, int line);
 extern void scmErrorVerbose(char *msg, char *file, int line);

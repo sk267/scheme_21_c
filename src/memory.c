@@ -59,10 +59,20 @@ void initializeSymbolTableBuffer()
 void initializeFunctions()
 {
     defineEnvironmentValue(newSymbol("+", 1), newFunc(F_TAG_PLUS), TOP_ENV);
+    defineEnvironmentValue(newSymbol("-", 1), newFunc(F_TAG_MINUS), TOP_ENV);
+    defineEnvironmentValue(newSymbol("*", 1), newFunc(F_TAG_MULT), TOP_ENV);
+    defineEnvironmentValue(newSymbol("cons", 4), newFunc(F_TAG_CONS), TOP_ENV);
+    defineEnvironmentValue(newSymbol("car", 3), newFunc(F_TAG_CAR), TOP_ENV);
+    defineEnvironmentValue(newSymbol("cdr", 3), newFunc(F_TAG_CDR), TOP_ENV);
 }
 
 void initializeSyntax()
 {
+    defineEnvironmentValue(newSymbol("define", 6), newSyntax(S_TAG_DEFINE), TOP_ENV);
+    defineEnvironmentValue(newSymbol("quote", 5), newSyntax(S_TAG_QUOTE), TOP_ENV);
+    defineEnvironmentValue(newSymbol("set!", 4), newSyntax(S_TAG_SET), TOP_ENV);
+    defineEnvironmentValue(newSymbol("display", 7), newSyntax(S_TAG_DISPLAY), TOP_ENV);
+    defineEnvironmentValue(newSymbol("if", 2), newSyntax(S_TAG_IF), TOP_ENV);
 }
 
 void growSymbolTableBuffer()
