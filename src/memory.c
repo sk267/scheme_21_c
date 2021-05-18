@@ -56,6 +56,15 @@ void initializeSymbolTableBuffer()
     currentNumberOfMaxSymbols = INITIAL_NUMBER_OF_MAX_SYMBOLS;
 }
 
+void initializeFunctions()
+{
+    defineEnvironmentValue(newSymbol("+", 1), newFunc(F_TAG_PLUS), TOP_ENV);
+}
+
+void initializeSyntax()
+{
+}
+
 void growSymbolTableBuffer()
 {
     // printf("growSymbolTableBuffer betreten\n");
@@ -124,5 +133,23 @@ scmObject newCons(scmObject inCar, scmObject inCdr)
     o->tag = TAG_CONS;
     o->value.scmCons.car = inCar;
     o->value.scmCons.cdr = inCdr;
+    return o;
+}
+
+scmObject newFunc(int whichFunction)
+{
+    scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    o->tag = TAG_FUNC;
+    o->value.scmFunction.whichFunction = whichFunction;
+
+    return o;
+}
+
+scmObject newSyntax(int whichSyntax)
+{
+    scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    o->tag = TAG_SYN;
+    o->value.scmSyntax.whichSyntax = whichSyntax;
+
     return o;
 }

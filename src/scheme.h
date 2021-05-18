@@ -18,12 +18,36 @@ enum
     TAG_FALSE,
     TAG_NULL,
     TAG_INV,
-    TAG_ENV
+    TAG_ENV,
+    TAG_FUNC,
+    TAG_SYN
+};
+
+enum
+{
+    F_TAG_PLUS = 1,
+    F_TAG_MINUS,
+    F_TAG_MULT,
+    F_TAG_CONS,
+    F_TAG_CAR,
+    F_TAG_CAR,
+    F_TAG_CDR,
+};
+
+enum
+{
+    S_TAG_DEFINE = 1,
+    S_TAG_QUOTE,
+    S_TAG_SET,
+    S_TAG_DISPLAY,
+    S_TAG_IF,
 };
 
 typedef struct scmObjectStruct *scmObject;
 typedef struct consStruct cons;
 typedef struct envStruct envStr;
+typedef struct funcStruct scmFunc;
+typedef struct synStruct scmSyn;
 
 struct consStruct
 {
@@ -38,6 +62,16 @@ struct envStruct
     int nVariables;
 };
 
+struct funcStruct
+{
+    int whichFunction;
+};
+
+struct synStruct
+{
+    int whichSyntax;
+};
+
 struct scmObjectStruct
 {
     int tag;
@@ -50,6 +84,8 @@ struct scmObjectStruct
         cons scmCons;
         envStr scmEnv;
         double scmDouble;
+        scmFunc scmFunction;
+        scmSyn scmSyntax;
     } value;
 };
 
@@ -64,8 +100,15 @@ extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
 extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
+extern scmObject newFunc(int whichFunction);
+extern scmObject newSyntax(int whichFunction);
+
 extern scmObject allocateEnvironment(int inCapacitiy);
 extern void initializeTopEnv();
+
+extern void initializeFunctions();
+extern void initializeSyntax();
+
 extern void defineEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern void setEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern scmObject getEnvironmentValue(scmObject key, scmObject env);

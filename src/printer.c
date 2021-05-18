@@ -48,6 +48,17 @@ void scm_print(scmObject input)
         scm_print(input->value.scmCons.cdr);
         printf(")");
         break;
+
+    case TAG_FUNC:
+        printf("print: FUNC gefunden!\n");
+        printf("Function Tag: %d\n", input->value.scmFunction.whichFunction);
+        break;
+
+    case TAG_SYN:
+        printf("print: SYN gefunden!\n");
+        printf("Syntax Tag: %d\n", input->value.scmSyntax.whichSyntax);
+        break;
+
     default:
         printf("kann ich noch nicht printen!! \n");
         break;
