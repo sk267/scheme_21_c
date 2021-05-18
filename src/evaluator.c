@@ -116,6 +116,30 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
         setEnvironmentValue(key, value, TOP_ENV);
     }
 
+    if (car == newSymbol("display", 7))
+    {
+        // DISPLAY #########################################
+
+        scmObject carUneval;
+        scmObject carEvaluated;
+
+        carUneval = getCar(restList);
+        carEvaluated = scm_eval(carUneval);
+        scm_print(carEvaluated);
+        return SCM_INV;
+    }
+
+    if (car == newSymbol("quote", 5))
+    {
+        // DISPLAY #########################################
+
+        scmObject carUneval;
+
+        carUneval = getCar(restList);
+        scm_print(carUneval);
+        return SCM_INV;
+    }
+
     if (car == newSymbol("cons", 4))
     {
         // CONS #########################################
@@ -141,6 +165,95 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
         }
 
         return newCons(carEvaluated, cdrEvaluated);
+    }
+
+    if (car == newSymbol("car", 3))
+    {
+        // CAR #########################################
+
+        scmObject car;
+        scmObject carEvaluated;
+
+        car = getCar(restList);
+        carEvaluated = scm_eval(car);
+
+        printf("noch da\n");
+        scm_print(carEvaluated);
+        printf("\n");
+
+        return getCar(carEvaluated);
+    }
+
+    if (car == newSymbol("cdr", 3))
+    {
+        // CAR #########################################
+
+        scmObject cdr;
+        scmObject cdrEvaluated;
+
+        cdr = getCar(restList);
+        cdrEvaluated = scm_eval(cdr);
+
+        printf("noch da\n");
+        scm_print(cdrEvaluated);
+        printf("\n");
+
+        return getCdr(cdrEvaluated);
+    }
+
+    if (car == newSymbol("if", 2))
+    {
+        // IF #########################################
+
+        EVAL_DEBUG_CODE({
+            printf("betrete if\n");
+        })
+        scmObject condUneval, trueExprUneval, falseExprUneval;
+        scmObject condEvaluated;
+
+        condUneval = getCar(restList);
+        restList = getCdr(restList);
+
+        EVAL_DEBUG_CODE(
+            {
+                printf("condUneval: ");
+                scm_print(condUneval);
+                printf("\n");
+            })
+
+        trueExprUneval = getCar(restList);
+        restList = getCdr(restList);
+
+        EVAL_DEBUG_CODE(
+            {
+                printf("trueExprUneval: ");
+                scm_print(trueExprUneval);
+                printf("\n");
+            })
+
+        falseExprUneval = getCar(restList);
+
+        EVAL_DEBUG_CODE(
+            {
+                printf("falseExprUneval: ");
+                scm_print(falseExprUneval);
+                printf("\n");
+            })
+
+        condEvaluated = scm_eval(condUneval);
+
+        if (condEvaluated == SCM_TRUE)
+        {
+            return scm_eval(trueExprUneval);
+        }
+        else if (condEvaluated == SCM_FALSE)
+        {
+            return scm_eval(falseExprUneval);
+        }
+        else
+        {
+            return SCM_NULL;
+        }
     }
 
     return exprUnevaluated;

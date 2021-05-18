@@ -278,11 +278,6 @@ scmObject read_Cons(scmObject nextCar)
     car = nextCar;
     cdr = scm_read();
 
-    if (cdr->tag == SCM_FALSE->tag)
-    {
-        scmError("found uncompleted List");
-    }
-
     if (cdr->tag == TAG_INV)
     {
         // cdr = SCM_NULL;
@@ -343,10 +338,15 @@ scmObject scm_read()
             // TRUE ################################################
             return SCM_TRUE;
         }
-        if (actChar == 'f')
+        else if (actChar == 'f')
         {
             // FALSE ################################################
+            printf("reader: false betreten! \n");
             return SCM_FALSE;
+        }
+        else
+        {
+            scmError("#t or #f are possible, nothing else!");
         }
     }
     else if (actChar == '(')
