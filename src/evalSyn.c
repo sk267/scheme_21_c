@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-#define EVAL_SYN_DEBUG
+// #define EVAL_SYN_DEBUG
 
 #ifdef EVAL_SYN_DEBUG
 #define EVAL_SYN_DEBUG_CODE(code) code
