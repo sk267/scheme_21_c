@@ -64,6 +64,7 @@ void initializeFunctions()
     defineEnvironmentValue(newSymbol("cons", 4), newFunc(F_TAG_CONS), TOP_ENV);
     defineEnvironmentValue(newSymbol("car", 3), newFunc(F_TAG_CAR), TOP_ENV);
     defineEnvironmentValue(newSymbol("cdr", 3), newFunc(F_TAG_CDR), TOP_ENV);
+    defineEnvironmentValue(newSymbol("eval", 4), newFunc(F_TAG_EVAL), TOP_ENV);
 }
 
 void initializeSyntax()

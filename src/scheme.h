@@ -31,6 +31,8 @@ enum
     F_TAG_CONS,
     F_TAG_CAR,
     F_TAG_CDR,
+    F_TAG_EVAL,
+
 };
 
 enum
@@ -145,3 +147,4 @@ extern void initializeEvalStack();
 extern void pushToEvalStack();
 extern scmObject popFromEvalStack();
 extern void evalListAndPushToEvalStack(scmObject restList);
+extern void pushListToEvalStack(scmObject restList);

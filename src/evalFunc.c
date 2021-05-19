@@ -77,79 +77,71 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
 
     case F_TAG_MULT:
     {
-        EVAL_FUNC_CODE({
-            printf("Betrete if * \n");
-        })
-
-        if (restList->tag == SCM_NULL->tag)
-        {
-            // Kein Argument eingegeben, leere Liste evaluiert zu 0
-            return newInteger(1);
-        }
 
         int fac = 1;
-        do
+
+        if (nArgs == 0)
         {
-            nextArg = restList->value.scmCons.car;
-            fac *= scm_eval(nextArg)->value.scmInt;
-            restList = restList->value.scmCons.cdr;
-        } while (restList->tag != TAG_NULL);
+            // No Arguments given
+            return newInteger(1);
+        }
+        for (int i = 0; i < nArgs; i++)
+        {
+            nextArg = popFromEvalStack();
+            scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+            fac *= nextArg->value.scmInt;
+        }
 
         return (newInteger(fac));
     }
     case F_TAG_CONS:
     {
         scmObject car, cdr;
-        scmObject carEvaluated, cdrEvaluated;
 
-        // getCar has to be evaluated
-        // in case we get an expression here, we want to evaluate it!
-
-        car = getCar(restList);
-        carEvaluated = scm_eval(car);
-
-        // getCdr returns Cons, getCar returns first arg of this cons
-        // (which is what we are looking for)
-        // in case we get an expression here, we want to evaluate it!
-        cdr = getCdr(restList);
-        cdrEvaluated = scm_eval(getCar(cdr));
-
-        if (getCdr(cdr) != SCM_NULL)
+        if (nArgs != 2)
         {
-            scmError("only two args are allowed for cons!");
+            scmError("Cons expects exactly 2 arguments!");
         }
 
-        return newCons(carEvaluated, cdrEvaluated);
+        cdr = popFromEvalStack();
+        car = popFromEvalStack();
+
+        return newCons(car, cdr);
     }
     case F_TAG_CAR:
     {
+        scmObject cons;
 
-        scmObject car;
-        scmObject carEvaluated;
+        if (nArgs != 1)
+        {
+            scmError("Cons expects exactly 1 argument!");
+        }
 
-        car = getCar(restList);
-        carEvaluated = scm_eval(car);
-
-        printf("noch da\n");
-        scm_print(carEvaluated);
-        printf("\n");
-
-        return getCar(carEvaluated);
+        cons = popFromEvalStack();
+        return getCar(cons);
     }
     case F_TAG_CDR:
     {
+        scmObject cons;
 
-        scmObject cdr;
-        scmObject cdrEvaluated;
+        if (nArgs != 1)
+        {
+            scmError("Cons expects exactly 1 argument!");
+        }
 
-        cdr = getCar(restList);
-        cdrEvaluated = scm_eval(cdr);
+        cons = popFromEvalStack();
+        return getCdr(cons);
+    }
+    case F_TAG_EVAL:
+    {
+        scmObject objectToEvaluate;
+        if (nArgs != 1)
+        {
+            scmError("Eval expects exactly 1 argument!");
+        }
 
-        printf("noch da\n");
-        scm_print(cdrEvaluated);
-        printf("\n");
-
-        return getCdr(cdrEvaluated);
+        objectToEvaluate = popFromEvalStack();
+        return objectToEvaluate;
     }
 
     default:

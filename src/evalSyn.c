@@ -10,108 +10,88 @@
 
 scmObject evalSyntax(scmObject syntaxEvaluated, scmObject restList)
 {
+
+    int nArgs;
+    int rememberEvalStackPointer;
+
+    rememberEvalStackPointer = evalStackPointer;
+    pushListToEvalStack(restList);
+    nArgs = evalStackPointer - rememberEvalStackPointer;
+
     switch (syntaxEvaluated->value.scmSyntax.whichSyntax)
     {
     case S_TAG_DEFINE:
     {
         scmObject key, value;
-        key = getCar(restList);
 
-        // getCdr returns Cons, getCar returns first arg of this cons
-        // (which is what we are looking for)
-        // in case we get an expression here, we want to evaluate it!
-        value = scm_eval(getCar(getCdr(restList)));
+        if (nArgs != 2)
+        {
+            scmError("define expects exactly 2 arguments");
+        }
+
+        value = popFromEvalStack();
+        key = popFromEvalStack();
+
+        value = scm_eval(value);
 
         defineEnvironmentValue(key, value, TOP_ENV);
         return SCM_INV;
     }
     case S_TAG_SET:
     {
-        scmObject keyUneval, valueUneval;
-        scmObject valueEvaluated;
+        scmObject key, value;
 
-        keyUneval = getCar(restList);
-        restList = getCdr(restList);
+        if (nArgs != 2)
+        {
+            scmError("define expects exactly 2 arguments");
+        }
 
-        valueUneval = getCar(restList);
-        valueEvaluated = scm_eval(valueUneval);
+        value = popFromEvalStack();
+        key = popFromEvalStack();
 
-        setEnvironmentValue(keyUneval, valueEvaluated, TOP_ENV);
+        value = scm_eval(value);
+
+        setEnvironmentValue(key, value, TOP_ENV);
         return SCM_INV;
     }
     case S_TAG_DISPLAY:
     {
-        // DISPLAY #########################################
-
-        scmObject carUneval;
-        scmObject carEvaluated;
-
-        carUneval = getCar(restList);
-        carEvaluated = scm_eval(carUneval);
-        scm_print(carEvaluated);
+        for (int i = 0; i < nArgs; i++)
+        {
+            scm_print(evalStack[rememberEvalStackPointer + i]);
+        }
         return SCM_INV;
     }
     case S_TAG_QUOTE:
     {
-        scmObject carUneval;
-
-        carUneval = getCar(restList);
-        scm_print(carUneval);
-        return SCM_INV;
+        scmError("quote: not yet implemented");
     }
     case S_TAG_IF:
     {
-        // IF #########################################
-
-        EVAL_SYN_DEBUG_CODE({
-            printf("betrete if\n");
-        })
-        scmObject condUneval, trueExprUneval, falseExprUneval;
+        scmObject condUneval, exprToEvaluate;
         scmObject condEvaluated;
 
-        condUneval = getCar(restList);
-        restList = getCdr(restList);
+        if (nArgs != 3)
+        {
+            scmError("if expects exactly 3 arguments");
+        }
 
-        EVAL_SYN_DEBUG_CODE(
-            {
-                printf("condUneval: ");
-                scm_print(condUneval);
-                printf("\n");
-            })
-
-        trueExprUneval = getCar(restList);
-        restList = getCdr(restList);
-
-        EVAL_SYN_DEBUG_CODE(
-            {
-                printf("trueExprUneval: ");
-                scm_print(trueExprUneval);
-                printf("\n");
-            })
-
-        falseExprUneval = getCar(restList);
-
-        EVAL_SYN_DEBUG_CODE(
-            {
-                printf("falseExprUneval: ");
-                scm_print(falseExprUneval);
-                printf("\n");
-            })
-
+        condUneval = evalStack[rememberEvalStackPointer];
         condEvaluated = scm_eval(condUneval);
 
         if (condEvaluated == SCM_TRUE)
         {
-            return scm_eval(trueExprUneval);
+            exprToEvaluate = evalStack[rememberEvalStackPointer + 1];
         }
         else if (condEvaluated == SCM_FALSE)
         {
-            return scm_eval(falseExprUneval);
+            exprToEvaluate = evalStack[rememberEvalStackPointer + 2];
         }
         else
         {
-            return SCM_NULL;
+            scmError("if condition did not evaluat to #t or #f");
         }
+        return scm_eval(exprToEvaluate);
     }
 
     default:
