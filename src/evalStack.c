@@ -5,6 +5,7 @@
 scmObject *evalStack = NULL;
 int evalStackCapacity = 0;
 int evalStackPointer = 0;
+int rememberEvalStackPointer;
 
 void initializeEvalStack()
 {
@@ -32,4 +33,19 @@ scmObject popFromEvalStack()
 {
     evalStackPointer--;
     return evalStack[evalStackPointer];
+}
+
+void evalListAndPushToEvalStack(scmObject restList)
+{
+    if (restList == SCM_NULL)
+    {
+        return;
+    }
+    scmObject nextUnevaluatedArg;
+    do
+    {
+        nextUnevaluatedArg = getCar(restList);
+        pushToEvalStack(scm_eval(nextUnevaluatedArg));
+        restList = getCdr(restList);
+    } while (restList->tag != TAG_NULL);
 }

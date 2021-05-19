@@ -12,25 +12,29 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
 {
 
     scmObject nextArg;
+    rememberEvalStackPointer = evalStackPointer;
+
+    evalListAndPushToEvalStack(restList);
 
     switch (functionEvaluated->value.scmFunction.whichFunction)
     {
     case F_TAG_PLUS:
     {
         int sum = 0;
+        int nArgs = evalStackPointer - rememberEvalStackPointer;
 
-        if (restList->tag == SCM_NULL->tag)
+        if (nArgs == 0)
         {
-            // Kein Argument eingegeben, leere Liste evaluiert zu 0
             return newInteger(0);
         }
-        do
+
+        for (int i = 0; i < nArgs; i++)
         {
-            nextArg = getCar(restList);
-            scmAssert(scm_eval(nextArg)->tag == TAG_INT, "got non Int value for addition!");
-            sum += scm_eval(nextArg)->value.scmInt;
-            restList = getCdr(restList);
-        } while (restList->tag != TAG_NULL);
+            nextArg = popFromEvalStack();
+
+            scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+            sum += nextArg->value.scmInt;
+        }
 
         return (newInteger(sum));
     }

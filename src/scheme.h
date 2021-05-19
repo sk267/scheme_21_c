@@ -139,7 +139,9 @@ extern jmp_buf savebuf;
 extern scmObject *evalStack;
 extern int evalStackCapacity;
 extern int evalStackPointer;
+extern int rememberEvalStackPointer;
 
 extern void initializeEvalStack();
 extern void pushToEvalStack();
 extern scmObject popFromEvalStack();
+extern void evalListAndPushToEvalStack(scmObject restList);
