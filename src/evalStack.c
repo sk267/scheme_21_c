@@ -1,6 +1,14 @@
 #include "scheme.h"
 
-#define INITIAL_EVAL_STACK_CAPACITY 10
+// #define EVALSTACK_DEBUG
+
+#ifdef EVALSTACK_DEBUG
+#define EVALSTACK_DEBUG_CODE(code) code
+#else
+#define EVALSTACK_DEBUG_CODE(code)
+#endif
+
+#define INITIAL_EVAL_STACK_CAPACITY 50
 
 scmObject *evalStack = NULL;
 int evalStackCapacity = 0;
@@ -27,6 +35,9 @@ void pushToEvalStack(scmObject evaluatedObject)
     }
     evalStack[evalStackPointer] = evaluatedObject;
     evalStackPointer++;
+    EVALSTACK_DEBUG_CODE({
+        printf("pushToEvalStack: pointer: %d\n", evalStackPointer);
+    })
 }
 
 scmObject popFromEvalStack()
@@ -45,6 +56,12 @@ void evalListAndPushToEvalStack(scmObject restList)
     do
     {
         nextUnevaluatedArg = getCar(restList);
+        EVALSTACK_DEBUG_CODE(
+            {
+                printf("evalListAndPushToEvalStack: going to be pushed: \n");
+                scm_print(scm_eval(nextUnevaluatedArg));
+                printf(" \n");
+            })
         pushToEvalStack(scm_eval(nextUnevaluatedArg));
         restList = getCdr(restList);
     } while (restList->tag != TAG_NULL);

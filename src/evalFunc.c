@@ -12,26 +12,39 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
 {
 
     scmObject nextArg;
-    rememberEvalStackPointer = evalStackPointer;
+    int nArgs;
+    int rememberEvalStackPointer;
 
+    EVAL_FUNC_CODE({
+        printf("evalStackPointer vor eval: %d\n", evalStackPointer);
+    })
+    rememberEvalStackPointer = evalStackPointer;
+    EVAL_FUNC_CODE({
+        printf("rememberEvalStackPointer: %d", rememberEvalStackPointer);
+    })
     evalListAndPushToEvalStack(restList);
+    EVAL_FUNC_CODE({
+        printf("evalStackPointer nach eval: %d\n", evalStackPointer);
+    })
+    nArgs = evalStackPointer - rememberEvalStackPointer;
+    EVAL_FUNC_CODE({
+        printf("nArgs: %d\n", nArgs);
+    })
 
     switch (functionEvaluated->value.scmFunction.whichFunction)
     {
     case F_TAG_PLUS:
     {
         int sum = 0;
-        int nArgs = evalStackPointer - rememberEvalStackPointer;
 
         if (nArgs == 0)
         {
+            // No Arguments given
             return newInteger(0);
         }
-
         for (int i = 0; i < nArgs; i++)
         {
             nextArg = popFromEvalStack();
-
             scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
             sum += nextArg->value.scmInt;
         }
@@ -40,30 +53,28 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
     }
     case F_TAG_MINUS:
     {
-        // SUBTRAKTION #####################################################
-        EVAL_FUNC_CODE({
-            printf("Betrete if + \n");
-        })
+        int sub;
 
-        if (restList->tag == SCM_NULL->tag)
+        if (nArgs == 0)
         {
-            // Kein Argument eingegeben, leere Liste evaluiert zu 0
+            // No Arguments given
             return newInteger(0);
         }
 
-        nextArg = restList->value.scmCons.car;
-        int sub = scm_eval(nextArg)->value.scmInt;
-        restList = restList->value.scmCons.cdr;
+        nextArg = evalStack[rememberEvalStackPointer];
+        scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+        sub = nextArg->value.scmInt;
 
-        while (restList->tag != TAG_NULL)
+        for (int i = 1; i < nArgs; i++)
         {
-            nextArg = restList->value.scmCons.car;
-            sub -= scm_eval(nextArg)->value.scmInt;
-            restList = restList->value.scmCons.cdr;
-        };
-
+            nextArg = evalStack[rememberEvalStackPointer + i];
+            scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+            sub -= nextArg->value.scmInt;
+        }
+        evalStackPointer = rememberEvalStackPointer;
         return (newInteger(sub));
     }
+
     case F_TAG_MULT:
     {
         EVAL_FUNC_CODE({
