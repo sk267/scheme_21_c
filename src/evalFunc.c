@@ -140,4 +140,5 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
     default:
         break;
     }
+    return SCM_NULL;
 }

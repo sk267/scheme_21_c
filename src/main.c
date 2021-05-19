@@ -45,6 +45,8 @@ scm_initialize()
     SCM_INV->tag = TAG_INV;
     SCM_INV->value.scmInt = 0;
 
+    initializeEvalStack();
+
     initializeFunctions();
     initializeSyntax();
 }

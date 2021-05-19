@@ -38,6 +38,35 @@ void selftest()
     //     }
     // }
 
+    scmObject s1, s2, s3;
+    scmObject popped1, popped2, popped3;
+
+    s1 = newInteger(11);
+    s2 = newInteger(22);
+    s3 = newInteger(33);
+
+    pushToEvalStack(s1);
+    pushToEvalStack(s2);
+    pushToEvalStack(s3);
+
+    popped3 = popFromEvalStack();
+    popped2 = popFromEvalStack();
+    popped1 = popFromEvalStack();
+
+    // printf("popped3: \n");
+    // scm_print(popped3);
+    // printf("\n");
+    // printf("popped2: \n");
+    // scm_print(popped2);
+    // printf("\n");
+    // printf("popped1: \n");
+    // scm_print(popped1);
+    // printf("\n");
+
+    scmAssert(popped3->value.scmInt == 33, "got wrong value from evalStack");
+    scmAssert(popped2->value.scmInt == 22, "got wrong value from evalStack");
+    scmAssert(popped1->value.scmInt == 11, "got wrong value from evalStack");
+
     scmObject symbol1, symbol2, symbol3, symbol4, symbol5;
 
     // printf("newSymbol(111, 3); wird aufgerufen\n");

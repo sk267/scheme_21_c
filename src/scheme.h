@@ -135,3 +135,11 @@ extern scmObject SCM_INV;
 extern scmObject TOP_ENV;
 
 extern jmp_buf savebuf;
+
+extern scmObject *evalStack;
+extern int evalStackCapacity;
+extern int evalStackPointer;
+
+extern void initializeEvalStack();
+extern void pushToEvalStack();
+extern scmObject popFromEvalStack();
