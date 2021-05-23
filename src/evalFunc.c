@@ -8,6 +8,125 @@
 #define EVAL_FUNC_CODE(code)
 #endif
 
+scmObject PLUS(int nArgs)
+{
+
+    printf("Betrete PLUS\n");
+    scmObject nextArg;
+    int sum = 0;
+
+    if (nArgs == 0)
+    {
+        // No Arguments given
+        return newInteger(0);
+    }
+    for (int i = 0; i < nArgs; i++)
+    {
+        nextArg = popFromEvalStack();
+        scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+        sum += nextArg->value.scmInt;
+    }
+
+    return (newInteger(sum));
+}
+
+scmObject MINUS(int nArgs)
+{
+    int sub;
+    scmObject nextArg;
+
+    if (nArgs == 0)
+    {
+        // No Arguments given
+        return newInteger(0);
+    }
+
+    nextArg = evalStack[rememberEvalStackPointer];
+    scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+    sub = nextArg->value.scmInt;
+
+    for (int i = 1; i < nArgs; i++)
+    {
+        nextArg = evalStack[rememberEvalStackPointer + i];
+        scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+        sub -= nextArg->value.scmInt;
+    }
+    evalStackPointer = rememberEvalStackPointer;
+    return (newInteger(sub));
+}
+
+scmObject MULT(int nArgs)
+{
+    scmObject nextArg;
+    int fac = 1;
+
+    if (nArgs == 0)
+    {
+        // No Arguments given
+        return newInteger(1);
+    }
+    for (int i = 0; i < nArgs; i++)
+    {
+        nextArg = popFromEvalStack();
+        scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+        fac *= nextArg->value.scmInt;
+    }
+
+    return (newInteger(fac));
+}
+
+scmObject CONS(int nArgs)
+{
+    scmObject car, cdr;
+
+    if (nArgs != 2)
+    {
+        scmError("Cons expects exactly 2 arguments!");
+    }
+
+    cdr = popFromEvalStack();
+    car = popFromEvalStack();
+
+    return newCons(car, cdr);
+}
+
+scmObject CAR(int nArgs)
+{
+    scmObject cons;
+
+    if (nArgs != 1)
+    {
+        scmError("Cons expects exactly 1 argument!");
+    }
+
+    cons = popFromEvalStack();
+    return getCar(cons);
+}
+
+scmObject CDR(int nArgs)
+{
+    scmObject cons;
+
+    if (nArgs != 1)
+    {
+        scmError("Cons expects exactly 1 argument!");
+    }
+
+    cons = popFromEvalStack();
+    return getCdr(cons);
+}
+scmObject EVAL(int nArgs)
+{
+    scmObject objectToEvaluate;
+    if (nArgs != 1)
+    {
+        scmError("Eval expects exactly 1 argument!");
+    }
+
+    objectToEvaluate = popFromEvalStack();
+    return objectToEvaluate;
+}
+
 scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
 {
 
@@ -31,25 +150,30 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
         printf("nArgs: %d\n", nArgs);
     })
 
+    return functionEvaluated->value.scmFunction.code(nArgs);
+
+#ifdef asd
+
     switch (functionEvaluated->value.scmFunction.whichFunction)
     {
     case F_TAG_PLUS:
     {
-        int sum = 0;
+        printf("should not go in here!\n");
+        // int sum = 0;
 
-        if (nArgs == 0)
-        {
-            // No Arguments given
-            return newInteger(0);
-        }
-        for (int i = 0; i < nArgs; i++)
-        {
-            nextArg = popFromEvalStack();
-            scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
-            sum += nextArg->value.scmInt;
-        }
+        // if (nArgs == 0)
+        // {
+        //     // No Arguments given
+        //     return newInteger(0);
+        // }
+        // for (int i = 0; i < nArgs; i++)
+        // {
+        //     nextArg = popFromEvalStack();
+        //     scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
+        //     sum += nextArg->value.scmInt;
+        // }
 
-        return (newInteger(sum));
+        // return (newInteger(sum));
     }
     case F_TAG_MINUS:
     {
@@ -147,5 +271,7 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
     default:
         break;
     }
+
+#endif
     return SCM_NULL;
 }

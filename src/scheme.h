@@ -49,6 +49,7 @@ typedef struct consStruct cons;
 typedef struct envStruct envStr;
 typedef struct funcStruct scmFunc;
 typedef struct synStruct scmSyn;
+typedef scmObject (*scmObjectFunctionPointer)();
 
 struct consStruct
 {
@@ -66,6 +67,7 @@ struct envStruct
 struct funcStruct
 {
     int whichFunction;
+    scmObjectFunctionPointer code;
 };
 
 struct synStruct
@@ -101,7 +103,7 @@ extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
 extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
-extern scmObject newFunc(int whichFunction);
+extern scmObject newFunc(scmObjectFunctionPointer code);
 extern scmObject newSyntax(int whichFunction);
 
 extern scmObject allocateEnvironment(int inCapacitiy);
@@ -148,3 +150,11 @@ extern void pushToEvalStack();
 extern scmObject popFromEvalStack();
 extern void evalListAndPushToEvalStack(scmObject restList);
 extern void pushListToEvalStack(scmObject restList);
+
+extern scmObject PLUS(int nArgs);
+extern scmObject MINUS(int nArgs);
+extern scmObject MULT(int nArgs);
+extern scmObject CONS(int nArgs);
+extern scmObject CAR(int nArgs);
+extern scmObject CDR(int nArgs);
+extern scmObject EVAL(int nArgs);

@@ -58,13 +58,13 @@ void initializeSymbolTableBuffer()
 
 void initializeFunctions()
 {
-    defineEnvironmentValue(newSymbol("+", 1), newFunc(F_TAG_PLUS), TOP_ENV);
-    defineEnvironmentValue(newSymbol("-", 1), newFunc(F_TAG_MINUS), TOP_ENV);
-    defineEnvironmentValue(newSymbol("*", 1), newFunc(F_TAG_MULT), TOP_ENV);
-    defineEnvironmentValue(newSymbol("cons", 4), newFunc(F_TAG_CONS), TOP_ENV);
-    defineEnvironmentValue(newSymbol("car", 3), newFunc(F_TAG_CAR), TOP_ENV);
-    defineEnvironmentValue(newSymbol("cdr", 3), newFunc(F_TAG_CDR), TOP_ENV);
-    defineEnvironmentValue(newSymbol("eval", 4), newFunc(F_TAG_EVAL), TOP_ENV);
+    defineEnvironmentValue(newSymbol("+", 1), newFunc(PLUS), TOP_ENV);
+    defineEnvironmentValue(newSymbol("-", 1), newFunc(MINUS), TOP_ENV);
+    defineEnvironmentValue(newSymbol("*", 1), newFunc(MULT), TOP_ENV);
+    defineEnvironmentValue(newSymbol("cons", 4), newFunc(CONS), TOP_ENV);
+    defineEnvironmentValue(newSymbol("car", 3), newFunc(CAR), TOP_ENV);
+    defineEnvironmentValue(newSymbol("cdr", 3), newFunc(CDR), TOP_ENV);
+    defineEnvironmentValue(newSymbol("eval", 4), newFunc(EVAL), TOP_ENV);
 }
 
 void initializeSyntax()
@@ -147,11 +147,11 @@ scmObject newCons(scmObject inCar, scmObject inCdr)
     return o;
 }
 
-scmObject newFunc(int whichFunction)
+scmObject newFunc(scmObjectFunctionPointer codeToUse)
 {
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_FUNC;
-    o->value.scmFunction.whichFunction = whichFunction;
+    o->value.scmFunction.code = codeToUse;
 
     return o;
 }
