@@ -213,63 +213,6 @@ scmObject read_String(scmObject newObj)
     return newObj;
 }
 
-// scmObject read_Cons(scmObject newObject)
-// {
-//     READER_DEBUG_CODE({
-//         printf("Betrete read_Cons\n");
-//     })
-//     skipWhitespace();
-
-//     char actChar = nextChar();
-//     READER_DEBUG_CODE({
-//         printf("read_Cons: actChar: %c\n", actChar);
-//     })
-
-//     // TODO: Andere Listen Input hier implementieren (dass man auch (1 2 3 4) eingeben kann!)
-
-//     if (actChar == ')')
-//     {
-//         return SCM_NULL;
-//     }
-//     unreadChar(actChar);
-
-//     scmObject car, cdr;
-
-//     READER_DEBUG_CODE({
-//         printf("read_Cons2: actChar: %c\n", actChar);
-//     })
-//     car = scm_read();
-
-//     actChar = nextChar();
-
-//     if (actChar == 10)
-//     {
-//         printf("!!! Error: If you wish to make a List with only one Argument a blank is needed after the last argument!\n");
-//         printf("Going back to REPL\n");
-//         longjmp(savebuf, 1);
-//     }
-
-//     if (actChar == ')')
-//     {
-//         return newCons(car, SCM_NULL);
-//     }
-
-//     unreadChar(actChar);
-
-//     cdr = scm_read();
-
-//     READER_DEBUG_CODE(
-//         {
-//             printf("read_Cons: cdr: ");
-//             scm_print(cdr);
-//             printf("\n");
-//         })
-
-//     scmAssert(actChar != -1, "'(' is missing!");
-
-//     return newCons(car, cdr);
-// }
-
 scmObject read_Cons(scmObject nextCar)
 {
 
