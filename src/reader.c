@@ -7,6 +7,7 @@
 #else
 #define READER_DEBUG_CODE(code) /*as nothing*/
 #endif
+int actChar;
 
 int charToInt(char input)
 {
@@ -18,20 +19,20 @@ int charToInt(char input)
 
 void skipWhitespace()
 {
-    char actChar;
     do
     {
         actChar = nextChar();
-
-        // printf("-----------------skipWhitespace: actChar: %d\n", (int)actChar);
+        READER_DEBUG_CODE({
+            printf("-----------------skipWhitespace: actChar: %d\n", (int)actChar);
+        })
     } while (
         (actChar == ' ') || (actChar == '\n') || (actChar == '\t') || (actChar == '\r'));
 
     unreadChar(actChar);
-    // printf("-----------------skipWhitespace: noch da \n");
+    READER_DEBUG_CODE({
+        printf("-----------------skipWhitespace: noch da \n");
+    })
 }
-
-int actChar;
 
 scmObject read_Integer(scmObject newObj)
 {
@@ -50,6 +51,7 @@ scmObject read_Integer(scmObject newObj)
         }
         else
         {
+            unreadChar(actChar);
             break;
         }
     }
@@ -157,6 +159,7 @@ scmObject read_Symbol(scmObject newObj)
         }
         else
         {
+            unreadChar(actChar);
             add_to_char_buffer(&buffer, '\0');
             break;
         }
@@ -301,7 +304,6 @@ scmObject scm_read()
 
     skipWhitespace();
     actChar = nextChar();
-    unreadChar(actChar);
     READER_DEBUG_CODE({
         printf("scm_read> actChar: %d \n", (int)actChar);
     })
