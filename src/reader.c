@@ -301,6 +301,7 @@ scmObject scm_read()
 
     skipWhitespace();
     actChar = nextChar();
+    unreadChar(actChar);
     READER_DEBUG_CODE({
         printf("scm_read> actChar: %d \n", (int)actChar);
     })
