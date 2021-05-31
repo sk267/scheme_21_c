@@ -11,7 +11,7 @@
 scmObject PLUS(int nArgs)
 {
 
-    printf("Betrete PLUS\n");
+    // printf("Betrete PLUS\n");
     scmObject nextArg;
     int sum = 0;
 
@@ -129,8 +129,6 @@ scmObject EVAL(int nArgs)
 
 scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
 {
-
-    scmObject nextArg;
     int nArgs;
     int rememberEvalStackPointer;
 

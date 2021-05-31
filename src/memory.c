@@ -69,11 +69,11 @@ void initializeFunctions()
 
 void initializeSyntax()
 {
-    defineEnvironmentValue(newSymbol("define", 6), newSyntax(S_TAG_DEFINE), TOP_ENV);
-    defineEnvironmentValue(newSymbol("quote", 5), newSyntax(S_TAG_QUOTE), TOP_ENV);
-    defineEnvironmentValue(newSymbol("set!", 4), newSyntax(S_TAG_SET), TOP_ENV);
-    defineEnvironmentValue(newSymbol("display", 7), newSyntax(S_TAG_DISPLAY), TOP_ENV);
-    defineEnvironmentValue(newSymbol("if", 2), newSyntax(S_TAG_IF), TOP_ENV);
+    defineEnvironmentValue(newSymbol("define", 6), newSyntax(DEFINE), TOP_ENV);
+    defineEnvironmentValue(newSymbol("quote", 5), newSyntax(QUOTE), TOP_ENV);
+    defineEnvironmentValue(newSymbol("set!", 4), newSyntax(SET), TOP_ENV);
+    defineEnvironmentValue(newSymbol("display", 7), newSyntax(DISPLAY), TOP_ENV);
+    defineEnvironmentValue(newSymbol("if", 2), newSyntax(IF), TOP_ENV);
 }
 
 void growSymbolTableBuffer()
@@ -156,11 +156,11 @@ scmObject newFunc(scmObjectFunctionPointer codeToUse)
     return o;
 }
 
-scmObject newSyntax(int whichSyntax)
+scmObject newSyntax(scmObjecttSyntaxPointer codeToUse)
 {
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_SYN;
-    o->value.scmSyntax.whichSyntax = whichSyntax;
+    o->value.scmSyntax.code = codeToUse;
 
     return o;
 }

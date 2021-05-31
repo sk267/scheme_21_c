@@ -72,7 +72,7 @@ scmObject scm_eval(scmObject inputToEval)
     }
     // Der ganze Rest evaluiert einfach zu sich selbst (Int, True, ...)
     return inputToEval;
-#
+
 #elif
     return inputToEval;
 #endif

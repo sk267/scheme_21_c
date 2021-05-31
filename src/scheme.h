@@ -50,6 +50,7 @@ typedef struct envStruct envStr;
 typedef struct funcStruct scmFunc;
 typedef struct synStruct scmSyn;
 typedef scmObject (*scmObjectFunctionPointer)();
+typedef scmObject (*scmObjecttSyntaxPointer)();
 
 struct consStruct
 {
@@ -73,6 +74,7 @@ struct funcStruct
 struct synStruct
 {
     int whichSyntax;
+    scmObjecttSyntaxPointer code;
 };
 
 struct scmObjectStruct
@@ -103,8 +105,8 @@ extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
 extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
-extern scmObject newFunc(scmObjectFunctionPointer code);
-extern scmObject newSyntax(int whichFunction);
+extern scmObject newFunc(scmObjectFunctionPointer codeToUse);
+extern scmObject newSyntax(scmObjecttSyntaxPointer codeToUse);
 
 extern scmObject allocateEnvironment(int inCapacitiy);
 extern void initializeTopEnv();
@@ -158,3 +160,10 @@ extern scmObject CONS(int nArgs);
 extern scmObject CAR(int nArgs);
 extern scmObject CDR(int nArgs);
 extern scmObject EVAL(int nArgs);
+
+extern scmObject DEFINE(int nArgs);
+extern scmObject SET(int nArgs);
+extern scmObject DISPLAY(int nArgs);
+extern scmObject DISPLAY(int nArgs);
+extern scmObject QUOTE(int nArgs);
+extern scmObject IF(int nArgs);
