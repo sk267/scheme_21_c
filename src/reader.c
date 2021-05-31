@@ -81,6 +81,24 @@ bool isValidSymbolChar(char input)
     }
 }
 
+bool isValidStringChar(char input)
+{
+    if (
+        ((input >= 'A') && (input <= 'Z')) ||
+        ((input >= 'a') && (input <= 'z')) ||
+        ((input >= '0') && (input <= '9')) ||
+        ((input >= '*') && (input <= '/')) ||
+        (input == '!') || (input == '?') ||
+        (input == '-') || (input == ' ') || (input == '_'))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 // bool isValidStringChar(char input)
 // {
 //     if (input != '\0')
@@ -191,7 +209,7 @@ scmObject read_String(scmObject newObj)
             // " entdeckt, rausgehen!
             break;
         }
-        if (isValidSymbolChar(actChar) == true)
+        if (isValidStringChar(actChar) == true)
         {
             add_to_char_buffer(&buffer, actChar);
             READER_DEBUG_CODE(

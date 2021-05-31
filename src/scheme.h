@@ -164,6 +164,5 @@ extern scmObject EVAL(int nArgs);
 extern scmObject DEFINE(int nArgs);
 extern scmObject SET(int nArgs);
 extern scmObject DISPLAY(int nArgs);
-extern scmObject DISPLAY(int nArgs);
 extern scmObject QUOTE(int nArgs);
 extern scmObject IF(int nArgs);

@@ -46,10 +46,23 @@ scmObject SET(int nArgs)
 
 scmObject DISPLAY(int nArgs)
 {
+    scmObject currentObject;
+
     for (int i = 0; i < nArgs; i++)
     {
-        scm_print(evalStack[rememberEvalStackPointer + i]);
+        currentObject = evalStack[rememberEvalStackPointer + i];
+
+        EVAL_SYN_DEBUG_CODE({
+            printf("DISPLAY: currentObject->tag: %d\n", currentObject->tag);
+        })
+        if ((currentObject->tag == TAG_CONS) || (currentObject->tag == TAG_SYMBOL))
+        {
+            currentObject = scm_eval(currentObject);
+        }
+        scm_print(currentObject);
     }
+
+    evalStackPointer = rememberEvalStackPointer;
     return SCM_INV;
 }
 
