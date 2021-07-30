@@ -58,28 +58,30 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated, scmObject env)
 scmObject scm_eval(scmObject inputToEval, scmObject env)
 {
 
-#ifdef true
     scmObject evaluated;
 
     if (inputToEval->tag == TAG_SYMBOL)
     {
-        // Nach dem Symbol-Value suchen und dieses Binding zurückgeben
-        evaluated = getEnvironmentValue(inputToEval, env);
-        if (evaluated == SCM_NULL)
+        while (env != SCM_NULL)
         {
-            scmError("variable does not exist yet!");
+            // Nach dem Symbol-Value suchen und dieses Binding zurückgeben
+            evaluated = getEnvironmentValue(inputToEval, env);
+            if (evaluated == SCM_NULL)
+            {
+                // Variable wurde von getEnvironmentValue nicht gefunden
+                // -> Wir suchen im Parent-Env
+                env = env->value.scmEnv.parentEnv;
+                continue;
+            }
+            return evaluated;
         }
-        return evaluated;
     }
 
     if (inputToEval->tag == TAG_CONS)
     {
         return evalFuncOrSyntax(inputToEval, env);
     }
+
     // Der ganze Rest evaluiert einfach zu sich selbst (Int, True, ...)
     return inputToEval;
-
-#elif
-    return inputToEval;
-#endif
 }

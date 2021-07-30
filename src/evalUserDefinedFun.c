@@ -24,7 +24,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     int rememberEvalStackPointer;
     int nArgs;
 
-    scmObject tmpEnv;
+    scmObject functionsEnv;
     scmObject restInputVars;
     scmObject nextKey;
     scmObject nextValue;
@@ -36,7 +36,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     nArgs = evalStackPointer - rememberEvalStackPointer;
 
     // Neues Environment anlegen
-    tmpEnv = allocateEnvironment(7, TOP_ENV);
+    functionsEnv = allocateEnvironment(7, TOP_ENV);
 
     // Alle Argumente (Entsprechende Keys mit den verknüpften Values, die schon evaluiert auf dem Stack liegen)
     // in das tmp-Env reinlegen
@@ -46,7 +46,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
         nextKey = getCar(restInputVars);
         nextValue = evalStack[rememberEvalStackPointer + i];
 
-        defineEnvironmentValue(nextKey, nextValue, tmpEnv);
+        defineEnvironmentValue(nextKey, nextValue, functionsEnv);
         restInputVars = getCdr(restInputVars);
     }
 
@@ -61,10 +61,10 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     while (restBodyList != SCM_NULL)
     {
         nextBodyElem = getCar(restBodyList);
-        lastValue = scm_eval(nextBodyElem, env);
+        lastValue = scm_eval(nextBodyElem, functionsEnv);
 
         restBodyList = getCdr(restBodyList);
     }
 
-    return SCM_NULL;
+    return lastValue;
 }

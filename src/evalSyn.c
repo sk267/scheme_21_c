@@ -145,5 +145,5 @@ scmObject evalSyntax(scmObject syntaxEvaluated, scmObject restList, scmObject en
     pushListToEvalStack(restList, env);
     nArgs = evalStackPointer - rememberEvalStackPointer;
 
-    return syntaxEvaluated->value.scmSyntax.code(nArgs);
+    return syntaxEvaluated->value.scmSyntax.code(nArgs, env);
 }
