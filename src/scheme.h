@@ -129,10 +129,10 @@ extern void defineEnvironmentValue(scmObject key, scmObject value, scmObject env
 extern void setEnvironmentValue(scmObject key, scmObject value, scmObject env);
 extern scmObject getEnvironmentValue(scmObject key, scmObject env);
 extern int hashForEnv(scmObject symbol, scmObject env);
-extern scmObject evalFuncOrSyntax(scmObject exprUnevaluated);
-extern scmObject evalFunction(scmObject functionEvaluated, scmObject restList);
-extern scmObject evalSyntax(scmObject functionEvaluated, scmObject restList);
-extern scmObject evalUserDefinedFunction(scmObject funcOrSynEvaluated, scmObject restList);
+extern scmObject evalFuncOrSyntax(scmObject exprUnevaluated, scmObject env);
+extern scmObject evalFunction(scmObject functionEvaluated, scmObject restList, scmObject env);
+extern scmObject evalSyntax(scmObject functionEvaluated, scmObject restList, scmObject env);
+extern scmObject evalUserDefinedFunction(scmObject funcOrSynEvaluated, scmObject restList, scmObject env);
 
 extern void scmAssertVerbose(int ok, char *msg, char *file, int line);
 extern void scmErrorVerbose(char *msg, char *file, int line);
@@ -140,7 +140,7 @@ extern void scmErrorVerbose(char *msg, char *file, int line);
 extern void initializeSymbolTableBuffer();
 
 extern scmObject scm_read();
-extern scmObject scm_eval(scmObject input);
+extern scmObject scm_eval(scmObject input, scmObject env);
 extern void scm_print(scmObject input);
 
 extern scmObject getCar(scmObject hopefullyCons);
@@ -162,8 +162,8 @@ extern int rememberEvalStackPointer;
 extern void initializeEvalStack();
 extern void pushToEvalStack();
 extern scmObject popFromEvalStack();
-extern void evalListAndPushToEvalStack(scmObject restList);
-extern void pushListToEvalStack(scmObject restList);
+extern void evalListAndPushToEvalStack(scmObject restList, scmObject env);
+extern void pushListToEvalStack(scmObject restList, scmObject env);
 
 extern scmObject PLUS(int nArgs);
 extern scmObject MINUS(int nArgs);
@@ -173,9 +173,9 @@ extern scmObject CAR(int nArgs);
 extern scmObject CDR(int nArgs);
 extern scmObject EVAL(int nArgs);
 
-extern scmObject DEFINE(int nArgs);
-extern scmObject SET(int nArgs);
-extern scmObject DISPLAY(int nArgs);
-extern scmObject QUOTE(int nArgs);
-extern scmObject IF(int nArgs);
-extern scmObject LAMBDA(int nArgs);
+extern scmObject DEFINE(int nArgs, scmObject env);
+extern scmObject SET(int nArgs, scmObject env);
+extern scmObject DISPLAY(int nArgs, scmObject env);
+extern scmObject QUOTE(int nArgs, scmObject env);
+extern scmObject IF(int nArgs, scmObject env);
+extern scmObject LAMBDA(int nArgs, scmObject env);

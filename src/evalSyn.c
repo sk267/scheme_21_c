@@ -8,7 +8,7 @@
 #define EVAL_SYN_DEBUG_CODE(code)
 #endif
 
-scmObject DEFINE(int nArgs)
+scmObject DEFINE(int nArgs, scmObject env)
 {
     scmObject key, value;
 
@@ -20,13 +20,13 @@ scmObject DEFINE(int nArgs)
     value = popFromEvalStack();
     key = popFromEvalStack();
 
-    value = scm_eval(value);
+    value = scm_eval(value, env);
 
     defineEnvironmentValue(key, value, TOP_ENV);
     return SCM_INV;
 }
 
-scmObject SET(int nArgs)
+scmObject SET(int nArgs, scmObject env)
 {
     scmObject key, value;
 
@@ -38,13 +38,13 @@ scmObject SET(int nArgs)
     value = popFromEvalStack();
     key = popFromEvalStack();
 
-    value = scm_eval(value);
+    value = scm_eval(value, env);
 
     setEnvironmentValue(key, value, TOP_ENV);
     return SCM_INV;
 }
 
-scmObject DISPLAY(int nArgs)
+scmObject DISPLAY(int nArgs, scmObject env)
 {
     scmObject currentObject;
 
@@ -57,7 +57,7 @@ scmObject DISPLAY(int nArgs)
         })
         if ((currentObject->tag == TAG_CONS) || (currentObject->tag == TAG_SYMBOL))
         {
-            currentObject = scm_eval(currentObject);
+            currentObject = scm_eval(currentObject, env);
         }
         scm_print(currentObject);
     }
@@ -66,13 +66,13 @@ scmObject DISPLAY(int nArgs)
     return SCM_INV;
 }
 
-scmObject QUOTE(int nArgs)
+scmObject QUOTE(int nArgs, scmObject env)
 {
     scmError("quote: not yet implemented");
     return SCM_NULL;
 }
 
-scmObject IF(int nArgs)
+scmObject IF(int nArgs, scmObject env)
 {
     scmObject condUneval, exprToEvaluate, condEvaluated;
 
@@ -82,7 +82,7 @@ scmObject IF(int nArgs)
     }
 
     condUneval = evalStack[rememberEvalStackPointer];
-    condEvaluated = scm_eval(condUneval);
+    condEvaluated = scm_eval(condUneval, env);
 
     EVAL_SYN_DEBUG_CODE(
         {
@@ -104,7 +104,7 @@ scmObject IF(int nArgs)
         scmError("if condition did not evaluat to #t or #f");
     }
     evalStackPointer = rememberEvalStackPointer;
-    return scm_eval(exprToEvaluate);
+    return scm_eval(exprToEvaluate, env);
 }
 
 static scmObject buildConsFromEvalStack(int idx, int bodyListLength)
@@ -125,7 +125,7 @@ static scmObject buildConsFromEvalStack(int idx, int bodyListLength)
     }
 }
 
-scmObject LAMBDA(int nArgs)
+scmObject LAMBDA(int nArgs, scmObject env)
 {
     scmObject argList, bodyList;
     int bodyListLength = rememberEvalStackPointer + nArgs - 1;
@@ -136,13 +136,13 @@ scmObject LAMBDA(int nArgs)
     return newUserDefinedFunction(argList, bodyList);
 }
 
-scmObject evalSyntax(scmObject syntaxEvaluated, scmObject restList)
+scmObject evalSyntax(scmObject syntaxEvaluated, scmObject restList, scmObject env)
 {
     int nArgs;
     int rememberEvalStackPointer;
 
     rememberEvalStackPointer = evalStackPointer;
-    pushListToEvalStack(restList);
+    pushListToEvalStack(restList, env);
     nArgs = evalStackPointer - rememberEvalStackPointer;
 
     return syntaxEvaluated->value.scmSyntax.code(nArgs);

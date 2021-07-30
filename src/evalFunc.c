@@ -128,7 +128,7 @@ scmObject EVAL(int nArgs)
     return objectToEvaluate;
 }
 
-scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
+scmObject evalFunction(scmObject functionEvaluated, scmObject restList, scmObject env)
 {
     int nArgs;
     int rememberEvalStackPointer;
@@ -140,7 +140,7 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList)
     EVAL_FUNC_CODE({
         printf("rememberEvalStackPointer: %d", rememberEvalStackPointer);
     })
-    evalListAndPushToEvalStack(restList);
+    evalListAndPushToEvalStack(restList, env);
     EVAL_FUNC_CODE({
         printf("evalStackPointer nach eval: %d\n", evalStackPointer);
     })

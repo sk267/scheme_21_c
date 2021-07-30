@@ -46,7 +46,7 @@ scmObject popFromEvalStack()
     return evalStack[evalStackPointer];
 }
 
-static void maybeEvalListAndPushToEvalStack(scmObject restList, bool doEvaluation)
+static void maybeEvalListAndPushToEvalStack(scmObject restList, bool doEvaluation, scmObject env)
 {
     if (restList == SCM_NULL)
     {
@@ -64,7 +64,7 @@ static void maybeEvalListAndPushToEvalStack(scmObject restList, bool doEvaluatio
             })
         if (doEvaluation)
         {
-            pushToEvalStack(scm_eval(nextUnevaluatedArg));
+            pushToEvalStack(scm_eval(nextUnevaluatedArg, env));
         }
         else
         {
@@ -75,12 +75,12 @@ static void maybeEvalListAndPushToEvalStack(scmObject restList, bool doEvaluatio
     } while (restList->tag != TAG_NULL);
 }
 
-void evalListAndPushToEvalStack(scmObject restList)
+void evalListAndPushToEvalStack(scmObject restList, scmObject env)
 {
-    maybeEvalListAndPushToEvalStack(restList, true);
+    maybeEvalListAndPushToEvalStack(restList, true, env);
 }
 
-void pushListToEvalStack(scmObject restList)
+void pushListToEvalStack(scmObject restList, scmObject env)
 {
-    maybeEvalListAndPushToEvalStack(restList, false);
+    maybeEvalListAndPushToEvalStack(restList, false, env);
 }

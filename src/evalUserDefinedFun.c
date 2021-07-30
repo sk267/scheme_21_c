@@ -6,7 +6,7 @@
 #define USERDEFINEDFUNCTION_DEBUG_CODE(code) //as nothing
 #endif
 
-scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaArgValues)
+scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaArgValues, scmObject env)
 {
 
     /*
@@ -31,7 +31,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
 
     rememberEvalStackPointer = evalStackPointer;
 
-    evalListAndPushToEvalStack(lambdaArgValues);
+    evalListAndPushToEvalStack(lambdaArgValues, env);
 
     nArgs = evalStackPointer - rememberEvalStackPointer;
 
@@ -50,9 +50,21 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
         restInputVars = getCdr(restInputVars);
     }
 
+    // eval-Stack aufräumen
+    evalStackPointer = rememberEvalStackPointer;
+
     // Die body-Liste evaluieren
     scmObject restBodyList = lambdaArgsAndBody->value.scmUserDefindedFunction.bodyList;
-    scmObject nextBodyElem = getCar(restBodyList);
+    scmObject nextBodyElem;
+    scmObject lastValue;
+
+    while (restBodyList != SCM_NULL)
+    {
+        nextBodyElem = getCar(restBodyList);
+        lastValue = scm_eval(nextBodyElem, env);
+
+        restBodyList = getCdr(restBodyList);
+    }
 
     return SCM_NULL;
 }

@@ -8,7 +8,7 @@
 #define EVAL_DEBUG_CODE(code)
 #endif
 
-scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
+scmObject evalFuncOrSyntax(scmObject exprUnevaluated, scmObject env)
 {
     scmObject funcOrSyn;
     scmObject funcOrSynEvaluated;
@@ -16,7 +16,7 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
 
     funcOrSyn = exprUnevaluated->value.scmCons.car;
     restList = exprUnevaluated->value.scmCons.cdr;
-    funcOrSynEvaluated = scm_eval(funcOrSyn);
+    funcOrSynEvaluated = scm_eval(funcOrSyn, env);
 
     EVAL_DEBUG_CODE(
         {
@@ -34,16 +34,16 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
     switch (funcOrSynEvaluated->tag)
     {
     case TAG_FUNC:
-        return evalFunction(funcOrSynEvaluated, restList);
+        return evalFunction(funcOrSynEvaluated, restList, env);
         break;
 
     case TAG_SYN:
-        return evalSyntax(funcOrSynEvaluated, restList);
+        return evalSyntax(funcOrSynEvaluated, restList, env);
         break;
 
     case TAG_USERDEFINDEFUNC:
         printf("evalFuncOrSyntax: in case TAG_USERDEFINDEFUNC gelandet\n");
-        return evalUserDefinedFunction(funcOrSynEvaluated, restList);
+        return evalUserDefinedFunction(funcOrSynEvaluated, restList, env);
 
         break;
 
@@ -55,7 +55,7 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
     return exprUnevaluated;
 }
 
-scmObject scm_eval(scmObject inputToEval)
+scmObject scm_eval(scmObject inputToEval, scmObject env)
 {
 
 #ifdef true
@@ -64,7 +64,7 @@ scmObject scm_eval(scmObject inputToEval)
     if (inputToEval->tag == TAG_SYMBOL)
     {
         // Nach dem Symbol-Value suchen und dieses Binding zurückgeben
-        evaluated = getEnvironmentValue(inputToEval, TOP_ENV);
+        evaluated = getEnvironmentValue(inputToEval, env);
         if (evaluated == SCM_NULL)
         {
             scmError("variable does not exist yet!");
@@ -74,7 +74,7 @@ scmObject scm_eval(scmObject inputToEval)
 
     if (inputToEval->tag == TAG_CONS)
     {
-        return evalFuncOrSyntax(inputToEval);
+        return evalFuncOrSyntax(inputToEval, env);
     }
     // Der ganze Rest evaluiert einfach zu sich selbst (Int, True, ...)
     return inputToEval;

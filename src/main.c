@@ -73,7 +73,7 @@ int main(int argCount, char *argValues[])
             // Vergleichbar mit try-Block
             printf("\n>");
             expr = scm_read();
-            expr = scm_eval(expr);
+            expr = scm_eval(expr, TOP_ENV);
             scm_print(expr);
         }
         else
