@@ -65,6 +65,7 @@ struct envStruct
     scmObject *keyValuePairs;
     int capacity;
     int nVariables;
+    scmObject parentEnv;
 };
 
 struct funcStruct
@@ -118,7 +119,7 @@ extern scmObject newFunc(scmObjectFunctionPointer codeToUse, char *functionName)
 extern scmObject newSyntax(scmObjectFunctionPointer codeToUse, char *syntaxName);
 extern scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList);
 
-extern scmObject allocateEnvironment(int inCapacitiy);
+extern scmObject allocateEnvironment(int inCapacitiy, scmObject parentEnv);
 extern void initializeTopEnv();
 
 extern void initializeFunctions();
@@ -131,6 +132,7 @@ extern int hashForEnv(scmObject symbol, scmObject env);
 extern scmObject evalFuncOrSyntax(scmObject exprUnevaluated);
 extern scmObject evalFunction(scmObject functionEvaluated, scmObject restList);
 extern scmObject evalSyntax(scmObject functionEvaluated, scmObject restList);
+extern scmObject evalUserDefinedFunction(scmObject funcOrSynEvaluated, scmObject restList);
 
 extern void scmAssertVerbose(int ok, char *msg, char *file, int line);
 extern void scmErrorVerbose(char *msg, char *file, int line);

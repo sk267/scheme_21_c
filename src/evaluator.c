@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-// #define EVAL_DEBUG
+#define EVAL_DEBUG
 
 #ifdef EVAL_DEBUG
 #define EVAL_DEBUG_CODE(code) code
@@ -23,7 +23,7 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
             printf("scm_eval:------------------------- \n");
             printf("restlist: ");
             scm_print(restList);
-            printf("funcOrSyn: ");
+            printf("\n funcOrSyn: ");
             scm_print(funcOrSyn);
             printf("\n");
             printf("funcOrSynEvaluated: \n");
@@ -39,6 +39,12 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated)
 
     case TAG_SYN:
         return evalSyntax(funcOrSynEvaluated, restList);
+        break;
+
+    case TAG_USERDEFINDEFUNC:
+        printf("evalFuncOrSyntax: in case TAG_USERDEFINDEFUNC gelandet\n");
+        return evalUserDefinedFunction(funcOrSynEvaluated, restList);
+
         break;
 
     default:

@@ -107,10 +107,9 @@ scmObject IF(int nArgs)
     return scm_eval(exprToEvaluate);
 }
 
-scmObject buildConsFromEvalStack(int idx, int bodyListLength)
+static scmObject buildConsFromEvalStack(int idx, int bodyListLength)
 {
 
-    printf("betrete buildConsFromEvalStack\n");
     scmObject car = (scmObject)malloc(sizeof(struct scmObjectStruct));
     car = evalStack[idx];
 

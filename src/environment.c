@@ -8,7 +8,7 @@
 #define ENV_DEBUG_CODE(code)
 #endif
 
-scmObject allocateEnvironment(int inCapacitiy)
+scmObject allocateEnvironment(int inCapacitiy, scmObject parEnv)
 {
     ENV_DEBUG_CODE({
         printf("Betrete allocate allocateEnvironment");
@@ -17,6 +17,7 @@ scmObject allocateEnvironment(int inCapacitiy)
     env->tag = TAG_ENV;
     env->value.scmEnv.nVariables = 0;
     env->value.scmEnv.capacity = inCapacitiy;
+    env->value.scmEnv.parentEnv = parEnv;
     // Hier auf (scmObject*) casten???
     env->value.scmEnv.keyValuePairs = (scmObject *)calloc(inCapacitiy, sizeof(scmObject));
 
@@ -40,7 +41,7 @@ int hashForEnv(scmObject symbol, scmObject env)
 
 void initializeTopEnv()
 {
-    TOP_ENV = allocateEnvironment(50);
+    TOP_ENV = allocateEnvironment(50, SCM_NULL);
 }
 
 void growEnvironment(scmObject env)
