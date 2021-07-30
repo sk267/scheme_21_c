@@ -22,7 +22,7 @@ scmObject DEFINE(int nArgs, scmObject env)
 
     value = scm_eval(value, env);
 
-    defineEnvironmentValue(key, value, TOP_ENV);
+    defineEnvironmentValue(key, value, env);
     return SCM_INV;
 }
 
@@ -40,7 +40,7 @@ scmObject SET(int nArgs, scmObject env)
 
     value = scm_eval(value, env);
 
-    setEnvironmentValue(key, value, TOP_ENV);
+    setEnvironmentValue(key, value, env);
     return SCM_INV;
 }
 
@@ -132,6 +132,8 @@ scmObject LAMBDA(int nArgs, scmObject env)
 
     argList = evalStack[rememberEvalStackPointer];
     bodyList = buildConsFromEvalStack(rememberEvalStackPointer + 1, bodyListLength);
+
+    evalStackPointer = rememberEvalStackPointer;
 
     return newUserDefinedFunction(argList, bodyList);
 }
