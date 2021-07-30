@@ -51,12 +51,19 @@ void scm_print(scmObject input)
 
     case TAG_FUNC:
         printf("print: FUNC gefunden!\n");
-        printf("Function Tag: %d\n", input->value.scmFunction.whichFunction);
+        printf("Function Name: %s\n", input->value.scmFunction.functionName);
         break;
 
     case TAG_SYN:
         printf("print: SYN gefunden!\n");
-        printf("Syntax Tag: %d\n", input->value.scmSyntax.whichSyntax);
+        printf("Syntax Tag: %s\n", input->value.scmSyntax.syntaxName);
+        break;
+
+    case TAG_USERDEFINDEFUNC:
+        printf("lambda: argList: ");
+        scm_print(input->value.scmUserDefindedFunction.argList);
+        printf(" bodyList: ");
+        scm_print(input->value.scmUserDefindedFunction.bodyList);
         break;
 
     default:

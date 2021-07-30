@@ -20,7 +20,8 @@ enum
     TAG_INV,
     TAG_ENV,
     TAG_FUNC,
-    TAG_SYN
+    TAG_SYN,
+    TAG_USERDEFINDEFUNC
 };
 
 enum
@@ -49,6 +50,7 @@ typedef struct consStruct cons;
 typedef struct envStruct envStr;
 typedef struct funcStruct scmFunc;
 typedef struct synStruct scmSyn;
+typedef struct userDefinedFuncStruct scmUserDefinedFunc;
 typedef scmObject (*scmObjectFunctionPointer)();
 typedef scmObject (*scmObjecttSyntaxPointer)();
 
@@ -67,14 +69,20 @@ struct envStruct
 
 struct funcStruct
 {
-    int whichFunction;
+    char *functionName;
     scmObjectFunctionPointer code;
 };
 
 struct synStruct
 {
-    int whichSyntax;
+    char *syntaxName;
     scmObjecttSyntaxPointer code;
+};
+
+struct userDefinedFuncStruct
+{
+    scmObject argList;
+    scmObject bodyList;
 };
 
 struct scmObjectStruct
@@ -91,6 +99,7 @@ struct scmObjectStruct
         double scmDouble;
         scmFunc scmFunction;
         scmSyn scmSyntax;
+        scmUserDefinedFunc scmUserDefindedFunction;
     } value;
 };
 
@@ -105,8 +114,9 @@ extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
 extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
-extern scmObject newFunc(scmObjectFunctionPointer codeToUse);
-extern scmObject newSyntax(scmObjecttSyntaxPointer codeToUse);
+extern scmObject newFunc(scmObjectFunctionPointer codeToUse, char *functionName);
+extern scmObject newSyntax(scmObjectFunctionPointer codeToUse, char *syntaxName);
+extern scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList);
 
 extern scmObject allocateEnvironment(int inCapacitiy);
 extern void initializeTopEnv();
@@ -166,3 +176,4 @@ extern scmObject SET(int nArgs);
 extern scmObject DISPLAY(int nArgs);
 extern scmObject QUOTE(int nArgs);
 extern scmObject IF(int nArgs);
+extern scmObject LAMBDA(int nArgs);

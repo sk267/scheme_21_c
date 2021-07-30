@@ -107,6 +107,36 @@ scmObject IF(int nArgs)
     return scm_eval(exprToEvaluate);
 }
 
+scmObject buildConsFromEvalStack(int idx, int bodyListLength)
+{
+
+    printf("betrete buildConsFromEvalStack\n");
+    scmObject car = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    car = evalStack[idx];
+
+    printf("bodyListLength: %d\n", bodyListLength);
+
+    if (idx >= bodyListLength)
+    {
+        return newCons(car, SCM_NULL);
+    }
+    else
+    {
+        return newCons(car, buildConsFromEvalStack(++idx, bodyListLength));
+    }
+}
+
+scmObject LAMBDA(int nArgs)
+{
+    scmObject argList, bodyList;
+    int bodyListLength = rememberEvalStackPointer + nArgs - 1;
+
+    argList = evalStack[rememberEvalStackPointer];
+    bodyList = buildConsFromEvalStack(rememberEvalStackPointer + 1, bodyListLength);
+
+    return newUserDefinedFunction(argList, bodyList);
+}
+
 scmObject evalSyntax(scmObject syntaxEvaluated, scmObject restList)
 {
     int nArgs;

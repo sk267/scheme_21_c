@@ -58,22 +58,23 @@ void initializeSymbolTableBuffer()
 
 void initializeFunctions()
 {
-    defineEnvironmentValue(newSymbol("+", 1), newFunc(PLUS), TOP_ENV);
-    defineEnvironmentValue(newSymbol("-", 1), newFunc(MINUS), TOP_ENV);
-    defineEnvironmentValue(newSymbol("*", 1), newFunc(MULT), TOP_ENV);
-    defineEnvironmentValue(newSymbol("cons", 4), newFunc(CONS), TOP_ENV);
-    defineEnvironmentValue(newSymbol("car", 3), newFunc(CAR), TOP_ENV);
-    defineEnvironmentValue(newSymbol("cdr", 3), newFunc(CDR), TOP_ENV);
-    defineEnvironmentValue(newSymbol("eval", 4), newFunc(EVAL), TOP_ENV);
+    defineEnvironmentValue(newSymbol("+", 1), newFunc(PLUS, "+"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("-", 1), newFunc(MINUS, "-"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("*", 1), newFunc(MULT, "*"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("cons", 4), newFunc(CONS, "cons"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("car", 3), newFunc(CAR, "car"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("cdr", 3), newFunc(CDR, "cdr"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("eval", 4), newFunc(EVAL, "eval"), TOP_ENV);
 }
 
 void initializeSyntax()
 {
-    defineEnvironmentValue(newSymbol("define", 6), newSyntax(DEFINE), TOP_ENV);
-    defineEnvironmentValue(newSymbol("quote", 5), newSyntax(QUOTE), TOP_ENV);
-    defineEnvironmentValue(newSymbol("set!", 4), newSyntax(SET), TOP_ENV);
-    defineEnvironmentValue(newSymbol("display", 7), newSyntax(DISPLAY), TOP_ENV);
-    defineEnvironmentValue(newSymbol("if", 2), newSyntax(IF), TOP_ENV);
+    defineEnvironmentValue(newSymbol("define", 6), newSyntax(DEFINE, "define"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("quote", 5), newSyntax(QUOTE, "quote"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("set!", 4), newSyntax(SET, "set"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("display", 7), newSyntax(DISPLAY, "display"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("if", 2), newSyntax(IF, "if"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("lambda", 6), newSyntax(LAMBDA, "lambda"), TOP_ENV);
 }
 
 void growSymbolTableBuffer()
@@ -147,20 +148,34 @@ scmObject newCons(scmObject inCar, scmObject inCdr)
     return o;
 }
 
-scmObject newFunc(scmObjectFunctionPointer codeToUse)
+scmObject newFunc(scmObjectFunctionPointer codeToUse, char *funcName)
 {
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_FUNC;
+    o->value.scmFunction.functionName = funcName;
     o->value.scmFunction.code = codeToUse;
 
     return o;
 }
 
-scmObject newSyntax(scmObjecttSyntaxPointer codeToUse)
+scmObject newSyntax(scmObjecttSyntaxPointer codeToUse, char *synName)
 {
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_SYN;
+    o->value.scmSyntax.syntaxName = synName;
     o->value.scmSyntax.code = codeToUse;
+
+    return o;
+}
+
+scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList)
+{
+
+    // printf("betrete newUserDefinedFunction \n");
+    scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    o->tag = TAG_USERDEFINDEFUNC;
+    o->value.scmUserDefindedFunction.argList = argList;
+    o->value.scmUserDefindedFunction.bodyList = bodyList;
 
     return o;
 }

@@ -24,7 +24,7 @@ void initializeEvalStack()
 void growEvalStack()
 {
     evalStack = (scmObject *)realloc(evalStack, sizeof(scmObject) * evalStackCapacity * 1.8);
-    evalStackCapacity = 1.8;
+    evalStackCapacity *= 1.8;
 }
 
 void pushToEvalStack(scmObject evaluatedObject)
@@ -64,14 +64,13 @@ static void maybeEvalListAndPushToEvalStack(scmObject restList, bool doEvaluatio
             })
         if (doEvaluation)
         {
-
             pushToEvalStack(scm_eval(nextUnevaluatedArg));
         }
         else
         {
-
             pushToEvalStack(nextUnevaluatedArg);
         }
+
         restList = getCdr(restList);
     } while (restList->tag != TAG_NULL);
 }
