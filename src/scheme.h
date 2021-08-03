@@ -165,6 +165,10 @@ extern scmObject popFromEvalStack();
 extern void evalListAndPushToEvalStack(scmObject restList, scmObject env);
 extern void pushListToEvalStack(scmObject restList, scmObject env);
 
+extern scmObject EQ(int nArgs);
+extern scmObject EQNR(int nArgs);
+extern scmObject GTNR(int nArgs);
+extern scmObject SMNR(int nArgs);
 extern scmObject PLUS(int nArgs);
 extern scmObject MINUS(int nArgs);
 extern scmObject MULT(int nArgs);

@@ -116,6 +116,121 @@ scmObject CDR(int nArgs)
     return getCdr(cons);
 }
 
+scmObject EQ(int nArgs)
+{
+
+    scmObject firstArg, secondArg;
+
+    if (nArgs != 2)
+    {
+        scmError("EQ expects exactly 2 arguments");
+    }
+
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+
+    evalStackPointer = rememberEvalStackPointer;
+
+    if (firstArg == secondArg)
+    {
+        return SCM_TRUE;
+    }
+    else
+    {
+        return SCM_FALSE;
+    }
+}
+
+scmObject EQNR(int nArgs)
+{
+    // printf("betrete EQNR");
+    scmObject firstArg, secondArg;
+
+    if (nArgs != 2)
+    {
+        scmError("EQ expects exactly 2 arguments");
+    }
+
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+
+    if ((firstArg->tag != TAG_INT) || secondArg->tag != TAG_INT)
+    {
+        scmError("= needs two int values!");
+    }
+
+    evalStackPointer = rememberEvalStackPointer;
+
+    if (firstArg->value.scmInt == secondArg->value.scmInt)
+    {
+        return SCM_TRUE;
+    }
+    else
+    {
+        return SCM_FALSE;
+    }
+}
+
+scmObject GTNR(int nArgs)
+{
+
+    scmObject firstArg, secondArg;
+
+    if (nArgs != 2)
+    {
+        scmError("> expects exactly 2 arguments");
+    }
+
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+
+    if ((firstArg->tag != TAG_INT) || secondArg->tag != TAG_INT)
+    {
+        scmError("> needs two int values!");
+    }
+
+    evalStackPointer = rememberEvalStackPointer;
+
+    if (firstArg->value.scmInt > secondArg->value.scmInt)
+    {
+        return SCM_TRUE;
+    }
+    else
+    {
+        return SCM_FALSE;
+    }
+}
+
+scmObject SMNR(int nArgs)
+{
+
+    scmObject firstArg, secondArg;
+
+    if (nArgs != 2)
+    {
+        scmError("< expects exactly 2 arguments");
+    }
+
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+
+    if ((firstArg->tag != TAG_INT) || secondArg->tag != TAG_INT)
+    {
+        scmError("< needs two int values!");
+    }
+
+    evalStackPointer = rememberEvalStackPointer;
+
+    if (firstArg->value.scmInt < secondArg->value.scmInt)
+    {
+        return SCM_TRUE;
+    }
+    else
+    {
+        return SCM_FALSE;
+    }
+}
+
 scmObject EVAL(int nArgs)
 {
     scmObject objectToEvaluate;
@@ -136,14 +251,18 @@ scmObject evalFunction(scmObject functionEvaluated, scmObject restList, scmObjec
     EVAL_FUNC_CODE({
         printf("evalStackPointer vor eval: %d\n", evalStackPointer);
     })
+
     rememberEvalStackPointer = evalStackPointer;
+
     EVAL_FUNC_CODE({
         printf("rememberEvalStackPointer: %d", rememberEvalStackPointer);
     })
     evalListAndPushToEvalStack(restList, env);
+
     EVAL_FUNC_CODE({
         printf("evalStackPointer nach eval: %d\n", evalStackPointer);
     })
+
     nArgs = evalStackPointer - rememberEvalStackPointer;
     EVAL_FUNC_CODE({
         printf("nArgs: %d\n", nArgs);

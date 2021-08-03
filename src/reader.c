@@ -71,7 +71,10 @@ bool isValidSymbolChar(char input)
         ((input >= 'a') && (input <= 'z')) ||
         ((input >= '0') && (input <= '9')) ||
         ((input >= '*') && (input <= '/')) ||
-        ((input == '!') || (input == '?')))
+        (input == '<') ||
+        (input == '=') ||
+        (input == '>') ||
+        ((input == '!')))
     {
         return true;
     }
@@ -88,7 +91,8 @@ bool isValidStringChar(char input)
         ((input >= 'a') && (input <= 'z')) ||
         ((input >= '0') && (input <= '9')) ||
         ((input >= '*') && (input <= '/')) ||
-        (input == '!') || (input == '?') ||
+        ((input >= '<') && (input <= '>')) ||
+        (input == '!') ||
         (input == '-') || (input == ' ') || (input == '_'))
     {
         return true;
@@ -279,9 +283,10 @@ scmObject scm_read()
     {
         return SCM_INV;
     }
-    if ((actChar >= 48) && (actChar <= 75))
+    if ((actChar >= 48) && (actChar <= 57))
     {
         // INTEGER #################################################
+        // printf("scm_reader: isInteger -> true\n");
         newObj = read_Integer(newObj);
     }
     else if (actChar == '"')
@@ -292,6 +297,7 @@ scmObject scm_read()
     else if (isValidSymbolChar(actChar))
     {
         // SYMBOL ##################################################
+        // printf("scm_reader: isValidSymbolChar -> true\n");
         unreadChar(actChar);
         newObj = read_Symbol(newObj);
     }

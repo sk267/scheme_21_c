@@ -74,37 +74,34 @@ scmObject QUOTE(int nArgs, scmObject env)
 
 scmObject IF(int nArgs, scmObject env)
 {
-    scmObject condUneval, exprToEvaluate, condEvaluated;
+    scmObject condUneval, condEvaluated, trueExpr, falseExpr;
 
+    printf("betrete if\n");
     if (nArgs != 3)
     {
         scmError("if expects exactly 3 arguments");
     }
 
-    condUneval = evalStack[rememberEvalStackPointer];
+    falseExpr = popFromEvalStack();
+    trueExpr = popFromEvalStack();
+    condUneval = popFromEvalStack();
+
+    evalStackPointer = rememberEvalStackPointer;
+
+    printf("evalStack[evalStackPointer]: ");
+    scm_print(evalStack[evalStackPointer]);
+    printf("\n");
+
     condEvaluated = scm_eval(condUneval, env);
-
-    EVAL_SYN_DEBUG_CODE(
-        {
-            printf("IF: condEvaluated: ");
-            scm_print(condEvaluated);
-            printf("\n");
-        })
-
-    if (condEvaluated == SCM_TRUE)
+    if (condEvaluated == SCM_FALSE)
     {
-        exprToEvaluate = evalStack[rememberEvalStackPointer + 1];
-    }
-    else if (condEvaluated == SCM_FALSE)
-    {
-        exprToEvaluate = evalStack[rememberEvalStackPointer + 2];
+        return scm_eval(falseExpr, env);
     }
     else
     {
-        scmError("if condition did not evaluat to #t or #f");
+
+        return scm_eval(trueExpr, env);
     }
-    evalStackPointer = rememberEvalStackPointer;
-    return scm_eval(exprToEvaluate, env);
 }
 
 static scmObject buildConsFromEvalStack(int idx, int bodyListLength)

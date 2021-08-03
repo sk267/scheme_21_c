@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-#define EVAL_DEBUG
+// #define EVAL_DEBUG
 
 #ifdef EVAL_DEBUG
 #define EVAL_DEBUG_CODE(code) code

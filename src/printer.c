@@ -19,6 +19,7 @@ void scm_print(scmObject input)
         PRINTER_DEBUG_CODE({
             printf("scm_print: integer erkannt\n");
         })
+
         printf("%d", input->value.scmInt);
         break;
     case TAG_STRING:

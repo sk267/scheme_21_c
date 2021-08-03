@@ -39,7 +39,7 @@ scmObject newSymbolAllocation(char *input, int length)
     MEMORY_DEBUG_CODE(
         {
             printf("newSymbolAllocation: gerade eben neues Symbol hinzugefuegt:\n");
-            printf("%d\n", numberOfExisitingSymbols);
+            printf("newSymbolAllocation: numberOfExisitingSymbols: %d\n", numberOfExisitingSymbols);
             scm_print(existingSymbols[numberOfExisitingSymbols]);
             printf("\n");
         })
@@ -59,12 +59,16 @@ void initializeSymbolTableBuffer()
 void initializeFunctions()
 {
     defineEnvironmentValue(newSymbol("+", 1), newFunc(PLUS, "+"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("=", 1), newFunc(EQNR, "="), TOP_ENV);
     defineEnvironmentValue(newSymbol("-", 1), newFunc(MINUS, "-"), TOP_ENV);
+    defineEnvironmentValue(newSymbol(">", 1), newFunc(GTNR, ">"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("<", 1), newFunc(SMNR, "<"), TOP_ENV);
     defineEnvironmentValue(newSymbol("*", 1), newFunc(MULT, "*"), TOP_ENV);
     defineEnvironmentValue(newSymbol("cons", 4), newFunc(CONS, "cons"), TOP_ENV);
     defineEnvironmentValue(newSymbol("car", 3), newFunc(CAR, "car"), TOP_ENV);
     defineEnvironmentValue(newSymbol("cdr", 3), newFunc(CDR, "cdr"), TOP_ENV);
     defineEnvironmentValue(newSymbol("eval", 4), newFunc(EVAL, "eval"), TOP_ENV);
+    defineEnvironmentValue(newSymbol("eq?", 3), newFunc(EQ, "eq?"), TOP_ENV);
 }
 
 void initializeSyntax()
@@ -150,6 +154,10 @@ scmObject newCons(scmObject inCar, scmObject inCdr)
 
 scmObject newFunc(scmObjectFunctionPointer codeToUse, char *funcName)
 {
+
+    printf("newFunc betreten \n");
+    printf("newFunc: funcName: %s \n", funcName);
+    printf("newFunc: codeToUse: %p \n", codeToUse);
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_FUNC;
     o->value.scmFunction.functionName = funcName;
