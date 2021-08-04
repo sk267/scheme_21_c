@@ -20,7 +20,7 @@ void scm_print(scmObject input)
             printf("scm_print: integer erkannt\n");
         })
 
-        printf("%d", input->value.scmInt);
+        printf("%d", getIntVal(input));
         break;
     case TAG_STRING:
         PRINTER_DEBUG_CODE({

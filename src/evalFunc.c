@@ -24,7 +24,7 @@ scmObject PLUS(int nArgs)
     {
         nextArg = popFromEvalStack();
         scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
-        sum += nextArg->value.scmInt;
+        sum += getIntVal(nextArg);
     }
 
     return (newInteger(sum));
@@ -43,13 +43,13 @@ scmObject MINUS(int nArgs)
 
     nextArg = evalStack[rememberEvalStackPointer];
     scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
-    sub = nextArg->value.scmInt;
+    sub = getIntVal(nextArg);
 
     for (int i = 1; i < nArgs; i++)
     {
         nextArg = evalStack[rememberEvalStackPointer + i];
         scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
-        sub -= nextArg->value.scmInt;
+        sub -= getIntVal(nextArg);
     }
     evalStackPointer = rememberEvalStackPointer;
     return (newInteger(sub));
@@ -69,7 +69,7 @@ scmObject MULT(int nArgs)
     {
         nextArg = popFromEvalStack();
         scmAssert(nextArg->tag == TAG_INT, "got Non-Integer for addition");
-        fac *= nextArg->value.scmInt;
+        fac *= getIntVal(nextArg);
     }
 
     return (newInteger(fac));
@@ -162,7 +162,7 @@ scmObject EQNR(int nArgs)
         scmError("= needs two int values!");
     }
 
-    if (firstArg->value.scmInt == secondArg->value.scmInt)
+    if (getIntVal(firstArg) == getIntVal(secondArg))
     {
         return SCM_TRUE;
     }
@@ -192,7 +192,7 @@ scmObject GTNR(int nArgs)
         scmError("> needs two int values!");
     }
 
-    if (firstArg->value.scmInt > secondArg->value.scmInt)
+    if (getIntVal(firstArg) > getIntVal(firstArg))
     {
         return SCM_TRUE;
     }
@@ -222,7 +222,7 @@ scmObject SMNR(int nArgs)
         scmError("< needs two int values!");
     }
 
-    if (firstArg->value.scmInt < secondArg->value.scmInt)
+    if (getIntVal(firstArg) < getIntVal(secondArg))
     {
         return SCM_TRUE;
     }

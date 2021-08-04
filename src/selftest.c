@@ -63,9 +63,9 @@ void selftest()
     // scm_print(popped1);
     // printf("\n");
 
-    scmAssert(popped3->value.scmInt == 33, "got wrong value from evalStack");
-    scmAssert(popped2->value.scmInt == 22, "got wrong value from evalStack");
-    scmAssert(popped1->value.scmInt == 11, "got wrong value from evalStack");
+    scmAssert(getIntVal(popped3) == 33, "got wrong value from evalStack");
+    scmAssert(getIntVal(popped2) == 22, "got wrong value from evalStack");
+    scmAssert(getIntVal(popped1) == 11, "got wrong value from evalStack");
 
     scmObject symbol1, symbol2, symbol3, symbol4, symbol5;
 
@@ -94,8 +94,9 @@ void selftest()
     scmObject obj1 = newInteger(33);
 
     scmAssert(obj1->tag == TAG_INT, "newInteger should be TAG_INT");
+    printf("noch da\n");
 
-    scmAssert(obj1->value.scmInt == 33, "newInteger value should be 33");
+    scmAssert(getIntVal(obj1) == 33, "newInteger value should be 33");
 
     obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
     // scm_print(obj1);
@@ -175,6 +176,24 @@ void selftest()
     hashForEnv(symbolToHash1, TOP_ENV);
     hashForEnv(symbolToHash2, TOP_ENV);
     hashForEnv(symbolToHash3, TOP_ENV);
+
+    // SmallInteger Test
+
+    printf("\n\nSmallInteger-Test\n");
+
+    printf("MAX_SMALL_INT: %ld\n", MAX_SMALL_INT);
+    printf("MIN_SMALL_INT: %ld\n", MIN_SMALL_INT);
+
+    scmObject mySmallInt;
+    mySmallInt = generateSmallInteger(7);
+    scmAssert(getSmallIntegerValue(mySmallInt) == 7, "smallInt should be 7");
+    mySmallInt = generateSmallInteger(45);
+    scmAssert(getSmallIntegerValue(mySmallInt) == 45, "smallInt should be 45");
+
+    scmAssert(fitsForForSmallInt(MAX_SMALL_INT) == true, "MAX_SMALL_INT sollte fuer Small Int passen!");
+    scmAssert(fitsForForSmallInt(MIN_SMALL_INT) == true, "MIN_SMALL_INT sollte fuer Small Int passen!");
+    scmAssert(fitsForForSmallInt(MAX_SMALL_INT + 1) == false, "MAX_SMALL_INT sollte NICHT fuer Small Int passen!");
+    scmAssert(fitsForForSmallInt(MIN_SMALL_INT - 1) == false, "MIN_SMALL_INT sollte NICHT fuer Small Int passen!");
 
     printf("#################### selftest ends ###########################\n");
 }

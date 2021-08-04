@@ -119,14 +119,25 @@ scmObject newSymbol(char *input, int length)
     return (newSymbolAllocation(input, length));
 }
 
-scmObject newInteger(int inInt)
+static scmObject generateBigInteger(int inInt)
 {
-
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_INT;
     o->value.scmInt = inInt;
 
     return o;
+}
+
+scmObject newInteger(int inInt)
+{
+    if (fitsForForSmallInt(inInt))
+    {
+        return generateSmallInteger(inInt);
+    }
+    else
+    {
+        return generateBigInteger(inInt);
+    }
 }
 
 scmObject newString(char *input, int length)

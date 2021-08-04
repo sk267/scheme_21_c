@@ -7,9 +7,17 @@
 #define scmAssert(ok, msg) scmAssertVerbose(ok, msg, __FILE__, __LINE__)
 #define scmError(msg) scmErrorVerbose(msg, __FILE__, __LINE__)
 
+#define PTAG_SMALLINTEGER 1
+#define PTAG_OBJECT 0
+#define SCM_INT int // könnte auch ein long sein, aber nur wenn die Rechner-Architektur daszulässt (hier erstmal nur int gemacht)
+
+#define MAX_SMALL_INT 0x3FFFFFFFL
+#define MIN_SMALL_INT (-MAX_SMALL_INT - 1)
+
 enum
 {
     TAG_INT = 1,
+    TAG_SMALLINT,
     TAG_DOUBLE,
     TAG_STRING,
     TAG_SYMBOL,
@@ -146,6 +154,12 @@ extern void scm_print(scmObject input);
 
 extern scmObject getCar(scmObject hopefullyCons);
 extern scmObject getCdr(scmObject hopefullyCons);
+extern scmObject generateSmallInteger(SCM_INT intVal);
+extern SCM_INT getSmallIntegerValue(scmObject something);
+extern bool isSmallInteger(scmObject something);
+extern int getTag(scmObject something);
+extern bool fitsForForSmallInt(int number);
+extern int getIntVal(scmObject smallOrBigInt);
 
 extern scmObject SCM_NULL;
 extern scmObject SCM_TRUE;
