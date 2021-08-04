@@ -72,7 +72,7 @@ static void maybeEvalListAndPushToEvalStack(scmObject restList, bool doEvaluatio
         }
 
         restList = getCdr(restList);
-    } while (restList->tag != TAG_NULL);
+    } while (getTag(restList) != TAG_NULL);
 }
 
 void evalListAndPushToEvalStack(scmObject restList, scmObject env)

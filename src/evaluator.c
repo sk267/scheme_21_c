@@ -62,7 +62,7 @@ scmObject scm_eval(scmObject inputToEval, scmObject env)
 
     scmObject evaluated;
 
-    if (inputToEval->tag == TAG_SYMBOL)
+    if (getTag(inputToEval) == TAG_SYMBOL)
     {
         while (env != SCM_NULL)
         {
@@ -79,7 +79,7 @@ scmObject scm_eval(scmObject inputToEval, scmObject env)
         }
     }
 
-    if (inputToEval->tag == TAG_CONS)
+    if (getTag(inputToEval) == TAG_CONS)
     {
         return evalFuncOrSyntax(inputToEval, env);
     }

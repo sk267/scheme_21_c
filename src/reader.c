@@ -248,7 +248,7 @@ scmObject read_Cons(scmObject nextCar)
     car = nextCar;
     cdr = scm_read();
 
-    if (cdr->tag == TAG_INV)
+    if (getTag(cdr) == TAG_INV)
     {
         // cdr = SCM_NULL;
         return newCons(car, SCM_NULL);

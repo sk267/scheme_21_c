@@ -93,10 +93,10 @@ void selftest()
 
     scmObject obj1 = newInteger(33);
 
-    scmAssert(obj1->tag == TAG_INT, "newInteger should be TAG_INT");
-    printf("noch da\n");
+    scmAssert(getTag(obj1) == TAG_SMALLINT, "newInteger should be TAG_INT");
 
     scmAssert(getIntVal(obj1) == 33, "newInteger value should be 33");
+    printf("noch da\n");
 
     obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
     // scm_print(obj1);
@@ -189,6 +189,13 @@ void selftest()
     scmAssert(getSmallIntegerValue(mySmallInt) == 7, "smallInt should be 7");
     mySmallInt = generateSmallInteger(45);
     scmAssert(getSmallIntegerValue(mySmallInt) == 45, "smallInt should be 45");
+    scmAssert(isSmallInteger(mySmallInt) == true, "isSmallInteger should be true!");
+
+    scmObject smallOrBigInt;
+    smallOrBigInt = newInteger(55);
+    scmAssert(isSmallInteger(smallOrBigInt) == true, "smallOrBigInt should be small!");
+    smallOrBigInt = newInteger(MAX_SMALL_INT + 5);
+    scmAssert(isSmallInteger(smallOrBigInt) == false, "smallOrBigInt should be small!");
 
     scmAssert(fitsForForSmallInt(MAX_SMALL_INT) == true, "MAX_SMALL_INT sollte fuer Small Int passen!");
     scmAssert(fitsForForSmallInt(MIN_SMALL_INT) == true, "MIN_SMALL_INT sollte fuer Small Int passen!");

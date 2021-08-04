@@ -55,7 +55,7 @@ scmObject DISPLAY(int nArgs, scmObject env)
         EVAL_SYN_DEBUG_CODE({
             printf("DISPLAY: currentObject->tag: %d\n", currentObject->tag);
         })
-        if ((currentObject->tag == TAG_CONS) || (currentObject->tag == TAG_SYMBOL))
+        if ((getTag(currentObject) == TAG_CONS) || (getTag(currentObject) == TAG_SYMBOL))
         {
             currentObject = scm_eval(currentObject, env);
         }

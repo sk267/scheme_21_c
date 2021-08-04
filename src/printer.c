@@ -10,11 +10,12 @@
 
 void scm_print(scmObject input)
 {
-    switch (input->tag)
+    switch (getTag(input))
     {
 
     case TAG_INV:
         break;
+    case TAG_SMALLINT:
     case TAG_INT:
         PRINTER_DEBUG_CODE({
             printf("scm_print: integer erkannt\n");

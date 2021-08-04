@@ -160,6 +160,7 @@ extern bool isSmallInteger(scmObject something);
 extern int getTag(scmObject something);
 extern bool fitsForForSmallInt(int number);
 extern int getIntVal(scmObject smallOrBigInt);
+extern bool isInteger(scmObject maybeInteger);
 
 extern scmObject SCM_NULL;
 extern scmObject SCM_TRUE;
