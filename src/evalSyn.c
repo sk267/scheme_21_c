@@ -138,7 +138,7 @@ scmObject LAMBDA(int nArgs, scmObject env)
 
     evalStackPointer = rememberEvalStackPointer;
 
-    return newUserDefinedFunction(argList, bodyList);
+    return newUserDefinedFunction(argList, bodyList, env);
 }
 
 scmObject evalSyntax(scmObject syntaxEvaluated, scmObject restList, scmObject env)

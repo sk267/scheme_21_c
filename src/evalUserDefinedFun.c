@@ -48,7 +48,9 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     nArgs = evalStackPointer - rememberEvalStackPointer;
 
     // Neues Environment anlegen
-    functionsEnv = allocateEnvironment(7, TOP_ENV);
+    // Dieses braucht als parentEnv das homeEnv des aufrufenden
+    scmObject homeEnv = lambdaArgsAndBody->value.scmUserDefindedFunction.homeEnv;
+    functionsEnv = allocateEnvironment(7, homeEnv);
 
     // Alle Argumente (Entsprechende Keys mit den verknüpften Values, die schon evaluiert auf dem Stack liegen)
     // in das tmp-Env reinlegen

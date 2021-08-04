@@ -176,7 +176,7 @@ scmObject newSyntax(scmObjecttSyntaxPointer codeToUse, char *synName)
     return o;
 }
 
-scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList)
+scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList, scmObject homeEnv)
 {
 
     // printf("betrete newUserDefinedFunction \n");
@@ -184,6 +184,7 @@ scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList)
     o->tag = TAG_USERDEFINDEFUNC;
     o->value.scmUserDefindedFunction.argList = argList;
     o->value.scmUserDefindedFunction.bodyList = bodyList;
+    o->value.scmUserDefindedFunction.homeEnv = homeEnv;
 
     return o;
 }

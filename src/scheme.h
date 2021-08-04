@@ -84,6 +84,7 @@ struct userDefinedFuncStruct
 {
     scmObject argList;
     scmObject bodyList;
+    scmObject homeEnv;
 };
 
 struct scmObjectStruct
@@ -117,7 +118,7 @@ extern scmObject newSymbolAllocation(char *input, int length);
 extern scmObject newCons(scmObject car, scmObject cdr);
 extern scmObject newFunc(scmObjectFunctionPointer codeToUse, char *functionName);
 extern scmObject newSyntax(scmObjectFunctionPointer codeToUse, char *syntaxName);
-extern scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList);
+extern scmObject newUserDefinedFunction(scmObject argList, scmObject bodyList, scmObject homeEnv);
 
 extern scmObject allocateEnvironment(int inCapacitiy, scmObject parentEnv);
 extern void initializeTopEnv();
