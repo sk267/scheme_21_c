@@ -76,7 +76,10 @@ scmObject IF(int nArgs, scmObject env)
 {
     scmObject condUneval, condEvaluated, trueExpr, falseExpr;
 
-    printf("betrete if\n");
+    EVAL_SYN_DEBUG_CODE({
+        printf("betrete if\n");
+    })
+
     if (nArgs != 3)
     {
         scmError("if expects exactly 3 arguments");
@@ -88,9 +91,12 @@ scmObject IF(int nArgs, scmObject env)
 
     evalStackPointer = rememberEvalStackPointer;
 
-    printf("evalStack[evalStackPointer]: ");
-    scm_print(evalStack[evalStackPointer]);
-    printf("\n");
+    EVAL_SYN_DEBUG_CODE(
+        {
+            printf("evalStack[evalStackPointer]: ");
+            scm_print(evalStack[evalStackPointer]);
+            printf("\n");
+        })
 
     condEvaluated = scm_eval(condUneval, env);
     if (condEvaluated == SCM_FALSE)

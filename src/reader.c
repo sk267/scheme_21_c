@@ -74,7 +74,8 @@ bool isValidSymbolChar(char input)
         (input == '<') ||
         (input == '=') ||
         (input == '>') ||
-        ((input == '!')))
+        (input == '?') ||
+        (input == '!'))
     {
         return true;
     }

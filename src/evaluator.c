@@ -42,7 +42,9 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated, scmObject env)
         break;
 
     case TAG_USERDEFINDEFUNC:
-        printf("evalFuncOrSyntax: in case TAG_USERDEFINDEFUNC gelandet\n");
+        EVAL_DEBUG_CODE({
+            printf("evalFuncOrSyntax: in case TAG_USERDEFINDEFUNC gelandet\n");
+        })
         return evalUserDefinedFunction(funcOrSynEvaluated, restList, env);
 
         break;

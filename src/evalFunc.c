@@ -81,6 +81,7 @@ scmObject CONS(int nArgs)
 
     if (nArgs != 2)
     {
+        evalStackPointer = rememberEvalStackPointer;
         scmError("Cons expects exactly 2 arguments!");
     }
 
@@ -96,6 +97,7 @@ scmObject CAR(int nArgs)
 
     if (nArgs != 1)
     {
+        evalStackPointer = rememberEvalStackPointer;
         scmError("Cons expects exactly 1 argument!");
     }
 
@@ -109,6 +111,7 @@ scmObject CDR(int nArgs)
 
     if (nArgs != 1)
     {
+        evalStackPointer = rememberEvalStackPointer;
         scmError("Cons expects exactly 1 argument!");
     }
 
@@ -118,18 +121,17 @@ scmObject CDR(int nArgs)
 
 scmObject EQ(int nArgs)
 {
-
     scmObject firstArg, secondArg;
-
-    if (nArgs != 2)
-    {
-        scmError("EQ expects exactly 2 arguments");
-    }
 
     firstArg = evalStack[rememberEvalStackPointer];
     secondArg = evalStack[rememberEvalStackPointer + 1];
 
     evalStackPointer = rememberEvalStackPointer;
+
+    if (nArgs != 2)
+    {
+        scmError("EQ expects exactly 2 arguments");
+    }
 
     if (firstArg == secondArg)
     {
@@ -146,20 +148,19 @@ scmObject EQNR(int nArgs)
     // printf("betrete EQNR");
     scmObject firstArg, secondArg;
 
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+    evalStackPointer = rememberEvalStackPointer;
+
     if (nArgs != 2)
     {
         scmError("EQ expects exactly 2 arguments");
     }
 
-    firstArg = evalStack[rememberEvalStackPointer];
-    secondArg = evalStack[rememberEvalStackPointer + 1];
-
     if ((firstArg->tag != TAG_INT) || secondArg->tag != TAG_INT)
     {
         scmError("= needs two int values!");
     }
-
-    evalStackPointer = rememberEvalStackPointer;
 
     if (firstArg->value.scmInt == secondArg->value.scmInt)
     {
@@ -176,20 +177,20 @@ scmObject GTNR(int nArgs)
 
     scmObject firstArg, secondArg;
 
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+
+    evalStackPointer = rememberEvalStackPointer;
+
     if (nArgs != 2)
     {
         scmError("> expects exactly 2 arguments");
     }
 
-    firstArg = evalStack[rememberEvalStackPointer];
-    secondArg = evalStack[rememberEvalStackPointer + 1];
-
     if ((firstArg->tag != TAG_INT) || secondArg->tag != TAG_INT)
     {
         scmError("> needs two int values!");
     }
-
-    evalStackPointer = rememberEvalStackPointer;
 
     if (firstArg->value.scmInt > secondArg->value.scmInt)
     {
@@ -206,20 +207,20 @@ scmObject SMNR(int nArgs)
 
     scmObject firstArg, secondArg;
 
+    firstArg = evalStack[rememberEvalStackPointer];
+    secondArg = evalStack[rememberEvalStackPointer + 1];
+
+    evalStackPointer = rememberEvalStackPointer;
+
     if (nArgs != 2)
     {
         scmError("< expects exactly 2 arguments");
     }
 
-    firstArg = evalStack[rememberEvalStackPointer];
-    secondArg = evalStack[rememberEvalStackPointer + 1];
-
     if ((firstArg->tag != TAG_INT) || secondArg->tag != TAG_INT)
     {
         scmError("< needs two int values!");
     }
-
-    evalStackPointer = rememberEvalStackPointer;
 
     if (firstArg->value.scmInt < secondArg->value.scmInt)
     {
@@ -236,6 +237,7 @@ scmObject EVAL(int nArgs)
     scmObject objectToEvaluate;
     if (nArgs != 1)
     {
+        evalStackPointer = rememberEvalStackPointer;
         scmError("Eval expects exactly 1 argument!");
     }
 

@@ -1,5 +1,7 @@
 #include "scheme.h"
 
+// #define USERDEFINEDFUNCTION_DEBUG
+
 #ifdef USERDEFINEDFUNCTION_DEBUG
 #define USERDEFINEDFUNCTION_DEBUG_CODE(code) code
 #else
@@ -20,6 +22,16 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     lambdaArgValues: (22 SCM_NULL)
     -----------------
     */
+
+    USERDEFINEDFUNCTION_DEBUG_CODE(
+        {
+            printf("\n----------------------------\nbetrete evalUserDefinedFunction: \n");
+            printf("lambdaArgsAndBody: ");
+            scm_print(lambdaArgsAndBody);
+            printf("\nlambdaArgValues:");
+            scm_print(lambdaArgValues);
+            printf("\n");
+        })
 
     int rememberEvalStackPointer;
     int nArgs;
@@ -60,11 +72,38 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
 
     while (restBodyList != SCM_NULL)
     {
+
+        USERDEFINEDFUNCTION_DEBUG_CODE({
+            printf("---in while:\n");
+        })
+
         nextBodyElem = getCar(restBodyList);
+
+        USERDEFINEDFUNCTION_DEBUG_CODE(
+            {
+                printf("nextBodyElem: ");
+                scm_print(nextBodyElem);
+                printf("\n");
+            })
+
         lastValue = scm_eval(nextBodyElem, functionsEnv);
+
+        USERDEFINEDFUNCTION_DEBUG_CODE(
+            {
+                printf("lastValue: ");
+                scm_print(lastValue);
+                printf("\n");
+            })
 
         restBodyList = getCdr(restBodyList);
     }
+    USERDEFINEDFUNCTION_DEBUG_CODE(
+        {
+            printf("lastValue: ");
+            scm_print(lastValue);
+            printf("\n");
 
+            printf("\n-----------------------------\n");
+        })
     return lastValue;
 }
