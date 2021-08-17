@@ -14,6 +14,8 @@
 #define MAX_SMALL_INT 0x3FFFFFFFL
 #define MIN_SMALL_INT (-MAX_SMALL_INT - 1)
 
+extern bool readFromFile;
+
 enum
 {
     TAG_INT = 1,
@@ -51,6 +53,13 @@ enum
     S_TAG_SET,
     S_TAG_DISPLAY,
     S_TAG_IF,
+};
+
+struct whichRead
+{
+    bool readFromConsole;
+    bool readFromFile;
+    bool readString;
 };
 
 typedef struct scmObjectStruct *scmObject;
@@ -167,6 +176,9 @@ extern scmObject SCM_TRUE;
 extern scmObject SCM_FALSE;
 extern scmObject SCM_INV;
 extern scmObject TOP_ENV;
+extern struct whichRead *WHICH_READ_V;
+extern FILE *FILE_POINTER;
+extern int SINGLE;
 
 extern jmp_buf savebuf;
 
@@ -180,6 +192,10 @@ extern void pushToEvalStack();
 extern scmObject popFromEvalStack();
 extern void evalListAndPushToEvalStack(scmObject restList, scmObject env);
 extern void pushListToEvalStack(scmObject restList, scmObject env);
+
+extern void scmReadFile(char *fileName);
+extern void switchToReadFromConsole();
+extern void switchToReadFromString();
 
 extern scmObject EQ(int nArgs);
 extern scmObject EQNR(int nArgs);

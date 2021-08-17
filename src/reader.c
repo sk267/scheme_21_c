@@ -23,7 +23,7 @@ void skipWhitespace()
     {
         actChar = nextChar();
         READER_DEBUG_CODE({
-            printf("-----------------skipWhitespace: actChar: %d\n", (int)actChar);
+            printf("-----------------skipWhitespace: actChar: %c\n", (int)actChar);
         })
     } while (
         (actChar == ' ') || (actChar == '\n') || (actChar == '\t') || (actChar == '\r'));
@@ -270,8 +270,9 @@ scmObject scm_read()
 
     skipWhitespace();
     actChar = nextChar();
+    // printf("scm_read> actChar: %d \n", (int)actChar);
     READER_DEBUG_CODE({
-        printf("scm_read> actChar: %d \n", (int)actChar);
+        printf("scm_read> actChar: %c \n", actChar);
     })
 
     if (actChar == -1)
@@ -308,6 +309,7 @@ scmObject scm_read()
         if (actChar == 't')
         {
             // TRUE ################################################
+            printf("true erkannt! \n");
             return SCM_TRUE;
         }
         else if (actChar == 'f')

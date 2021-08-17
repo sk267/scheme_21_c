@@ -12,6 +12,9 @@ scmObject SCM_NULL;
 scmObject SCM_INV;
 scmObject TOP_ENV;
 
+struct whichRead *WHICH_READ_V;
+FILE *FILE_POINTER;
+
 // Globale Variable; muss von überall erreichbar sein:
 jmp_buf savebuf;
 
@@ -28,6 +31,9 @@ scm_initialize()
     SCM_NULL = (scmObject)malloc(sizeof(scmObject));
     SCM_INV = (scmObject)malloc(sizeof(scmObject));
     TOP_ENV = (scmObject)malloc(sizeof(scmObject));
+    WHICH_READ_V = (struct whichRead *)malloc(sizeof(struct whichRead));
+
+    switchToReadFromConsole();
 
     initializeTopEnv();
 
@@ -48,6 +54,8 @@ scm_initialize()
     initializeEvalStack();
     initializeFunctions();
     initializeSyntax();
+
+    scmReadFile("initialize.txt");
 }
 
 int main(int argCount, char *argValues[])

@@ -202,5 +202,9 @@ void selftest()
     scmAssert(fitsForForSmallInt(MAX_SMALL_INT + 1) == false, "MAX_SMALL_INT sollte NICHT fuer Small Int passen!");
     scmAssert(fitsForForSmallInt(MIN_SMALL_INT - 1) == false, "MIN_SMALL_INT sollte NICHT fuer Small Int passen!");
 
+    // printf("whichRead: %d\n", WHICH_READ_V->readFromConsole);
+    // printf("whichRead: %d\n", WHICH_READ_V->readFromFile);
+    // printf("whichRead: %d\n", WHICH_READ_V->readString);
+
     printf("#################### selftest ends ###########################\n");
 }

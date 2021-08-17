@@ -95,3 +95,40 @@ int getIntVal(scmObject smallOrBigInt)
         return smallOrBigInt->value.scmInt;
     }
 }
+
+void switchToReadFromConsole()
+{
+    WHICH_READ_V->readFromFile = false;
+    WHICH_READ_V->readFromConsole = true;
+    WHICH_READ_V->readString = false;
+}
+
+void scmReadFile(char *fileName)
+{
+
+    FILE_POINTER = fopen(fileName, "r");
+
+    WHICH_READ_V->readFromFile = true;
+    WHICH_READ_V->readFromConsole = false;
+    WHICH_READ_V->readString = false;
+
+    while (SINGLE != EOF)
+    {
+        // printf("scmReadFile: SINGLE: %c\n", SINGLE);
+        scmObject expr;
+
+        expr = scm_read();
+        expr = scm_eval(expr, TOP_ENV);
+        scm_print(expr);
+    }
+
+    fclose(FILE_POINTER);
+}
+
+void switchToReadFromString()
+{
+
+    WHICH_READ_V->readFromFile = false;
+    WHICH_READ_V->readFromConsole = false;
+    WHICH_READ_V->readString = true;
+}
