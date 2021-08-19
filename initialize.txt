@@ -1,1 +1,9 @@
 (define add10 (lambda (n) (+ n 10)))
+
+(define add20 (lambda (n) (+ n 20)))
+
+(define fac (lambda (n) (if (< n 1) 1 (* n (fac (- n 1))))))
+
+(define sum (lambda (n)  (display n) (if (< n 1) 0 (+ n (sum (- n 1))))))
+
+(define cd (lambda (n) (display n) (if (< n 1) (display " Schluss ") (cd (- n 1)))))

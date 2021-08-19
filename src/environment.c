@@ -21,10 +21,6 @@ scmObject allocateEnvironment(int inCapacitiy, scmObject parEnv)
     // Hier auf (scmObject*) casten???
     env->value.scmEnv.keyValuePairs = (scmObject *)calloc(inCapacitiy, sizeof(scmObject));
 
-    ENV_DEBUG_CODE({
-        printf("allocateEnvironment: capacity: %d\n", env->value.scmEnv.capacity);
-    })
-
     return env;
 }
 
