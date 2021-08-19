@@ -35,7 +35,7 @@ void scm_print(scmObject input)
         printf("%s", input->value.scmSymbol);
         break;
     case TAG_NULL:
-        printf("SCM_NULL");
+        printf("()");
         break;
     case TAG_FALSE:
         printf("#f");

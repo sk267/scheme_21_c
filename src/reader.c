@@ -327,13 +327,13 @@ scmObject scm_read()
     {
         skipWhitespace();
         actChar = nextChar();
-        unreadChar(actChar);
         if (actChar == ')')
         {
             return SCM_NULL;
         }
         else
         {
+            unreadChar(actChar);
             // CONS ######################################################
             newObj = read_Cons(scm_read());
         }
