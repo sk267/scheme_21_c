@@ -99,6 +99,16 @@ void setOrDefineEnvironmentValue(scmObject key, scmObject value, scmObject env, 
     int initialIndex;
     int capacity;
 
+    ENV_DEBUG_CODE(
+        {
+            printf("++++++++++++++++++++++++++++++++++++++++\n");
+            printf("setOrDefineEnvironmentValue: key: ");
+            scm_print(key);
+            printf(" value: ");
+            scm_print(value);
+            printf("\n---------------------------------------\n");
+        })
+
     if (env->value.scmEnv.capacity == env->value.scmEnv.nVariables)
     {
         growEnvironment(env);

@@ -26,11 +26,11 @@ scm_initialize()
         printf("initialize...\n");
     })
 
-    SCM_TRUE = (scmObject)malloc(sizeof(scmObject));
-    SCM_FALSE = (scmObject)malloc(sizeof(scmObject));
-    SCM_NULL = (scmObject)malloc(sizeof(scmObject));
-    SCM_INV = (scmObject)malloc(sizeof(scmObject));
-    TOP_ENV = (scmObject)malloc(sizeof(scmObject));
+    SCM_TRUE = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    SCM_FALSE = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    SCM_NULL = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    SCM_INV = (scmObject)malloc(sizeof(struct scmObjectStruct));
+    TOP_ENV = (scmObject)malloc(sizeof(struct scmObjectStruct));
     WHICH_READ_V = (struct whichRead *)malloc(sizeof(struct whichRead));
 
     switchToReadFromConsole();

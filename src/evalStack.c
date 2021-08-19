@@ -29,6 +29,15 @@ void growEvalStack()
 
 void pushToEvalStack(scmObject evaluatedObject)
 {
+
+    EVALSTACK_DEBUG_CODE(
+        {
+            printf("\n*********************************************\n");
+            printf("pushToEvalStack: evaluatedObject:\n");
+            scm_print(evaluatedObject);
+            printf("\n----------------------------------------------\n");
+        })
+
     if (evalStackPointer == evalStackCapacity)
     {
         growEvalStack();

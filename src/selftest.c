@@ -206,5 +206,10 @@ void selftest()
     // printf("whichRead: %d\n", WHICH_READ_V->readFromFile);
     // printf("whichRead: %d\n", WHICH_READ_V->readString);
 
+    scmObject myNullSymbol = newSymbol("myNull", 6);
+    defineEnvironmentValue(myNullSymbol, SCM_NULL, TOP_ENV);
+
+    newCons(myNullSymbol, SCM_NULL);
+
     printf("#################### selftest ends ###########################\n");
 }
