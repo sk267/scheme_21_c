@@ -27,14 +27,34 @@ void growEvalStack()
     evalStackCapacity *= 1.8;
 }
 
-void pushToEvalStack(scmObject evaluatedObject)
+void pushToEvalStack(scmObject objectToPush)
 {
+
+    EVALSTACK_DEBUG_CODE(
+        {
+            printf("pushToEvalStack ++++++++++++++++++++++++\n");
+            printf("objectToPush: ");
+            scm_print(objectToPush);
+            printf("\n");
+            printf("++++++++++++++++++++++++++++++++++++++++\n");
+        })
     if (evalStackPointer == evalStackCapacity)
     {
         growEvalStack();
     }
-    evalStack[evalStackPointer] = evaluatedObject;
+    evalStack[evalStackPointer] = objectToPush;
     evalStackPointer++;
+
+    EVALSTACK_DEBUG_CODE(
+        {
+            for (int i = 0; i <= evalStackPointer; i++)
+            {
+                printf("evalStack[%d]: ", i);
+                scm_print(evalStack[i]);
+                printf("\n");
+            }
+            printf("-----------------------------------------\n\n");
+        })
     EVALSTACK_DEBUG_CODE({
         printf("pushToEvalStack: pointer: %d\n", evalStackPointer);
     })

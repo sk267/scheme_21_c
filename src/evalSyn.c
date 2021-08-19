@@ -116,7 +116,9 @@ static scmObject buildConsFromEvalStack(int idx, int bodyListLength)
     scmObject car = (scmObject)malloc(sizeof(struct scmObjectStruct));
     car = evalStack[idx];
 
-    printf("bodyListLength: %d\n", bodyListLength);
+    EVAL_SYN_DEBUG_CODE({
+        printf("bodyListLength: %d\n", bodyListLength);
+    })
 
     if (idx >= bodyListLength)
     {

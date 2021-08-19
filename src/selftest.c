@@ -38,6 +38,21 @@ void selftest()
     //     }
     // }
 
+    scmObject myKey = newSymbol("abc", 3);
+    scmObject myValue = newInteger(777);
+    defineEnvironmentValue(myKey, myValue, TOP_ENV);
+
+    scmObject smallEnv1 = allocateEnvironment(7, TOP_ENV);
+    scmObject smallEnv2 = allocateEnvironment(7, smallEnv1);
+
+    scmObject hopefullyMyValue = getEnvironmentValue(myKey, TOP_ENV);
+
+    scm_print(hopefullyMyValue);
+
+    printf("\nFERTIG\n");
+
+    return;
+
     scmObject s1, s2, s3;
     scmObject popped1, popped2, popped3;
 

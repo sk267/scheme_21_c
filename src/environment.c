@@ -10,9 +10,6 @@
 
 scmObject allocateEnvironment(int inCapacitiy, scmObject parEnv)
 {
-    ENV_DEBUG_CODE({
-        printf("Betrete allocate allocateEnvironment");
-    })
     scmObject env = (scmObject)malloc(sizeof(struct scmObjectStruct));
     env->tag = TAG_ENV;
     env->value.scmEnv.nVariables = 0;
@@ -20,6 +17,14 @@ scmObject allocateEnvironment(int inCapacitiy, scmObject parEnv)
     env->value.scmEnv.parentEnv = parEnv;
     // Hier auf (scmObject*) casten???
     env->value.scmEnv.keyValuePairs = (scmObject *)calloc(inCapacitiy, sizeof(scmObject));
+    ENV_DEBUG_CODE(
+        {})
+    printf("++++++++++++++++++++++++++++++++++++\n");
+    printf("++++++++++++++++++++++++++++++++++++\n");
+    printf("Betrete allocate allocateEnvironment");
+    printf("inCapaicity: %d\n", inCapacitiy);
+    printf("inCapaicity parent: %d\n", parEnv->value.scmEnv.capacity);
+    printf("-------------------------------------\n");
 
     return env;
 }

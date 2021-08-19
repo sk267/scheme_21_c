@@ -2,6 +2,8 @@
 
 (define add20 (lambda (n) (+ n 20)))
 
+(define add (lambda (a b c) (+ a b c)))
+
 (define fac (lambda (n) (if (< n 1) 1 (* n (fac (- n 1))))))
 
 (define sum (lambda (n)  (display n) (if (< n 1) 0 (+ n (sum (- n 1))))))

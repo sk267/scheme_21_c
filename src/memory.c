@@ -165,10 +165,6 @@ scmObject newCons(scmObject inCar, scmObject inCdr)
 
 scmObject newFunc(scmObjectFunctionPointer codeToUse, char *funcName)
 {
-
-    printf("newFunc betreten \n");
-    printf("newFunc: funcName: %s \n", funcName);
-    printf("newFunc: codeToUse: %p \n", codeToUse);
     scmObject o = (scmObject)malloc(sizeof(struct scmObjectStruct));
     o->tag = TAG_FUNC;
     o->value.scmFunction.functionName = funcName;

@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-// #define USERDEFINEDFUNCTION_DEBUG
+#define USERDEFINEDFUNCTION_DEBUG
 
 #ifdef USERDEFINEDFUNCTION_DEBUG
 #define USERDEFINEDFUNCTION_DEBUG_CODE(code) code
@@ -33,7 +33,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
             printf("\n");
         })
 
-    int rememberEvalStackPointer;
+    int rememberEvalStackPointer = 0;
     int nArgs;
 
     scmObject functionsEnv;
@@ -70,7 +70,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     // Die body-Liste evaluieren
     scmObject restBodyList = lambdaArgsAndBody->value.scmUserDefindedFunction.bodyList;
     scmObject nextBodyElem;
-    scmObject lastValue;
+    scmObject lastValue = SCM_NULL;
 
     while (restBodyList != SCM_NULL)
     {
