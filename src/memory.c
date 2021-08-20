@@ -8,18 +8,55 @@
 #define MEMORY_DEBUG_CODE(code)
 #endif
 
-int INITIAL_NUMBER_OF_MAX_SYMBOLS = 20;
-scmObject *existingSymbols;
-int numberOfExisitingSymbols = 0;
-int currentNumberOfMaxSymbols;
+int INITAL_SYMBOL_TABLE_CAPACITY = 30;
+scmObject *symbolTable;
+scmObject *biggerMem;
+int numberOfSymbolsInSymbolTable = 0;
+int symbolTableCapacity;
 
-scmObject newSymbolAllocation(char *input, int length)
+static inline void printSymbolTable()
+{
+    printf("SymbolTable sieht so aus: \n");
+    for (int i = 0; i < symbolTableCapacity; i++)
+    {
+        printf("i: %d ", i);
+        if (symbolTable[i] == NULL)
+        {
+            printf("NULL");
+        }
+        else
+        {
+            scm_print(symbolTable[i]);
+        }
+        printf("\n");
+    }
+}
+
+static inline void printBiggerMem()
+{
+    printf("printBiggerMem sieht so aus: \n");
+    for (int i = 0; i < symbolTableCapacity; i++)
+    {
+        printf("i: %d ", i);
+        if (biggerMem[i] == NULL)
+        {
+            printf("NULL");
+        }
+        else
+        {
+            scm_print(biggerMem[i]);
+        }
+        printf("\n");
+    }
+}
+
+scmObject newSymbolAllocation(char *input, int length, int indexToStart)
 {
 
-    MEMORY_DEBUG_CODE({
-        printf("----------------------------------------newSymbolAllocation betreten\n");
-    })
+    MEMORY_DEBUG_CODE({})
+    // printf("----------------------------------------newSymbolAllocation betreten\n");
 
+    // String zusammenbauen und mit '\0' byte ans Ende setzen
     char *copiedString = (char *)malloc((length + 1) * sizeof(char));
     strcpy(copiedString, input);
     copiedString[length] = '\0';
@@ -34,26 +71,44 @@ scmObject newSymbolAllocation(char *input, int length)
     o->tag = TAG_SYMBOL;
     o->value.scmSymbol = copiedString;
 
-    existingSymbols[numberOfExisitingSymbols] = o;
+    // Geeignete Stelle im Symbol-Table suchen
+    int idx = indexToStart;
+    while (true)
+    {
+        // ist an diesem Index eine Stelle frei?
+        if (symbolTable[idx % symbolTableCapacity] == NULL)
+        {
+            // lege das Symbol an dieser Stelle ab
+            symbolTable[idx % symbolTableCapacity] = o;
+            numberOfSymbolsInSymbolTable++;
+            break;
+        }
+        else
+        {
+            // suche weiter
+            idx++;
+        }
+        if ((idx % symbolTableCapacity) == indexToStart)
+        {
+            // should never happen
+            scmError("No free slot found for new Symbol in Symbol Table!");
+        }
+    }
 
     MEMORY_DEBUG_CODE(
         {
             printf("newSymbolAllocation: gerade eben neues Symbol hinzugefuegt:\n");
-            printf("newSymbolAllocation: numberOfExisitingSymbols: %d\n", numberOfExisitingSymbols);
-            scm_print(existingSymbols[numberOfExisitingSymbols]);
+            printf("newSymbolAllocation: numberOfSymbolsInSymbolTable: %d\n", numberOfSymbolsInSymbolTable);
+            scm_print(symbolTable[numberOfSymbolsInSymbolTable]);
             printf("\n");
         })
-
-    numberOfExisitingSymbols++;
 
     return o;
 }
 void initializeSymbolTableBuffer()
 {
-    // printf("size: %d\n", sizeof(scmObject) * INITIAL_NUMBER_OF_MAX_SYMBOLS);
-    existingSymbols = (scmObject *)malloc(sizeof(scmObject) * INITIAL_NUMBER_OF_MAX_SYMBOLS);
-    // printf("size: %p\n", existingSymbols);
-    currentNumberOfMaxSymbols = INITIAL_NUMBER_OF_MAX_SYMBOLS;
+    symbolTable = (scmObject *)calloc(INITAL_SYMBOL_TABLE_CAPACITY, sizeof(scmObject));
+    symbolTableCapacity = INITAL_SYMBOL_TABLE_CAPACITY;
 }
 
 void initializeFunctions()
@@ -83,40 +138,71 @@ void initializeSyntax()
 
 void growSymbolTableBuffer()
 {
-    // printf("growSymbolTableBuffer betreten\n");
-    // printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
-    currentNumberOfMaxSymbols += 10;
-    // printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
-    // printf("sizeof exisitingSymbols: %ld\n", sizeof(existingSymbols));
+    scmObject *oldMemory = symbolTable;
+    MEMORY_DEBUG_CODE(
+        {
+            printf("-------------------------------------growSymbolTableBuffer betreten\n");
+            printf("growSymbolTableBuffer: %d\n", symbolTableCapacity);
+            printSymbolTable();
+        })
+    int oldSymbolTableCapacity = symbolTableCapacity;
+    symbolTableCapacity += 10;
 
-    existingSymbols = (scmObject *)realloc(existingSymbols, sizeof(scmObject) * currentNumberOfMaxSymbols);
-    // printf("Noch da\n");
+    biggerMem = (scmObject *)calloc(symbolTableCapacity, sizeof(scmObject));
+    memcpy(biggerMem, symbolTable, sizeof(scmObject) * oldSymbolTableCapacity);
+    symbolTable = biggerMem;
+
+    free(oldMemory);
+}
+
+static int hashForSymbols(char *input, int length)
+{
+    int myHash;
+    myHash = (uintptr_t)input * 7;
+    myHash = myHash % symbolTableCapacity;
+    return myHash;
 }
 
 scmObject newSymbol(char *input, int length)
 {
 
-    if (numberOfExisitingSymbols == currentNumberOfMaxSymbols)
+    // SymbolTable sollte maximal zu 70% voll sein!
+    if (numberOfSymbolsInSymbolTable >= (symbolTableCapacity * 0.7))
     {
-        // SymbolTableBuffer ist voll, der Buffer muss vergrößert werden
         growSymbolTableBuffer();
     }
 
-    // Check, if this Symbol already exists in SymbolTable
-    for (int i = 0; i < numberOfExisitingSymbols; i++)
-    {
+    int indexToStart = hashForSymbols(input, length) % symbolTableCapacity;
 
-        if (strcmp(existingSymbols[i]->value.scmSymbol, input) == 0)
+    // Check, if this Symbol already exists in SymbolTable
+    for (int i = 0; i < symbolTableCapacity; i++)
+    {
+        if (symbolTable[(indexToStart + i) % symbolTableCapacity] != NULL)
         {
-            // Found an existing Symbol!
-            MEMORY_DEBUG_CODE({
-                printf("--------------------------------------Found an existing Symbol!\n");
-            })
-            return existingSymbols[i];
+            if (getTag(symbolTable[(indexToStart + i) % symbolTableCapacity]) == TAG_SYMBOL)
+            {
+
+                // printf("newSymbol: existens check: Symbol at idx %d: ", i);
+                // scm_print(symbolTable[(indexToStart + i) % symbolTableCapacity]);
+                // printf("\n");
+
+                if (strcmp(symbolTable[(indexToStart + i) % symbolTableCapacity]->value.scmSymbol, input) == 0)
+                {
+                    // Found an existing Symbol!
+                    MEMORY_DEBUG_CODE({
+                        printf("--------------------------------------Found an existing Symbol!\n");
+                    })
+                    return symbolTable[(indexToStart + i) % symbolTableCapacity];
+                }
+            }
+        }
+        else
+        {
+            continue;
         }
     }
     // No exisitng Symbol found, new Symbol will be created!
-    return (newSymbolAllocation(input, length));
+    return newSymbolAllocation(input, length, indexToStart);
 }
 
 static scmObject generateBigInteger(int inInt)

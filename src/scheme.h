@@ -131,7 +131,7 @@ extern void unreadChar(char input);
 extern scmObject newInteger(int inInt);
 extern scmObject newString(char *input, int length);
 extern scmObject newSymbol(char *input, int length);
-extern scmObject newSymbolAllocation(char *input, int length);
+extern scmObject newSymbolAllocation(char *input, int length, int indexToStart);
 extern scmObject newCons(scmObject car, scmObject cdr);
 extern scmObject newFunc(scmObjectFunctionPointer codeToUse, char *functionName);
 extern scmObject newSyntax(scmObjectFunctionPointer codeToUse, char *syntaxName);
