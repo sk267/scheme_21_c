@@ -195,22 +195,6 @@ scmObject getEnvironmentValue(scmObject key, scmObject inEnv)
                 scm_print(key);
                 printf("\n");
             })
-        scmObject tmpParent = env;
-
-        ENV_DEBUG_CODE(
-            {
-                while (true)
-                {
-                    if ((tmpParent = tmpParent->value.scmEnv.parentEnv) != SCM_NULL)
-                    {
-                        printf("\nund sein Parent Env ist %p\n", tmpParent);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            })
 
         // printf("\n das env beinhaltet: \n");
         // for (int i = 0; i < env->value.scmEnv.capacity; i++)

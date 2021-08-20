@@ -60,7 +60,7 @@ scm_initialize()
 
 int main(int argCount, char *argValues[])
 {
-    printf("Welcome to my scheme 2021!!\n");
+    printf("\n\nWelcome to my scheme 2021!!\n\n");
 
     MAIN_DEBUG_CODE(
         {
@@ -69,7 +69,10 @@ int main(int argCount, char *argValues[])
         })
 
     scm_initialize();
-    // selftest();
+    selftest();
+
+    printf("MAX_SMALL_INT: %ld\n", MAX_SMALL_INT);
+    printf("MIN_SMALL_INT: %ld\n", MIN_SMALL_INT);
 
     // Read Eval Print Loop
     scmObject expr;

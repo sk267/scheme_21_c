@@ -14,7 +14,8 @@ scmObject getCdr(scmObject hopefullyCons)
 
 int getTag(scmObject something)
 {
-    if ((long)something & PTAG_SMALLINTEGER)
+    uintptr_t tmpPointerToDoAddOperation = (uintptr_t)something;
+    if (tmpPointerToDoAddOperation & PTAG_SMALLINTEGER)
     {
         // Unterstes Bit ist gesetzt
         // es handelt sich um ein SMALL_INTEGER
@@ -26,9 +27,8 @@ int getTag(scmObject something)
 
 bool isSmallInteger(scmObject something)
 {
-    bool isSmall;
-
-    if ((long)something & PTAG_SMALLINTEGER)
+    uintptr_t tmpPointerToDoAddOperation = (uintptr_t)something;
+    if (tmpPointerToDoAddOperation & PTAG_SMALLINTEGER)
     {
         return true;
     }
@@ -70,14 +70,16 @@ SCM_INT getSmallIntegerValue(scmObject something)
 {
     scmAssert((int)isSmallInteger(something), "did not get a small integer!");
     // bits müssen wieder um eins nach rechts geshiftet werden, um korrekte Zahl zu erhalten
-    return (SCM_INT)something >> 1;
+    uintptr_t tmpVarForBitShifting = (uintptr_t)something;
+    tmpVarForBitShifting = tmpVarForBitShifting >> 1;
+    return (SCM_INT)tmpVarForBitShifting;
 }
 
 scmObject generateSmallInteger(SCM_INT intVal)
 {
-    long newSmallInt;
+    uintptr_t newSmallInt;
 
-    newSmallInt = (long)intVal << 1;
+    newSmallInt = (uintptr_t)intVal << 1;
     newSmallInt = newSmallInt | PTAG_SMALLINTEGER;
 
     return (scmObject)newSmallInt;
@@ -119,7 +121,6 @@ void scmReadFile(char *fileName)
 
         expr = scm_read();
         expr = scm_eval(expr, TOP_ENV);
-        scm_print(expr);
     }
 
     fclose(FILE_POINTER);

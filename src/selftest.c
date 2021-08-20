@@ -47,13 +47,11 @@ void selftest()
     scmObject hopefullyMyIntValue;
 
     hopefullyMyIntValue = getEnvironmentValue(myKey, smallEnv2);
-    printf("hart: \n");
-    scm_print(hopefullyMyIntValue);
-    printf("\nnach print\n");
+    // printf("hart: \n");
+    // scm_print(hopefullyMyIntValue);
+    // printf("\nnach print\n");
 
     scmAssert(getIntVal(hopefullyMyIntValue), "Was not able to go through paretns-envs to find a value");
-
-    printf("\nFERTIG\n");
 
     scmObject s1, s2, s3;
     scmObject popped1, popped2, popped3;
@@ -111,9 +109,7 @@ void selftest()
     scmObject obj1 = newInteger(33);
 
     scmAssert(getTag(obj1) == TAG_SMALLINT, "newInteger should be TAG_INT");
-
     scmAssert(getIntVal(obj1) == 33, "newInteger value should be 33");
-    printf("noch da\n");
 
     obj1 = newCons(newInteger(44), newSymbol("hallo", 5));
     // scm_print(obj1);
@@ -148,34 +144,40 @@ void selftest()
     defineEnvironmentValue(tmpKey6, tmpVal6, TOP_ENV);
 
     tmpVal1 = getEnvironmentValue(tmpKey1, TOP_ENV);
-    printf("\n");
-    scm_print(tmpVal1);
-    printf("\n");
+    scmAssert(getIntVal(tmpVal1) == 1, "expected the IntVal to be 1");
+    // printf("\n");
+    // scm_print(tmpVal1);
+    // printf("\n");
 
     tmpVal2 = getEnvironmentValue(tmpKey2, TOP_ENV);
-    printf("\n");
-    scm_print(tmpVal2);
-    printf("\n");
+    scmAssert(getIntVal(tmpVal2) == 2, "expected the IntVal to be 2");
+    // printf("\n");
+    // scm_print(tmpVal2);
+    // printf("\n");
 
     tmpVal3 = getEnvironmentValue(tmpKey3, TOP_ENV);
-    printf("\n");
-    scm_print(tmpVal3);
-    printf("\n");
+    scmAssert(getIntVal(tmpVal3) == 3, "expected the IntVal to be 3");
+    // printf("\n");
+    // scm_print(tmpVal3);
+    // printf("\n");
 
     tmpVal4 = getEnvironmentValue(tmpKey4, TOP_ENV);
-    printf("\n");
-    scm_print(tmpVal4);
-    printf("\n");
+    scmAssert(getIntVal(tmpVal4) == 4, "expected the IntVal to be 4");
+    // printf("\n");
+    // scm_print(tmpVal4);
+    // printf("\n");
 
     tmpVal5 = getEnvironmentValue(tmpKey5, TOP_ENV);
-    printf("\n");
-    scm_print(tmpVal5);
-    printf("\n");
+    scmAssert(getIntVal(tmpVal5) == 5, "expected the IntVal to be 5");
+    // printf("\n");
+    // scm_print(tmpVal5);
+    // printf("\n");
 
     tmpVal6 = getEnvironmentValue(tmpKey6, TOP_ENV);
-    printf("\n");
-    scm_print(tmpVal6);
-    printf("\n");
+    scmAssert(strcmp(tmpVal6->value.scmChar, "StringV") == 0, "expected the IntVal to be 6");
+    // printf("\n");
+    // scm_print(tmpVal6);
+    // printf("\n");
 
     scmObject symbolToHash1;
     scmObject symbolToHash2;
@@ -186,20 +188,15 @@ void selftest()
     symbolToHash3 = newSymbol("acb", 3);
 
     // myHash = (long)symbolToHash1->value.scmSymbol;
-    printf("\nMyHash1: %p\n", symbolToHash1);
+    // printf("\nMyHash1: %p\n", symbolToHash1);
     // myHash = (long)symbolToHash2->value.scmSymbol;
-    printf("\nMyHash2: %p\n", symbolToHash2);
+    // printf("\nMyHash2: %p\n", symbolToHash2);
 
     hashForEnv(symbolToHash1, TOP_ENV);
     hashForEnv(symbolToHash2, TOP_ENV);
     hashForEnv(symbolToHash3, TOP_ENV);
 
     // SmallInteger Test
-
-    printf("\n\nSmallInteger-Test\n");
-
-    printf("MAX_SMALL_INT: %ld\n", MAX_SMALL_INT);
-    printf("MIN_SMALL_INT: %ld\n", MIN_SMALL_INT);
 
     scmObject mySmallInt;
     mySmallInt = generateSmallInteger(7);
