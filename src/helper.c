@@ -132,3 +132,29 @@ void switchToReadFromString()
     WHICH_READ_V->readFromConsole = false;
     WHICH_READ_V->readString = true;
 }
+
+void print_env(scmObject env)
+{
+    scmObject binding, key, val;
+    while (env != SCM_NULL)
+    {
+        printf("------------------%p\n", env);
+        for (int i = 0; i < env->value.scmEnv.capacity; i++)
+        {
+            if (env->value.scmEnv.keyValuePairs[i] == NULL)
+            {
+                continue;
+            }
+            binding = env->value.scmEnv.keyValuePairs[i];
+            key = getCar(binding);
+            val = getCdr(binding);
+            printf("key: ");
+            scm_print(key);
+            printf(", value: ");
+            scm_print(val);
+            printf("\n");
+        }
+        printf("parent: %p\n", env->value.scmEnv.parentEnv);
+        env = env->value.scmEnv.parentEnv;
+    }
+}

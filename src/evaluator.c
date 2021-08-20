@@ -60,23 +60,9 @@ scmObject evalFuncOrSyntax(scmObject exprUnevaluated, scmObject env)
 scmObject scm_eval(scmObject inputToEval, scmObject env)
 {
 
-    scmObject evaluated;
-
     if (getTag(inputToEval) == TAG_SYMBOL)
     {
-        while (env != SCM_NULL)
-        {
-            // Nach dem Symbol-Value suchen und dieses Binding zurückgeben
-            evaluated = getEnvironmentValue(inputToEval, env);
-            if (evaluated == SCM_NULL)
-            {
-                // Variable wurde von getEnvironmentValue nicht gefunden
-                // -> Wir suchen im Parent-Env
-                env = env->value.scmEnv.parentEnv;
-                continue;
-            }
-            return evaluated;
-        }
+        return getEnvironmentValue(inputToEval, env);
     }
 
     if (getTag(inputToEval) == TAG_CONS)

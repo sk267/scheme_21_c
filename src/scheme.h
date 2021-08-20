@@ -215,3 +215,5 @@ extern scmObject DISPLAY(int nArgs, scmObject env);
 extern scmObject QUOTE(int nArgs, scmObject env);
 extern scmObject IF(int nArgs, scmObject env);
 extern scmObject LAMBDA(int nArgs, scmObject env);
+
+extern void print_env(scmObject env);

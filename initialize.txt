@@ -4,8 +4,11 @@
 
 (define add (lambda (a b c) (+ a b c)))
 
-(define fac (lambda (n) (if (< n 1) 1 (* n (fac (- n 1))))))
+(define fac (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))))
 
-(define sum (lambda (n)  (display n) (if (< n 1) 0 (+ n (sum (- n 1))))))
+(define sum (lambda (n) (if (= n 0) 0 (+ n (sum (- n 1))))))
 
 (define cd (lambda (n) (display n) (if (< n 1) (display " Schluss ") (cd (- n 1)))))
+
+(define make-adder (lambda (c)
+                    (lambda (n) (+ n c))))

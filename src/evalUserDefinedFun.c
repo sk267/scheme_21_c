@@ -1,6 +1,6 @@
 #include "scheme.h"
 
-#define USERDEFINEDFUNCTION_DEBUG
+// #define USERDEFINEDFUNCTION_DEBUG
 
 #ifdef USERDEFINEDFUNCTION_DEBUG
 #define USERDEFINEDFUNCTION_DEBUG_CODE(code) code
@@ -10,6 +10,8 @@
 
 scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaArgValues, scmObject env)
 {
+
+    printf("+++++++++++++++++++++++++++++++++++++++++ evalUserDefinedFunction betreten\n");
 
     /*
     Was in scm_eval beispielsweise ankommt:
@@ -33,7 +35,7 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
             printf("\n");
         })
 
-    int rememberEvalStackPointer = 0;
+    // int rememberEvalStackPointer = 0;
     int nArgs;
 
     scmObject functionsEnv;
@@ -52,17 +54,32 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
     scmObject homeEnv = lambdaArgsAndBody->value.scmUserDefindedFunction.homeEnv;
     functionsEnv = allocateEnvironment(7, homeEnv);
 
+    printf("\n\nArgs: %d\n", nArgs);
+
     // Alle Argumente (Entsprechende Keys mit den verknüpften Values, die schon evaluiert auf dem Stack liegen)
     // in das tmp-Env reinlegen
     restInputVars = lambdaArgsAndBody->value.scmUserDefindedFunction.argList;
     for (int i = 0; i < nArgs; i++)
     {
+        // TODO!!!!!
         nextKey = getCar(restInputVars);
         nextValue = evalStack[rememberEvalStackPointer + i];
+
+        USERDEFINEDFUNCTION_DEBUG_CODE(
+            {})
+        printf("+++++++++++++++evalUserDefinedFunction: Argumente ablegen\n");
+        printf("%p, nextKey: ", functionsEnv);
+        scm_print(nextKey);
+        printf("\n nextValue: ");
+        scm_print(nextValue);
+        printf(" \n");
+        printf("------------------------------------\n");
 
         defineEnvironmentValue(nextKey, nextValue, functionsEnv);
         restInputVars = getCdr(restInputVars);
     }
+
+    print_env(functionsEnv);
 
     // eval-Stack aufräumen
     evalStackPointer = rememberEvalStackPointer;

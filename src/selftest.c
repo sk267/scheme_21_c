@@ -37,21 +37,23 @@ void selftest()
     //         printf("hier steht %d\n", testInts[i]);
     //     }
     // }
-
-    scmObject myKey = newSymbol("abc", 3);
+    scmObject myKey = newSymbol("xyz", 3);
     scmObject myValue = newInteger(777);
     defineEnvironmentValue(myKey, myValue, TOP_ENV);
 
-    scmObject smallEnv1 = allocateEnvironment(7, TOP_ENV);
-    scmObject smallEnv2 = allocateEnvironment(7, smallEnv1);
+    scmObject smallEnv1 = allocateEnvironment(3, TOP_ENV);
+    scmObject smallEnv2 = allocateEnvironment(4, smallEnv1);
 
-    scmObject hopefullyMyValue = getEnvironmentValue(myKey, TOP_ENV);
+    scmObject hopefullyMyIntValue;
 
-    scm_print(hopefullyMyValue);
+    hopefullyMyIntValue = getEnvironmentValue(myKey, smallEnv2);
+    printf("hart: \n");
+    scm_print(hopefullyMyIntValue);
+    printf("\nnach print\n");
+
+    scmAssert(getIntVal(hopefullyMyIntValue), "Was not able to go through paretns-envs to find a value");
 
     printf("\nFERTIG\n");
-
-    return;
 
     scmObject s1, s2, s3;
     scmObject popped1, popped2, popped3;

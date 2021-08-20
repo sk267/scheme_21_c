@@ -69,7 +69,7 @@ int main(int argCount, char *argValues[])
         })
 
     scm_initialize();
-    selftest();
+    // selftest();
 
     // Read Eval Print Loop
     scmObject expr;
