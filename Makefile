@@ -6,6 +6,7 @@
 CC = gcc -g
 CXXFLAGS = -std=c11 -Wall
 LDFLAGS = 
+CFLAGS=-Wall -Werror -Wextra -Wpedantic -Wformat -Wformat-security
 
 # Makefile settings - Can be customized.
 APPNAME = myapp

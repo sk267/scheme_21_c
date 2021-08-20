@@ -35,7 +35,6 @@ scmObject evalUserDefinedFunction(scmObject lambdaArgsAndBody, scmObject lambdaA
             printf("\n");
         })
 
-    // int rememberEvalStackPointer = 0;
     int nArgs;
 
     scmObject functionsEnv;
