@@ -14,7 +14,14 @@
 #define MAX_SMALL_INT 0x3FFFFFFFL
 #define MIN_SMALL_INT (-MAX_SMALL_INT - 1)
 
+#define INITIAL_RETURN_STACK_SIZE 10
+
 extern bool readFromFile;
+
+typedef void (*VOIDFUNC)();
+typedef void *(*VOIDPTRFUNC)();
+typedef VOIDPTRFUNC (*VOIDFUNCPTRFUNC)();
+#define contFunc VOIDFUNCPTRFUNC
 
 enum
 {
@@ -217,3 +224,18 @@ extern scmObject IF(int nArgs, scmObject env);
 extern scmObject LAMBDA(int nArgs, scmObject env);
 
 extern void print_env(scmObject env);
+
+// /////////////////////////////////////////////////////////
+// Trampoline Code
+// /////////////////////////////////////////////////////////
+
+extern scmObject retVal;
+extern contFunc *returnStack;
+extern int returnStackCapacity;
+extern int returnStackPointer;
+
+extern void initializeReturnStack();
+extern void growReturnStack();
+extern void rPUSH(contFunc obj);
+extern contFunc rPOP();
+extern void trampoline(contFunc startingPoint);

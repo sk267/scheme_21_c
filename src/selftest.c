@@ -220,5 +220,78 @@ void selftest()
     // printf("whichRead: %d\n", WHICH_READ_V->readFromFile);
     // printf("whichRead: %d\n", WHICH_READ_V->readString);
 
+    // /////////////////////////////////////////////////////////
+    // Trampoline Test-Code
+    // /////////////////////////////////////////////////////////
+    trampolineTest();
+
     printf("#################### selftest ends ###########################\n");
+}
+
+/*
+Ablauf:
+
+f1() ->
+    f2() ->
+        f3()
+        return
+    cont_f2
+    ...print und bla
+    return
+cont_f1
+... print und bla
+return
+*/
+
+static contFunc cont_f1();
+static contFunc cont_f2();
+static contFunc f2();
+static contFunc f3();
+
+// void trampoline(contFunc startingPoint)
+// {
+//     contFunc nextCont = startingPoint;
+
+//     rPUSH(NULL);
+//     while (nextCont != NULL)
+//     {
+//         nextCont = (*nextCont)();
+//     }
+// }
+
+static contFunc f1()
+{
+    printf("hier f1\n");
+    rPUSH(cont_f1);
+    return f2;
+}
+
+static contFunc cont_f1()
+{
+    printf("hier cont_f1\n");
+    return rPOP();
+}
+
+static contFunc f2()
+{
+    printf("hier f2\n");
+    rPUSH(cont_f2);
+    return f3;
+}
+
+static contFunc cont_f2()
+{
+    printf("hier cont_f2\n");
+    return rPOP();
+}
+
+static contFunc f3()
+{
+    printf("hier f3\n");
+    return rPOP();
+}
+
+void trampolineTest()
+{
+    trampoline(f1);
 }

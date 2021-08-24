@@ -52,6 +52,7 @@ scm_initialize()
     SCM_INV->value.scmInt = 0;
 
     initializeEvalStack();
+    initializeReturnStack();
     initializeFunctions();
     initializeSyntax();
 

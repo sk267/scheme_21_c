@@ -73,3 +73,91 @@ scmObject scm_eval(scmObject inputToEval, scmObject env)
     // Der ganze Rest evaluiert einfach zu sich selbst (Int, True, ...)
     return inputToEval;
 }
+
+// /////////////////////////////////////////////////////////
+// Trampoline Code
+// /////////////////////////////////////////////////////////
+
+/*
+caller:
+    pushToEvalStack(inputToEval)
+    pushToEvalStack(env)
+    trampoline(C_scm_eval)
+*/
+contFunc C_scm_eval()
+{
+    // expects on evalStack: inputToEval, env
+
+    scmObject retVal;
+    scmObject inputToEval, env;
+
+    env = popFromEvalStack();
+    inputToEval = popFromEvalStack();
+
+    if (getTag(inputToEval) == TAG_SYMBOL)
+    {
+        // Push kann man sich sparen, wenn man es oben einfach weglässt
+        pushToEvalStack(inputToEval);
+        pushToEvalStack(env);
+        return C_getEnvironmentValue;
+    }
+
+    if (getTag(inputToEval) == TAG_CONS)
+    {
+        // Push kann man sich sparen, wenn man es oben einfach weglässt
+        pushToEvalStack(inputToEval);
+        pushToEvalStack(env);
+        return C_evalFuncOrSyntax;
+    }
+
+    // Der ganze Rest evaluiert einfach zu sich selbst (Int, True, ...)
+    // return inputToEval;          ---             old Code
+    retVal = inputToEval;
+    return rPOP();
+}
+
+scmObject retVal;
+contFunc *returnStack = NULL;
+int returnStackCapacity = 0;
+int returnStackPointer = 0;
+
+void initializeReturnStack()
+{
+    returnStack = (contFunc *)malloc(sizeof(contFunc) * INITIAL_RETURN_STACK_SIZE);
+    returnStackCapacity = INITIAL_RETURN_STACK_SIZE;
+    returnStackPointer = 0;
+}
+
+void growReturnStack()
+{
+    int oldCapacity = returnStackCapacity;
+    int newCapacity = oldCapacity * 5 / 4;
+    returnStack = (contFunc *)realloc(returnStack, sizeof(contFunc) * newCapacity);
+    returnStackCapacity = newCapacity;
+}
+
+void rPUSH(contFunc obj)
+{
+    returnStack[returnStackPointer] = obj;
+    returnStackPointer++;
+    if (returnStackPointer == returnStackCapacity)
+    {
+        growReturnStack();
+    }
+}
+
+contFunc rPOP()
+{
+    return returnStack[--returnStackPointer];
+}
+
+void trampoline(contFunc startingPoint)
+{
+    contFunc nextCont = startingPoint;
+
+    rPUSH(NULL);
+    while (nextCont != NULL)
+    {
+        nextCont = (*nextCont)();
+    }
+}
