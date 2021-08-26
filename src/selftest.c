@@ -1,16 +1,8 @@
 #include "scheme.h"
 
-void printTmp(char *input)
-{
-    printf("printTmp: %s\n", input);
-}
-
 void selftest()
 {
     printf("#################### selftest begins ###########################\n\n");
-
-    // printf("IHK.value: %s\n", newSymbol("IHK", 3)->value.scmSymbol);
-    // printf("\nlllllllllllllllllllllllllllllll\n\n");
 
     // char *a = "Hallo";
     // char *b = "Hallo";
@@ -51,7 +43,7 @@ void selftest()
     // scm_print(hopefullyMyIntValue);
     // printf("\nnach print\n");
 
-    scmAssert(getIntVal(hopefullyMyIntValue), "Was not able to go through paretns-envs to find a value");
+    scmAssert(getIntVal(hopefullyMyIntValue) == 777, "Was not able to go through parents-envs to find a value");
 
     scmObject s1, s2, s3;
     scmObject popped1, popped2, popped3;
