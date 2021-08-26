@@ -104,18 +104,6 @@ bool isValidStringChar(char input)
     }
 }
 
-// bool isValidStringChar(char input)
-// {
-//     if (input != '\0')
-//     {
-//         return true;
-//     }
-//     else
-//     {
-//         return false;
-//     }
-// }
-
 typedef struct charBufferStruct charBuffer;
 
 struct charBufferStruct
@@ -263,21 +251,19 @@ scmObject scm_read()
 {
     scmObject newObj = (scmObject)malloc(sizeof(scmObject));
 
-    // printf("\n>");
     READER_DEBUG_CODE({
         printf("Betrete scm_read! \n");
     })
 
     skipWhitespace();
     actChar = nextChar();
-    // printf("scm_read> actChar: %d \n", (int)actChar);
+
     READER_DEBUG_CODE({
         printf("scm_read> actChar: %c \n", actChar);
     })
 
     if (actChar == -1)
     {
-        // printf("------------------------------ EOF gefunden!! \n");
         return SCM_FALSE;
     }
 
@@ -288,7 +274,6 @@ scmObject scm_read()
     if ((actChar >= 48) && (actChar <= 57))
     {
         // INTEGER #################################################
-        // printf("scm_reader: isInteger -> true\n");
         newObj = read_Integer(newObj);
     }
     else if (actChar == '"')
@@ -299,7 +284,6 @@ scmObject scm_read()
     else if (isValidSymbolChar(actChar))
     {
         // SYMBOL ##################################################
-        // printf("scm_reader: isValidSymbolChar -> true\n");
         unreadChar(actChar);
         newObj = read_Symbol(newObj);
     }

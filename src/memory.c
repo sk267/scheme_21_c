@@ -83,14 +83,8 @@ void initializeSyntax()
 
 void growSymbolTableBuffer()
 {
-    // printf("growSymbolTableBuffer betreten\n");
-    // printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
     currentNumberOfMaxSymbols += 10;
-    // printf("growSymbolTableBuffer: %d\n", currentNumberOfMaxSymbols);
-    // printf("sizeof exisitingSymbols: %ld\n", sizeof(existingSymbols));
-
     existingSymbols = (scmObject *)realloc(existingSymbols, sizeof(scmObject) * currentNumberOfMaxSymbols);
-    // printf("Noch da\n");
 }
 
 scmObject newSymbol(char *input, int length)

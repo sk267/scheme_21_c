@@ -116,9 +116,7 @@ void scmReadFile(char *fileName)
 
     while (SINGLE != EOF)
     {
-        // printf("scmReadFile: SINGLE: %c\n", SINGLE);
         scmObject expr;
-
         expr = scm_read();
         expr = scm_eval(expr, TOP_ENV);
     }

@@ -174,15 +174,11 @@ scmObject getEnvironmentValue(scmObject key, scmObject inEnv)
 
     scmObject env = inEnv;
 
-    // printf("Betrete getEnvironmentValue\n");
     int initialIndex = hashForEnv(key, env);
     int capacity = env->value.scmEnv.capacity;
 
     initialIndex = initialIndex % capacity;
     int index = initialIndex;
-
-    // printf("getEnvironmentValue: initialIndex: %d\n", initialIndex);
-    // printf("getEnvironmentValue: initialIndex mod capaxity: %d\n", (initialIndex % capacity));
 
     // Suche im inEnv sowie allen parent Environments:
     while (env != SCM_NULL)
@@ -196,20 +192,6 @@ scmObject getEnvironmentValue(scmObject key, scmObject inEnv)
                 printf("\n");
             })
 
-        // printf("\n das env beinhaltet: \n");
-        // for (int i = 0; i < env->value.scmEnv.capacity; i++)
-        // {
-        //     if (env->value.scmEnv.keyValuePairs[i] == NULL)
-        //     {
-        //         printf("NULL\n");
-        //     }
-        //     else
-        //     {
-        //         printf("i: %d  -  ", i);
-        //         scm_print(getCar(env->value.scmEnv.keyValuePairs[i]));
-        //         printf("\n");
-        //     }
-        // }
         while (true)
         {
 

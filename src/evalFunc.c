@@ -10,8 +10,6 @@
 
 scmObject PLUS(int nArgs)
 {
-
-    // printf("Betrete PLUS\n");
     scmObject nextArg;
     int sum = 0;
 
@@ -145,7 +143,6 @@ scmObject EQ(int nArgs)
 
 scmObject EQNR(int nArgs)
 {
-    // printf("betrete EQNR");
     scmObject firstArg, secondArg;
 
     firstArg = evalStack[rememberEvalStackPointer];

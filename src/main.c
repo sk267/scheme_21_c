@@ -74,7 +74,7 @@ int main(int argCount, char *argValues[])
     printf("MAX_SMALL_INT: %ld\n", MAX_SMALL_INT);
     printf("MIN_SMALL_INT: %ld\n", MIN_SMALL_INT);
 
-    // Read Eval Print Loop
+    // Read Eval Print Loop - REPL
     scmObject expr;
     for (;;)
     {
